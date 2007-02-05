@@ -17,18 +17,12 @@
     along with C=Key; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#ifndef UTIL_H
-#define UTIL_H 1
-#include "usart.h"
+#ifndef PS2_HOST_H
+#define PS2_HOST_H 1
 
-#ifndef TRUE
-#define TRUE	1
-#define FALSE 	0
-#endif
-
-#define debug(x) 
-#define debug2(x) USART0_Transmit(x);
-
-void printHex(unsigned char b);
+void PS2_host_init(void);
+void PS2_host_trigger_send(void);
+void PS2_host_CLK(void);
+void PS2_host_Timer(void);
 
 #endif

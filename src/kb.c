@@ -14,12 +14,10 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar; if not, write to the Free Software
+    along with C=Key; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include <avr/io.h>
-#include <avr/signal.h>
-#include <avr/interrupt.h>
 #include "util.h"
 #include "KB.h"
 
@@ -48,18 +46,11 @@ void KB_init() {
   KB_set_repeat_delay(250);   // wait 250 ms
   KB_set_repeat_period(32);   // once every 32 ms
   
-  OCR2=31; //32 counts * 256 cycles/count * 16 times per run * 120 runs/sec  
-  TCNT2=0;
-  
   // set COL to input
   KB_DDR_COL=0x00;
   // turn on pullups.
   KB_PORT_COL_OUT=0xff;
   
-  // Set OC2 clk  to SYSCLK/256 and Compare Timer MOde
-  TCCR2 = (1<<CS22) | (1<<CS21) | (1<<WGM21);
-  // set up OC2 IRQ
-  TIMSK |= (1<<OCIE2);
   
 }
 
@@ -99,7 +90,8 @@ void KB_store(unsigned char data) {
 	KB_RxBuf[tmphead] = data; /* Store received data in buffer */
 }
 
-SIGNAL(SIG_OUTPUT_COMPARE2) {
+void kb_scan(void) {
+  // this should be called 120 times/sec
   unsigned char j;
   unsigned char in;
   unsigned char result;
@@ -107,7 +99,7 @@ SIGNAL(SIG_OUTPUT_COMPARE2) {
   unsigned char mult;
   unsigned int tmp;
   // this is where we scan.
-  // we scan at 60Hz
+  // we scan at 120Hz
   switch(KB_state) {
     default:
     case KB_ST_READ:

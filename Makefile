@@ -43,7 +43,7 @@ TARGET = ckey
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = src/usart.c src/kb.c src/main.c src/ps2.c src/util.c src/scanner64.c src/led.c
+SRC = src\usart.c src\kb.c src\main.c src\ps2.c src\util.c src\scanner64.c src\led.c src\ps2_device.c src\ps2_host.c src\poll64.c
 
 
 # List Assembler source files here.
