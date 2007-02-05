@@ -20,6 +20,29 @@
 #ifndef USART_H
 #define USART_H 1
 
+#ifdef UBRR0H
+
+#define UBRRH UBRR0H
+#define UBRRL UBRR0L
+#define UCSRA UCSR0A
+#define UCSRB UCSR0B
+#define UCSRC UCSR0C
+#define U2X U2X0
+#define TXEN TXEN0
+#define RXEN RXEN0
+#define RXCIE RXCIE0
+#define URSEL URSEL0
+#define UCSZ0 UCSZ01
+#define UCSZ1 UCSZ11
+#define UDR UDR0
+#define UDRIE UDRIE0
+
+#define SIG_UART_RECV SIG_USART0_RECV
+#define SIG_UART_DATA SIG_USART0_DATA
+
+
+#endif
+
 #define USART_RX_BUFFER_SIZE 128     /* 2,4,8,16,32,64,128 or 256 bytes */
 #define USART_TX_BUFFER_SIZE 128     /* 2,4,8,16,32,64,128 or 256 bytes */
 #define USART_RX_BUFFER_MASK ( USART_RX_BUFFER_SIZE - 1 )
@@ -39,6 +62,7 @@
 #define B9600	191
 #define B19200	95
 #define B38400	47
+#define B57600  31
 #define B76800	23
 #define B115200	15
 #define B230400	7
@@ -46,8 +70,8 @@
 #define B921600	1
 
 void USART0_Init( unsigned int baudrate );
-unsigned char USART0_Receive( void );
-void USART0_Transmit( unsigned char data );
+uint8_t USART0_Receive( void );
+void USART0_Transmit( uint8_t data );
 
 #ifndef USART_C
 #endif

@@ -31,15 +31,21 @@
 	#error PS2 TX buffer size is not a power of 2
 #endif
 
-#define PS2_HALF_CYCLE 50
+/*
+ * After a device sends a byte to host, it has to holdoff for a while
+ * before doing anything else.  One KB I tested this is 2.14mS.
+ */
+ 
+#define PS2_HALF_CYCLE 40 // ~42 uS when all is said and done.
+#define PS2_SEND_HOLDOFF_COUNT  ((uint8_t)(2140/PS2_HALF_CYCLE)) 
 
 #define PS2_PORT_CLK_OUT	PORTD
 #define PS2_PORT_CLK_IN		PIND
-#define PS2_PIN_CLK 		3
+#define PS2_PIN_CLK 		  (1<<PIN3)
 #define PS2_PORT_DDR_CLK	DDRD
 #define PS2_PORT_DATA_OUT	PORTD
 #define PS2_PORT_DATA_IN	PIND
-#define PS2_PIN_DATA		2
+#define PS2_PIN_DATA		  (1<<PIN2)
 #define PS2_PORT_DDR_DATA	DDRD
 
 #define PS2_ST_IDLE           0
@@ -52,7 +58,7 @@
 #define PS2_ST_PREP_STOP      7
 #define PS2_ST_SEND_STOP      8
 
-#define PS2_ST_CHECK_CLK      9
+#define PS2_ST_HOLDOFF        9
 #define PS2_ST_WAIT_START     10
 #define PS2_ST_GET_START      11
 #define PS2_ST_WAIT_BIT       12
@@ -64,13 +70,16 @@
 #define PS2_ST_GET_ACK        18
 #define PS2_ST_WAIT_ACK       19
 #define PS2_ST_WAIT_ACK2      20
-#define PS2_ST_ABORT          21
+#define PS2_ST_HOST_INHIBIT   21
+#define PS2_ST_WAIT_RESPONSE  22
 
 #define PS2_MODE_DEVICE       1
 #define PS2_MODE_HOST         2
 
 #define PS2_KEY_UP            0xf0
 #define PS2_KEY_EXT           0xe0
+#define PS2_KEY_EXT_2         0xe1
+
 
 // normal keys
 #define PS2_KEY_F5            0x03
@@ -130,6 +139,8 @@
 #define PS2_KEY_APOSTROPHE    0x52
 #define PS2_KEY_LBRACKET      0x54
 #define PS2_KEY_EQUALS        0x55
+#define PS2_KEY_CAPS_LOCK     0x58
+#define PS2_KEY_RSHIFT        0x59
 #define PS2_KEY_ENTER         0x5a
 #define PS2_KEY_RBRACKET      0x5b
 #define PS2_KEY_BACKSLASH     0x5d
@@ -137,22 +148,43 @@
 #define PS2_KEY_NUM_1         0x69
 #define PS2_KEY_NUM_4         0x6b
 #define PS2_KEY_NUM_7         0x6c
-#define PS2_KEY_DEL           0x71
+#define PS2_KEY_NUM_0         0x70
+#define PS2_KEY_NUM_PERIOD    0x71
 #define PS2_KEY_NUM_2         0x72
+#define PS2_KEY_NUM_5         0x73
 #define PS2_KEY_NUM_6         0x74
 #define PS2_KEY_NUM_8         0x75
 #define PS2_KEY_ESC           0x76
+#define PS2_KEY_NUM_LOCK      0x77
 #define PS2_KEY_NUM_3         0x7a
 #define PS2_KEY_NUM_9         0x7d
 #define PS2_KEY_F7            0x83
 
 // extended keys
+#define PS2_KEY_RALT          0x11
+#define PS2_KEY_ECTRL         0x12
 #define PS2_KEY_RCTRL         0x14
+#define PS2_KEY_NUM_SLASH     0x4a
+#define PS2_KEY_NUM_ENTER     0x5a
+#define PS2_KEY_END           0x69
 #define PS2_KEY_CRSR_LEFT     0x6b
 #define PS2_KEY_HOME          0x6c
+#define PS2_KEY_INSERT        0x70
+#define PS2_KEY_DELETE        0x71
 #define PS2_KEY_CRSR_DOWN     0x72
 #define PS2_KEY_CRSR_RIGHT    0x74
 #define PS2_KEY_CRSR_UP       0x75
+#define PS2_KEY_PAGE_DOWN     0x7a
+#define PS2_KEY_PRINT_SCREEN  0x7c
+#define PS2_KEY_PAGE_UP       0x7d
+
+// deprecated ones.
+#define PS2_KEY_BREAK_1       0x14
+#define PS2_KEY_BREAK_2       0x77
+
+// new ones
+#define PS2_KEY_PCTRL         0x14
+#define PS2_KEY_PAUSE         0x77
 
 
 #define PS2_CMD_RESET         0xff
@@ -169,35 +201,41 @@
 #define PS2_CMD_OVERFLOW      0xff
 #define PS2_CMD_READ_ID       0xf2
 
+#define PS2_LED_SCROLL_LOCK   1
+#define PS2_LED_NUM_LOCK      2
+#define PS2_LED_CAPS_LOCK     4
 
-void PS2_init(unsigned char mode);
 
-unsigned char PS2_set_CLK(void);
-void PS2_clear_CLK(void);
-unsigned char PS2_read_CLK(void);
 
-void PS2_set_DATA(void);
-void PS2_clear_DATA(void);
-unsigned char PS2_read_DATA(void);
+void PS2_init(uint8_t mode);
 
-void PS2_enable_IRQ_CLK_Rise(void);
-void PS2_enable_IRQ_CLK_Fall(void);
-void PS2_disable_IRQ_CLK(void);
+void PS2_delay(uint16_t ms);
+inline uint8_t PS2_set_CLK(void);
+inline void PS2_clear_CLK(void);
+inline uint8_t PS2_read_CLK(void);
 
-void PS2_enable_IRQ_timer0(int us);
-void PS2_disable_IRQ_timer0(void);
+inline void PS2_set_DATA(void);
+inline void PS2_clear_DATA(void);
+inline uint8_t PS2_read_DATA(void);
 
-unsigned char PS2_get_state(void);
-void PS2_set_state(unsigned char state);
-unsigned char PS2_get_count(void);
+inline void PS2_enable_IRQ_CLK_Rise(void);
+inline void PS2_enable_IRQ_CLK_Fall(void);
+inline void PS2_disable_IRQ_CLK(void);
 
-unsigned char PS2_recv( void );
-void PS2_send( unsigned char data );
-unsigned char PS2_data_available( void );
+inline void PS2_enable_IRQ_timer0(uint8_t us);
+inline void PS2_disable_IRQ_timer0(void);
+
+uint8_t PS2_get_state(void);
+void PS2_set_state(uint8_t state);
+inline uint8_t PS2_get_count(void);
+
+uint8_t PS2_recv( void );
+void PS2_send( uint8_t data );
+uint8_t PS2_data_available( void );
 void PS2_write_byte(void);
 void PS2_read_byte(void);
 void PS2_commit_read_byte(void);
-unsigned char PS2_data_to_send(void);
+uint8_t PS2_data_to_send(void);
 
 void PS2_write_bit(void);
 void PS2_write_parity(void);
@@ -205,8 +243,8 @@ void PS2_read_bit(void);
 void PS2_clear_counters(void);
 
 void PS2_check_CLK(void);
-void PS2_handle_cmds(unsigned char data);
-unsigned int PS2_get_typematic_delay(unsigned char rate);
-unsigned int PS2_get_typematic_period(unsigned char rate);
+void PS2_handle_cmds(uint8_t data);
+unsigned int PS2_get_typematic_delay(uint8_t rate);
+unsigned int PS2_get_typematic_period(uint8_t rate);
 
 #endif

@@ -20,15 +20,19 @@
 #ifndef SCANNER_H
 #define SCANNER_H
 
-#define SCAN_FLAG_NONE  0
-#define SCAN_FLAG_SHIFT 1
-#define SCAN_FLAG_CTRL  2
-#define SCAN_FLAG_CMDR  4
+#define SCAN_FLAG_NONE   0
+#define SCAN_FLAG_LSHIFT 1
+#define SCAN_FLAG_RSHIFT 2
+#define SCAN_FLAG_SHIFT  3
+#define SCAN_FLAG_CTRL   4
+#define SCAN_FLAG_CMDR   8
 
 #define SCAN_MAP_NONE   0
 #define SCAN_MAP_SHIFT  1
 #define SCAN_MAP_EXT    2
 
+void scan_init(void);
 void scan(void);
+
 
 #endif

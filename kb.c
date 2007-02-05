@@ -18,18 +18,19 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include <avr/io.h>
+#include <inttypes.h>
 #include "util.h"
 #include "KB.h"
 
 static unsigned char KB_RxBuf[KB_RX_BUFFER_SIZE];
-static volatile unsigned char KB_RxHead;
-static volatile unsigned char KB_RxTail;
+static volatile uint8_t KB_RxHead;
+static volatile uint8_t KB_RxTail;
 
 static unsigned char KB_cache[16];
-static volatile unsigned char KB_state;
-static volatile unsigned char KB_scan_idx;
+static volatile uint8_t KB_state;
+static volatile uint8_t KB_scan_idx;
 
-static volatile unsigned char KB_repeat_code;
+static volatile uint8_t KB_repeat_code;
 static volatile unsigned int KB_repeat_count;
 static volatile unsigned int KB_repeat_match;
 static volatile unsigned int KB_repeat_delay;
@@ -40,7 +41,7 @@ void KB_init() {
   KB_scan_idx=0;
   
   // set keyboard repeat to 0.
-  KB_repeat_code=0;
+  KB_repeat_code=KB_NO_REPEAT;
   KB_repeat_count=0;
   
   KB_set_repeat_delay(250);   // wait 250 ms
@@ -65,7 +66,7 @@ void KB_set_repeat_period(unsigned int period) {
   KB_repeat_period=period<<1;
 }
 
-void KB_set_repeat_code(unsigned char code) {
+void KB_set_repeat_code(uint8_t code) {
   if(code != KB_repeat_code) {
     KB_repeat_count=0;
     KB_repeat_code=code;
@@ -73,12 +74,12 @@ void KB_set_repeat_code(unsigned char code) {
   }
 }
 
-unsigned char KB_get_repeat_code() {
+uint8_t KB_get_repeat_code() {
   return KB_repeat_code;
 }
 
-void KB_store(unsigned char data) {
-  unsigned char tmphead;
+void KB_store(uint8_t data) {
+  uint8_t tmphead;
   
 	tmphead = ( KB_RxHead + 1 ) & KB_RX_BUFFER_MASK;
 	KB_RxHead = tmphead;      /* Store new index */
@@ -90,13 +91,13 @@ void KB_store(unsigned char data) {
 	KB_RxBuf[tmphead] = data; /* Store received data in buffer */
 }
 
-void kb_scan(void) {
+void KB_scan(void) {
   // this should be called 120 times/sec
-  unsigned char j;
-  unsigned char in;
-  unsigned char result;
-  unsigned char mask;
-  unsigned char mult;
+  uint8_t j;
+  uint8_t in;
+  uint8_t result;
+  uint8_t mask;
+  uint8_t mult;
   unsigned int tmp;
   // this is where we scan.
   // we scan at 120Hz
@@ -113,7 +114,7 @@ void kb_scan(void) {
       KB_PORT_ROW_LOW_OUT=~j;
       KB_PORT_ROW_HIGH_OUT=~in;
       KB_state=KB_ST_PREP;
-      if(KB_repeat_code!= 0) {
+      if(KB_repeat_code != KB_NO_REPEAT) {
         KB_repeat_count++;
         if(KB_repeat_count >= KB_repeat_match) {
           KB_repeat_count=0;
@@ -166,8 +167,12 @@ void kb_scan(void) {
   }
 }
 
-unsigned char KB_recv( void ) {
-	unsigned char tmptail;
+uint8_t KB_data_available( void ) {
+  return ( KB_RxHead != KB_RxTail ); /* Return 0 (FALSE) if the receive buffer is empty */
+}
+
+uint8_t KB_recv( void ) {
+	uint8_t tmptail;
 	
 	while ( KB_RxHead == KB_RxTail ) {
     ;

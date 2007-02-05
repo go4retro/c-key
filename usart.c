@@ -17,35 +17,36 @@
     along with C=Key; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+#include <inttypes.h>
 #include <avr/io.h>
 #include <avr/signal.h>
 #include <avr/interrupt.h>
 #include "usart.h"
 
 static unsigned char USART_RxBuf[USART_RX_BUFFER_SIZE];
-static volatile unsigned char USART_RxHead;
-static volatile unsigned char USART_RxTail;
+static volatile uint8_t USART_RxHead;
+static volatile uint8_t USART_RxTail;
 static unsigned char USART_TxBuf[USART_TX_BUFFER_SIZE];
-static volatile unsigned char USART_TxHead;
-static volatile unsigned char USART_TxTail;
+static volatile uint8_t USART_TxHead;
+static volatile uint8_t USART_TxTail;
 
 /* Initialize USART */
 void USART0_Init( unsigned int baudrate ) {
-	unsigned char x;
+	uint8_t x;
 	
 	/* Set the baud rate */
-	UBRRH = (unsigned char) (baudrate>>8);                  
-	UBRRL = (unsigned char) baudrate;
+	UBRRH = (uint8_t) (baudrate>>8);                  
+	UBRRL = (uint8_t) baudrate;
 	
 	// double the speed of the serial port.
 	
-	UCSRA |= (1<<U2X); 
+	UCSRA = (1<<U2X); 
 	
 	/* Enable UART receiver and transmitter */
 	UCSRB = ( ( 1 << RXCIE ) | ( 1 << RXEN ) | ( 1 << TXEN ) ); 
 	
 	/* Set frame format: 8 data 1stop */
-	UCSRC = (1<<URSEL) | (1<<UCSZ1)|(1<<UCSZ0);              //For devices without Extended IO
+	//UCSRC = (1<<URSEL) | (1<<UCSZ1)|(1<<UCSZ0);
 	
 	/* Flush receive buffer */
 	x = 0; 			    
@@ -59,8 +60,8 @@ void USART0_Init( unsigned int baudrate ) {
 
 /* Interrupt handlers */
 SIGNAL(SIG_UART_RECV) {
-	unsigned char data;
-	unsigned char tmphead;
+	uint8_t data;
+	uint8_t tmphead;
 	
 	/* Read the received data */
 	data = UDR;        
@@ -77,9 +78,8 @@ SIGNAL(SIG_UART_RECV) {
 }
 
 SIGNAL(SIG_UART_DATA) {
-	unsigned char tmptail;
+	uint8_t tmptail;
 
-	/* Check if all data is transmitted */
 	if ( USART_TxHead != USART_TxTail ) {
 		/* Calculate buffer index */
 		tmptail = ( USART_TxTail + 1 ) & USART_TX_BUFFER_MASK;
@@ -92,8 +92,8 @@ SIGNAL(SIG_UART_DATA) {
 }
 
 /* Read and write functions */
-unsigned char USART0_Receive( void ) {
-	unsigned char tmptail;
+uint8_t USART0_Receive( void ) {
+	uint8_t tmptail;
 	
 	while ( USART_RxHead == USART_RxTail ) { ; }
 	tmptail = ( USART_RxTail + 1 ) & USART_RX_BUFFER_MASK;/* Calculate buffer index */
@@ -103,8 +103,8 @@ unsigned char USART0_Receive( void ) {
 	return USART_RxBuf[tmptail];           /* Return data */
 }
 
-void USART0_Transmit( unsigned char data ) {
-	unsigned char tmphead;
+void USART0_Transmit( uint8_t data ) {
+	uint8_t tmphead;
 	/* Calculate buffer index */
 	tmphead = ( USART_TxHead + 1 ) & USART_TX_BUFFER_MASK; /* Wait for free space in buffer */
 	while ( tmphead == USART_TxTail ) ;
@@ -115,6 +115,6 @@ void USART0_Transmit( unsigned char data ) {
 	UCSRB |= (1<<UDRIE);                    /* Enable UDRE interrupt */
 }
 
-unsigned char USART0_Data_Available( void ) {
+uint8_t USART0_Data_Available( void ) {
 	return ( USART_RxHead != USART_RxTail ); /* Return 0 (FALSE) if the receive buffer is empty */
 }

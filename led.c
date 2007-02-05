@@ -18,19 +18,22 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include <avr/io.h>
+#include <inttypes.h>
 #include "led.h"
 
-void led_on(unsigned char led) {
-  LED_PORT |=(1<<led);
+void led_on(uint8_t led) {
+  LED_PORT |=led;
+  LED_DDR |=led;
 }
 
-void led_off(unsigned char led) {
-  LED_PORT &=~(1<<led);
+void led_off(uint8_t led) {
+  LED_PORT &=(uint8_t)~led;
+  LED_DDR &=(uint8_t)~led;
 }
 
-void led_blink(unsigned char times, unsigned char led) {
-  unsigned int i;
-  unsigned long delay;
+void led_blink(uint8_t times, uint8_t led) {
+  uint16_t i;
+  uint32_t delay;
   
   for(i=0;i<times;i++) {
     led_on(led);

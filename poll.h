@@ -20,6 +20,12 @@
 #ifndef POLL_H
 #define POLL_H 1
 
+#ifndef TRUE
+#define TRUE  1
+#define FALSE 0
+#endif
+
+void poll_init(void);
 void poll(void);
 
 #endif
