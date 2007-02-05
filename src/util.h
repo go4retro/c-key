@@ -26,8 +26,8 @@
 #define FALSE 	0
 #endif
 
-#define debug(x) 
-#define debug2(x) USART0_Transmit(x);
+#define debug(x) USART0_Transmit(x)
+#define debug2(x) debug(x)
 
 void printHex(unsigned char b);
 

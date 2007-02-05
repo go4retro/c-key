@@ -33,6 +33,8 @@
 #define KB_ST_PREP        1
 #define KB_ST_READ        2
 
+#define KB_NO_REPEAT      0xff
+
 #define KB_RX_BUFFER_SIZE 16     /* 2,4,8,16,32,64,128 or 256 bytes */
 #define KB_RX_BUFFER_MASK ( KB_RX_BUFFER_SIZE - 1 )
 #if ( KB_RX_BUFFER_SIZE & KB_RX_BUFFER_MASK )
@@ -42,9 +44,10 @@
 void KB_init(void);
 void KB_set_repeat_delay(unsigned int ms);
 void KB_set_repeat_period(unsigned int period);
-void KB_set_repeat_code(unsigned char code);
+void KB_set_repeat_code(uint8_t code);
 unsigned char KB_get_repeat_code(void);
+uint8_t KB_data_available( void );
 unsigned char KB_recv( void );
-void kb_scan(void);
+void KB_scan(void);
 
 #endif

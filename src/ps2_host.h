@@ -23,6 +23,7 @@
 void PS2_host_init(void);
 void PS2_host_trigger_send(void);
 void PS2_host_CLK(void);
+void PS2_host_DATA(void);
 void PS2_host_Timer(void);
 
 #endif

@@ -33,7 +33,7 @@
 
 
 # MCU name
-MCU = atmega32
+MCU = atmega162
 
 # Output format. (can be srec, ihex, binary)
 FORMAT = ihex
@@ -43,7 +43,7 @@ TARGET = ckey
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = src\usart.c src\kb.c src\main.c src\ps2.c src\util.c src\scanner64.c src\led.c src\ps2_device.c src\ps2_host.c src\poll64.c
+SRC = src\switches.c src\usart.c src\kb.c src\main.c src\ps2.c src\util.c src\scanner64.c src\led.c src\ps2_device.c src\ps2_host.c src\poll64.c
 
 
 # List Assembler source files here.
@@ -76,7 +76,7 @@ EXTRAINCDIRS =
 CSTANDARD = -std=gnu99
 
 # Place -D or -U options here
-CDEFS =
+CDEFS = -D $(MCU)
 
 # Place -I options here
 CINCS =

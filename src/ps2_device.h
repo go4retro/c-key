@@ -23,6 +23,7 @@
 void PS2_device_init(void);
 void PS2_device_trigger_send(void);
 void PS2_device_CLK(void);
+void PS2_device_DATA(void);
 void PS2_device_Timer(void);
 
 #endif
