@@ -1,0 +1,93 @@
+I'll replace these with better instructions later, but for now, this is it:
+
+Parts:
+1 Atmel AVR ATmega16 or ATmega32 microcontroller (40 pin DIP version)
+2 18-22pF capacitors
+1 14.7456MHz crystal
+1 20 pin header
+1 perfboard (optional)
+1 40 pin socket (optional)
+2 DE-9M joystick connectors (optional)
+1 2 pin header (for LED)
+1 330 ohm resistor (for LED)
+Wire
+PS2/DIN keyboard connector with wire (get one from an old PS/2 mouse...)
+
+Construction:
+
+1) Wire up the capacitors and the crystal to the controller.  On the DIP 
+version, the crystal is pins 12 and 13
+2) Wire up the PS/2/DIN connector.  The Clock Line 
+(see http://www.beyondlogic.org/keyboard/keybrd.htm for pinouts) goes to 
+PD3 (INT1), and Data goes to PD2 (INT0).  +5v and Gnd go to appropriate 
+spots on controller
+3) Wire up keyboard connector:
+
+1->PB0
+2->N/C
+3->PC0
+4->N/C
+5->PC0
+6->PC1
+7->PC2
+8->PC3
+9->PC4
+10->PC5
+11->PC6
+12->PC7
+13->PA7
+14->PA6
+15->PA5
+16->PA4
+17->PA3
+18->PA2
+19->PA1
+20->PA0
+
+For C128 keyboard
+21->PB3   (This will move to PB1 in next version, so be forewarned)
+22->PB4   (This will move to PB2...)
+23->PB5   (This will move to PB3...)
+24->PC1
+25->PC2
+
+4) Wire up joystick connectors (optional)
+Joy 0:
+1->PC0
+2->PC1
+3->PC2
+4->PC3
+5
+6->PC4
+7
+8->PB1    (This will move to PB4 in next version...)
+9
+
+Joy 1:
+1->PC0
+2->PC1
+3->PC2
+4->PC3
+5
+6->PC4
+7
+8->PB2    (This will move to PB5 in next version...)
+9
+
+5) Wire up LED connector
+1 (LED+->PD7
+2 (LED-)(attach via 330ohm resistor to ground.)
+3 (LED+->PD7
+
+6) Compile code
+I used WinAVR (http://winavr.sourceforge.net/) to compile.  
+
+7) Download to AVR
+I used a cable like the following: (http://www.qsl.net/zl1bpu/micro/ENV/PGM.htm)
+If you don't want to build this or can't, you can send the AVR to me for
+programming for a nominal fee (email me at brain@jbrain.com)
+
+8) Install and run.
+
+Jim
+
