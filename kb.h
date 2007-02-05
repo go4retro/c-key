@@ -14,7 +14,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar; if not, write to the Free Software
+    along with C=Key; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #ifndef KB_H
@@ -45,5 +45,6 @@ void KB_set_repeat_period(unsigned int period);
 void KB_set_repeat_code(unsigned char code);
 unsigned char KB_get_repeat_code(void);
 unsigned char KB_recv( void );
+void kb_scan(void);
 
 #endif

@@ -17,18 +17,9 @@
     along with C=Key; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#ifndef UTIL_H
-#define UTIL_H 1
-#include "usart.h"
+#ifndef POLL_H
+#define POLL_H 1
 
-#ifndef TRUE
-#define TRUE	1
-#define FALSE 	0
-#endif
-
-#define debug(x) 
-#define debug2(x) USART0_Transmit(x);
-
-void printHex(unsigned char b);
+void poll(void);
 
 #endif
