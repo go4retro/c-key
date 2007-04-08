@@ -18,11 +18,6 @@
 #
 # make clean = Clean out built project files.
 #
-# make coff = Convert ELF to AVR COFF (for use with AVR Studio 3.x or VMLAB).
-#
-# make extcoff = Convert ELF to AVR Extended COFF (for use with AVR Studio
-#                4.07 or greater).
-#
 # make program = Download the hex file to the device, using avrdude.  Please
 #                customize the avrdude settings below first!
 #
@@ -33,7 +28,9 @@
 
 
 # MCU name
-MCU = atmega162
+#MCU = atmega162
+#MCU = atmega16
+MCU = atmega32
 
 # Output format. (can be srec, ihex, binary)
 FORMAT = ihex
@@ -43,7 +40,7 @@ TARGET = ckey
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = src\switches.c src\usart.c src\kb.c src\main.c src\ps2.c src\util.c src\scanner64.c src\led.c src\ps2_device.c src\ps2_host.c src\poll64.c
+SRC = src/switches.c src/usart.c src/kb.c src/main.c src/ps2.c src/util.c src/scanner64.c src/led.c src/ps2_device.c src/ps2_host.c src/poll64.c
 
 
 # List Assembler source files here.
@@ -307,29 +304,6 @@ program: $(TARGET).hex $(TARGET).eep
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
 
 
-
-
-# Convert ELF to COFF for use in debugging / simulating in AVR Studio or VMLAB.
-COFFCONVERT=$(OBJCOPY) --debugging \
---change-section-address .data-0x800000 \
---change-section-address .bss-0x800000 \
---change-section-address .noinit-0x800000 \
---change-section-address .eeprom-0x810000 
-
-
-coff: $(TARGET).elf
-	@echo
-	@echo $(MSG_COFF) $(TARGET).cof
-	$(COFFCONVERT) -O coff-avr $< $(TARGET).cof
-
-
-extcoff: $(TARGET).elf
-	@echo
-	@echo $(MSG_EXTENDED_COFF) $(TARGET).cof
-	$(COFFCONVERT) -O coff-ext-avr $< $(TARGET).cof
-
-
-
 # Create final output files (.hex, .eep) from ELF output file.
 %.hex: %.elf
 	@echo
@@ -359,7 +333,7 @@ extcoff: $(TARGET).elf
 # Link: create ELF output file from object files.
 .SECONDARY : $(TARGET).elf
 .PRECIOUS : $(OBJ)
-%.elf: $(OBJ)
+ckey.elf: $(OBJ)
 	@echo
 	@echo $(MSG_LINKING) $@
 	$(CC) $(ALL_CFLAGS) $(OBJ) --output $@ $(LDFLAGS)
