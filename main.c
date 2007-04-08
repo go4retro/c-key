@@ -29,10 +29,10 @@
 int main( void ) {
   uint8_t mode;
 
-  //mode=PS2_MODE_DEVICE;
-  mode=PS2_MODE_HOST;
+  mode=PS2_MODE_DEVICE;
+  //mode=PS2_MODE_HOST;
   
-	USART0_Init( B38400 );
+	USART0_Init( B115200 );
 	PS2_init(mode);
   if(mode==PS2_MODE_DEVICE) {
     scan_init();

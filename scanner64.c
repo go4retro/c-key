@@ -30,7 +30,7 @@
 #include "scanner.h"
 #include "scanner64.h"
 
-static prog_uint8_t regular[0x40] =  {0xc0,PS2_KEY_Q,0xcf,PS2_KEY_SPACE,0xd0,0xcd,0xce,PS2_KEY_1
+static prog_uint8_t regular[0x58] =  {0xc0,PS2_KEY_Q,0xcf,PS2_KEY_SPACE,0xd0,0xcd,0xce,PS2_KEY_1
                                         ,PS2_KEY_4,PS2_KEY_E,PS2_KEY_S,PS2_KEY_Z,PS2_KEY_LSHIFT,PS2_KEY_A,PS2_KEY_W,PS2_KEY_3
                                         ,0xc1,PS2_KEY_T,PS2_KEY_F,PS2_KEY_C,PS2_KEY_X,PS2_KEY_D,PS2_KEY_R,PS2_KEY_5
                                         ,0xc3,PS2_KEY_U,PS2_KEY_H,PS2_KEY_B,PS2_KEY_V,PS2_KEY_G,PS2_KEY_Y,0xc2
@@ -38,6 +38,9 @@ static prog_uint8_t regular[0x40] =  {0xc0,PS2_KEY_Q,0xcf,PS2_KEY_SPACE,0xd0,0xc
                                         ,PS2_KEY_MINUS,0xc7,0xc9,PS2_KEY_PERIOD,PS2_KEY_COMMA,PS2_KEY_L,PS2_KEY_P,0xc6
                                         ,0xd1,0xcc,0xcb,PS2_KEY_RSHIFT,PS2_KEY_SLASH,0xca,0xc8,0x5d
                                         ,0xd2,0xd3,0xd4,0xd5,0xd6,0xd7,PS2_KEY_ENTER,PS2_KEY_BS
+                                        ,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff
+                                        ,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff
+                                        ,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff
                                         };
                                         
 static prog_uint8_t mappings[2][25][2][2] = {
@@ -97,8 +100,11 @@ static prog_uint8_t mappings[2][25][2][2] = {
                                          }
                                         };
                                         
-static prog_uint8_t joy_table[5]= {JOY_UP,JOY_DOWN,JOY_RIGHT,JOY_LEFT,JOY_FIRE};
-static uint8_t joy_mapping[2][9][2]= {
+static prog_uint8_t joy_table[2][8]={
+                                    {JOY_RIGHT,0,0,JOY_FIRE,0,JOY_LEFT,JOY_DOWN,JOY_UP},
+                                    {0,JOY_DOWN,JOY_LEFT,JOY_RIGHT,JOY_FIRE,0,0,JOY_UP}
+                                   };
+static prog_uint8_t joy_mapping[2][9][2]= {
                                                {
                                                  {SCAN_MAP_NONE,PS2_KEY_E},
                                                  {SCAN_MAP_NONE,PS2_KEY_W},
@@ -136,7 +142,11 @@ void scan_init(void) {
   KB_init();
   SW_init(SW_TYPE_INPUT,(1<<SW_RESTORE) | (1<<SW_CAPSENSE) | (1<<SW_4080));
   
-  OCR2=31; //32 counts * 256 cycles/count * 16 times per run * 120 runs/sec  
+#ifdef PORT_KEYS
+  OCR2=20; //21 counts * 256 cycles/count * 24 times per run * 120 runs/sec
+#else  
+  OCR2=31; //32 counts * 256 cycles/count * 16 times per run * 120 runs/sec
+#endif
   TCNT2=0;
   
   // Set OC2 clk  to SYSCLK/256 and Compare Timer Mode
@@ -267,11 +277,15 @@ uint8_t get_joy_direction(uint8_t *joy) {
   return i;
 }
 
-void do_joy(uint8_t *joy, uint8_t data, uint8_t table[9][2]) {
+void do_joy(uint8_t *joy, uint8_t data, uint8_t map[8],uint8_t table[9][2]) {
   uint8_t i;
-  //printHex(data);
+  uint8_t new;
+  
+  // get new button
+  new=pgm_read_byte(&map[data&0x07]);
   if((data & 0x80) != 0) {
-    if((data & 0x7) == 4) {
+    
+    if(new == JOY_FIRE) {
       // fire not pressed
       i=8;
     } else {
@@ -279,13 +293,13 @@ void do_joy(uint8_t *joy, uint8_t data, uint8_t table[9][2]) {
       i=get_joy_direction(joy);
     }
     if(i<9) {
-      send_key_code(table[i][0],table[i][1],KEY_UP);
       KB_set_repeat_code(KB_NO_REPEAT);
+      send_key_code(pgm_read_byte(&table[i][0]),pgm_read_byte(&table[i][1]),KEY_UP);
     }
-    (*joy)&=(uint8_t)~(pgm_read_byte(&joy_table[data & 0x7]));
+    (*joy)&=(uint8_t)~new;
   } else {
-    (*joy)|=(pgm_read_byte(&joy_table[data & 0x7]));
-    if((data & 0x7) == 4) {
+    (*joy)|=new;
+    if(new == JOY_FIRE) {
       // fire pressed
       i=8;
     } else {
@@ -293,7 +307,7 @@ void do_joy(uint8_t *joy, uint8_t data, uint8_t table[9][2]) {
       i=get_joy_direction(joy);
     }
     if(i<9) {
-      send_key_code(table[i][0],table[i][1],KEY_DOWN);
+      send_key_code(pgm_read_byte(&table[i][0]),pgm_read_byte(&table[i][1]),KEY_DOWN);
       KB_set_repeat_code(data);
     }
   }
@@ -326,11 +340,14 @@ inline void parse_key(uint8_t data) {
     if(key_action==KEY_DOWN)
       KB_set_repeat_code(code);
   } else if(code > 0x57 && code < 0x5d) {
-    // joy1
-    do_joy(&joy0,data,joy_mapping[1]);
-  } else if(code > 0x5f && code < 0x65) {
-    // joy0
-    do_joy(&joy1,data,joy_mapping[0]);
+    // joy0, when JP4 is set to scan.
+    do_joy(&joy0,data,joy_table[0],joy_mapping[0]);
+  } else if(code >= 0x70 && code < 0x78) {
+    // joy0 new
+    do_joy(&joy0,data,joy_table[0],joy_mapping[0]);
+  } else if(code >= 0x78 && code < 0x80) {
+    // joy1 new
+    do_joy(&joy1,data,joy_table[1],joy_mapping[1]);
   }
 }
 

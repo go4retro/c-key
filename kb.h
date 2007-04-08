@@ -20,6 +20,8 @@
 #ifndef KB_H
 #define KB_H 1
 
+#define PORT_KEYS 1
+
 #define KB_PORT_ROW_LOW_OUT   PORTA
 #define KB_PORT_ROW_LOW_IN    PINA
 #define KB_DDR_ROW_LOW        DDRA
@@ -32,6 +34,11 @@
 
 #define KB_ST_PREP        1
 #define KB_ST_READ        2
+#ifdef PORT_KEYS
+#define KB_ST_QUIESCE      3
+#define KB_ST_READ_PORTS  4
+#endif
+
 
 #define KB_NO_REPEAT      0xff
 

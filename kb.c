@@ -20,7 +20,7 @@
 #include <avr/io.h>
 #include <inttypes.h>
 #include "util.h"
-#include "KB.h"
+#include "kb.h"
 
 static unsigned char KB_RxBuf[KB_RX_BUFFER_SIZE];
 static volatile uint8_t KB_RxHead;
@@ -30,11 +30,16 @@ static unsigned char KB_cache[16];
 static volatile uint8_t KB_state;
 static volatile uint8_t KB_scan_idx;
 
+#ifdef PORT_KEYS
+static unsigned char PORT_cache[2];
+#endif
+
 static volatile uint8_t KB_repeat_code;
 static volatile unsigned int KB_repeat_count;
 static volatile unsigned int KB_repeat_match;
 static volatile unsigned int KB_repeat_delay;
 static volatile unsigned int KB_repeat_period;
+static volatile unsigned int KB_curr_value;
 
 void KB_init() {
   KB_state=KB_ST_READ;
@@ -91,29 +96,51 @@ void KB_store(uint8_t data) {
 	KB_RxBuf[tmphead] = data; /* Store received data in buffer */
 }
 
+void KB_decode(uint8_t in, uint8_t old, uint8_t base) {
+    uint8_t j,mask,result;
+    // we have a key change.
+    /*
+      If last state was 00001010 and new
+      state was:        01001000 
+      we need to xor:   01000010 which
+      will tell us what changed:
+      
+      Then, in & xor gives us new keys
+      state and xor gives us keys no longer pressed.
+    */
+    mask = in ^ old;
+    result=old & mask;
+    if(result != 0) {
+      // we have keys no longer pressed.
+      for(j=0;j<8;j++) {
+        if(result & 1) {
+          KB_store((base+j) | 0x80);
+        }
+        result=result>>1;
+      }
+    }
+    result=in & mask;
+    if(result != 0) {
+      // we have keys pressed.
+      for(j=0;j<8;j++) {
+        if(result & 1) {
+          KB_store(base+j);
+        }
+        result=result>>1;
+      }
+    }
+}
+
 void KB_scan(void) {
   // this should be called 120 times/sec
   uint8_t j;
   uint8_t in;
-  uint8_t result;
-  uint8_t mask;
-  uint8_t mult;
   unsigned int tmp;
   // this is where we scan.
   // we scan at 120Hz
   switch(KB_state) {
     default:
     case KB_ST_READ:
-      // we just read, prep now.
-      // set pin low:
-      tmp=(1<<KB_scan_idx);
-      j=(tmp & 0xff);
-      in=((tmp & 0xff00) >> 8);
-      KB_DDR_ROW_LOW=j;
-      KB_DDR_ROW_HIGH=in;
-      KB_PORT_ROW_LOW_OUT=~j;
-      KB_PORT_ROW_HIGH_OUT=~in;
-      KB_state=KB_ST_PREP;
       if(KB_repeat_code != KB_NO_REPEAT) {
         KB_repeat_count++;
         if(KB_repeat_count >= KB_repeat_match) {
@@ -122,47 +149,62 @@ void KB_scan(void) {
           KB_store(KB_repeat_code);
         }
       }
+      // we just read, prep now.
+      // set pin low:
+      tmp=(1<<KB_scan_idx);
+      j=(tmp & 0xff);
+      in=((tmp & 0xff00) >> 8);
+      KB_DDR_ROW_LOW=j;
+      KB_DDR_ROW_HIGH=in;
+      KB_PORT_ROW_LOW_OUT=(uint8_t)~j;
+      KB_PORT_ROW_HIGH_OUT=(uint8_t)~in;
+      KB_state=KB_ST_PREP;
       break;
     case KB_ST_PREP:
       // we just prepped, read.
-      in=~KB_PORT_COL_IN;
+      KB_curr_value=(uint8_t)~KB_PORT_COL_IN;
+#ifdef PORT_KEYS
+      // set rows back to input.
+      KB_DDR_ROW_LOW=0;
+      KB_DDR_ROW_HIGH=0;
+      KB_PORT_ROW_LOW_OUT=0xff;
+      KB_PORT_ROW_HIGH_OUT=0xff;
+      KB_state=KB_ST_QUIESCE;
+      break;
+    case KB_ST_QUIESCE:
+      in=KB_curr_value;
+      if(KB_PORT_COL_IN==0xff && in != KB_cache[KB_scan_idx]) {
+#else
       if(in != KB_cache[KB_scan_idx]) {
-        mult=KB_scan_idx<<3;
-        // we have a key change.
-        /*
-          If last state was 00001010 and new
-          state was:        01001000 
-          we need to xor:   01000010 which
-          will tell us what changed:
-          
-          Then, in & xor gives us new keys
-          state and xor gives us keys no longer pressed.
-        */
-        mask = in ^ KB_cache[KB_scan_idx];
-        result=KB_cache[KB_scan_idx] & mask;
-        if(result != 0) {
-          // we have keys no longer pressed.
-          for(j=0;j<8;j++) {
-            if(result & 1) {
-              KB_store((mult+j) | 0x80);
-            }
-            result=result>>1;
-          }
-        }
-        result=in & mask;
-        if(result != 0) {
-          // we have keys pressed.
-          for(j=0;j<8;j++) {
-            if(result & 1) {
-              KB_store(mult+j);
-            }
-            result=result>>1;
-          }
-        }
+#endif
+        KB_decode(in,KB_cache[KB_scan_idx],KB_scan_idx<<3);
         KB_cache[KB_scan_idx]=in;
       }
-      KB_state=KB_ST_READ;
       KB_scan_idx = ((KB_scan_idx + 1) & 0x0f);
+      KB_state=KB_ST_READ;
+#ifdef PORT_KEYS
+      if(KB_scan_idx==0) {
+        // set rows to input.
+        KB_DDR_ROW_LOW=0;
+        // turn on pullups.
+        KB_PORT_ROW_LOW_OUT=0xff;
+        KB_state=KB_ST_READ_PORTS;
+      }
+      break;
+    case KB_ST_READ_PORTS:
+      // read the two ports directly
+      in=(uint8_t)~KB_PORT_ROW_LOW_IN;
+      if(in != PORT_cache[1]) {
+        KB_decode(in,PORT_cache[1],0x78);
+        PORT_cache[1]=in;
+      }
+      in=(uint8_t)~KB_PORT_COL_IN;
+      if(in != PORT_cache[0]) {
+        KB_decode(in,PORT_cache[0],0x70);
+        PORT_cache[0]=in;
+      }
+      KB_state=KB_ST_READ;
+#endif
       break;
   }
 }
