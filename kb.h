@@ -22,15 +22,24 @@
 
 #define PORT_KEYS 1
 
+#ifdef REV3
+#define KB_PORT_ROW_LOW_OUT   PORTC
+#define KB_PORT_ROW_LOW_IN    PINC
+#define KB_DDR_ROW_LOW        DDRC
+#define KB_PORT_COL_OUT       PORTA
+#define KB_PORT_COL_IN        PINA
+#define KB_DDR_COL            DDRA
+#else
 #define KB_PORT_ROW_LOW_OUT   PORTA
 #define KB_PORT_ROW_LOW_IN    PINA
 #define KB_DDR_ROW_LOW        DDRA
-#define KB_PORT_ROW_HIGH_OUT  PORTB
-#define KB_PORT_ROW_HIGH_IN   PINB
-#define KB_DDR_ROW_HIGH       DDRB
 #define KB_PORT_COL_OUT       PORTC
 #define KB_PORT_COL_IN        PINC
 #define KB_DDR_COL            DDRC
+#endif
+#define KB_PORT_ROW_HIGH_OUT  PORTB
+#define KB_PORT_ROW_HIGH_IN   PINB
+#define KB_DDR_ROW_HIGH       DDRB
 
 #define KB_ST_PREP        1
 #define KB_ST_READ        2
