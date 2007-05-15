@@ -187,19 +187,23 @@
 #define PS2_KEY_PAUSE         0x77
 
 
-#define PS2_CMD_RESET         0xff
-#define PS2_CMD_ENABLE        0xf4
-#define PS2_CMD_DISABLE       0xf5
-#define PS2_CMD_ACK           0xfa
+#define PS2_CMD_LEDS          0xed
 #define PS2_CMD_ECHO          0xee
 #define PS2_CMD_SET_CODE_SET  0xf0
-#define PS2_CMD_SET_RATE      0xf3
-#define PS2_CMD_LEDS          0xed
-#define PS2_CMD_RESEND        0xfe
-#define PS2_CMD_BAT           0xaa
-#define PS2_CMD_ERROR         0x00
-#define PS2_CMD_OVERFLOW      0xff
 #define PS2_CMD_READ_ID       0xf2
+#define PS2_CMD_SET_RATE      0xf3
+#define PS2_CMD_ENABLE        0xf4
+#define PS2_CMD_DISABLE       0xf5
+#define PS2_CMD_DEFAULT       0xf6
+#define PS2_CMD_RESEND        0xfe
+#define PS2_CMD_RESET         0xff
+
+#define PS2_CMD_ERROR         0x00
+#define PS2_CMD_BAT           0xaa
+#define PS2_CMD_ECHO_RESP     0xee
+#define PS2_CMD_ACK           0xfa
+#define PS2_CMD_BAT_FAILURE   0xfc
+#define PS2_CMD_OVERFLOW      0xff
 
 #define PS2_LED_SCROLL_LOCK   1
 #define PS2_LED_NUM_LOCK      2

@@ -11,12 +11,12 @@ static uint8_t SW_cache;
 static uint8_t SW_mask;
 
 void SW_init(uint8_t type, uint8_t mask) {
-  SW_mask=mask;
-  // bring them to inputs;
-  PORT_SW_DDR&=(uint8_t)~mask;
   // bring them HI-Z
   PORT_SW_OUT|=mask;
-  SW_cache=(PORT_SW_IN & mask);
+  // bring them to inputs;
+  PORT_SW_DDR&=(uint8_t)~mask;
+  SW_mask=mask;
+  SW_cache=(PORT_SW_IN & SW_mask);
 }
 
 void SW_store(uint8_t data) {

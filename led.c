@@ -21,14 +21,16 @@
 #include <inttypes.h>
 #include "led.h"
 
+void led_init(uint8_t led) {
+  LED_DDR |=led;
+}
+
 void led_on(uint8_t led) {
   LED_PORT |=led;
-  LED_DDR |=led;
 }
 
 void led_off(uint8_t led) {
   LED_PORT &=(uint8_t)~led;
-  LED_DDR &=(uint8_t)~led;
 }
 
 void led_blink(uint8_t times, uint8_t led) {

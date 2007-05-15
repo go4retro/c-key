@@ -36,15 +36,31 @@ void PS2_device_host_inhibit(void) {
 }
 
 void PS2_device_init(void) {
-  // need to do this once here, as CLK might already be low.
-  if(!PS2_read_CLK()) {
-    PS2_device_host_inhibit();
-  } else {
-    PS2_enable_IRQ_CLK_Fall();
-  }
-  // wait 880mS.
-  PS2_delay(880);
+  PS2_set_state(PS2_ST_IDLE);
+  PS2_disable_IRQ_CLK();
+  PS2_disable_IRQ_timer0();
+  PS2_set_CLK();
+  PS2_set_DATA();
+  // wait 600mS.
+  PS2_delay(600);
+  //PS2_clear_CLK();
+  //PS2_clear_DATA();
+  //PS2_delay(775);
+  //PS2_set_CLK();
+  //PS2_delay(80);
+  //PS2_set_DATA();
+  //PS2_delay(384);
+  //PS2_clear_CLK();
+  //PS2_delay(483);
+  //PS2_set_CLK();
+  //PS2_delay(60);
   PS2_send(PS2_CMD_BAT);
+  // need to do this once here, as CLK might already be low.
+  //if(!PS2_read_CLK()) {
+  //  PS2_device_host_inhibit();
+  //} else {
+  //  PS2_enable_IRQ_CLK_Fall();
+  //}
 }
 
 inline void PS2_device_trigger_send(void) {
@@ -229,7 +245,7 @@ void PS2_device_Timer(void) {
           // bing DATA low to ack
           PS2_clear_DATA();
           // commit data
-          PS2_write_byte();
+          //PS2_write_byte();  jlb, moved.
         } else {
           PS2_set_state(PS2_ST_GET_PARITY);
         }
@@ -248,6 +264,7 @@ void PS2_device_Timer(void) {
       // we just need to wait a 50uS or so, to ensure the host saw the CLK go high
       PS2_device_holdoff_count=1;
       PS2_set_state(PS2_ST_HOLDOFF);
+      PS2_write_byte();   //jlb moved
       break;
     case PS2_ST_HOLDOFF:
       PS2_device_holdoff_count--;

@@ -33,6 +33,7 @@
 
 #define LED_DELAY    14745600/2
 
+void led_init(uint8_t led);
 void led_on(uint8_t led);
 void led_off(uint8_t led);
 void led_blink(uint8_t times, uint8_t led);
