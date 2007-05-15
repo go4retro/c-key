@@ -28,18 +28,29 @@
 
 int main( void ) {
   uint8_t mode;
+  USART0_Init( B115200 );
 
-  mode=PS2_MODE_DEVICE;
-  //mode=PS2_MODE_HOST;
+  // check for direction
+  mode=(PIND&(1<<4)?PS2_MODE_HOST:PS2_MODE_DEVICE);
+  switch(mode) {
+    case PS2_MODE_DEVICE:
+        debug2('D');
+        break;
+    case PS2_MODE_HOST:
+        debug2('H');
+        break;
+    default:
+        debug2('E');
+        break;
+  }
   
-	USART0_Init( B115200 );
-	PS2_init(mode);
+  PS2_init(mode);
+    poll_init();
   if(mode==PS2_MODE_DEVICE) {
     scan_init();
     sei();
     scan();
   } else {
-    poll_init();
     sei();
     poll();
   }

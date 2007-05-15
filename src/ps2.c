@@ -43,13 +43,21 @@ static volatile uint8_t PS2_Bit_Count;
 static volatile uint8_t PS2_One_Count;
 
 static volatile uint8_t PS2_Mode;
+static volatile uint8_t PS2_LEDs;
+static volatile uint8_t PS2_CodeSet;
 
-void PS2_init(uint8_t mode) {
+void PS2_clear_buffers(void) {
   PS2_TxHead=0;
   PS2_TxTail=0;
   PS2_RxHead=0;
   PS2_RxTail=0;
+}
+
+void PS2_init(uint8_t mode) {
+  PS2_clear_buffers();
   PS2_Mode=mode;
+  PS2_LEDs=0;
+  PS2_CodeSet=2;
   
 	PS2_set_CLK();
 	PS2_set_DATA();
@@ -229,6 +237,7 @@ void PS2_write_byte(void) {
     /* ERROR! Receive buffer overflow */
   }
 
+  debug2('i');
   printHex(PS2_Byte);
   PS2_RxBuf[tmp] = PS2_Byte; /* Store received data in buffer */
 }
@@ -237,6 +246,7 @@ void PS2_read_byte(void) {
   PS2_Bit_Count=0;
   PS2_One_Count=0;
   PS2_Byte = PS2_TxBuf[( PS2_TxTail + 1 ) & PS2_TX_BUFFER_MASK];  /* Start transmition */
+  debug2('o');
   printHex(PS2_Byte);
 }
 
@@ -306,10 +316,25 @@ SIGNAL(SIG_OUTPUT_COMPARE0) {
 }
 
 void PS2_handle_cmds(uint8_t data) {
+  uint8_t i;
+  
     switch(data) {
+      case PS2_CMD_ACK:
+        //ignore.
+        break;
       case PS2_CMD_RESET:
-      case PS2_CMD_ENABLE:
+        PS2_send(PS2_CMD_ACK);
+        PS2_send(PS2_CMD_BAT);
+        break;
       case PS2_CMD_DISABLE:
+        // we should disable sending output if we receive this command.
+      case PS2_CMD_ENABLE:
+        //clear out KB buffers 
+        cli();
+        PS2_clear_buffers();
+        sei();
+        PS2_send(PS2_CMD_ACK);
+        break;
       default:
         PS2_send(PS2_CMD_ACK);
         break;
@@ -318,20 +343,25 @@ void PS2_handle_cmds(uint8_t data) {
         break;
       case PS2_CMD_SET_CODE_SET:
         PS2_send(PS2_CMD_ACK);
-        if(PS2_recv() == 0) {
-          PS2_send(2);
+        i=PS2_recv();
+        if(i == 0) {
+          PS2_send(PS2_CodeSet);
+        } else {
+          PS2_CodeSet=i;
         }
         break;
       case PS2_CMD_SET_RATE:
-        // this needs to be done in another area.
+        // this should to be caught in another area, ignore if received here.
         break;
       case PS2_CMD_READ_ID:
         PS2_send(PS2_CMD_ACK);
         PS2_send(0xab);
+        PS2_send(0x83);
         break;
       case PS2_CMD_LEDS:
         PS2_send(PS2_CMD_ACK);
-        PS2_recv();
+        PS2_LEDs=PS2_recv()&0x07;
+        PS2_send(PS2_CMD_ACK);
         break;
       case PS2_CMD_RESEND:
         break;

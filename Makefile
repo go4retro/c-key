@@ -28,9 +28,9 @@
 
 
 # MCU name
-#MCU = atmega162
+MCU = atmega162
 #MCU = atmega16
-MCU = atmega32
+#MCU = atmega32
 
 # Output format. (can be srec, ihex, binary)
 FORMAT = ihex
@@ -73,7 +73,7 @@ EXTRAINCDIRS =
 CSTANDARD = -std=gnu99
 
 # Place -D or -U options here
-CDEFS = -D $(MCU)
+CDEFS = -D $(MCU) -D REV3
 
 # Place -I options here
 CINCS =

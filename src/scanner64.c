@@ -153,6 +153,7 @@ void scan_init(void) {
   TCCR2 = (1<<CS22) | (1<<CS21) | (1<<WGM21);
   // set up OC2 IRQ
   TIMSK |= (1<<OCIE2);
+  
 }
 
 SIGNAL(SIG_OUTPUT_COMPARE2) {
@@ -166,13 +167,30 @@ void handle_cmds(void) {
   
   while(PS2_data_available()) {
     data=PS2_recv();
-    PS2_handle_cmds(data);
+    //debug2('%');
+    //printHex(data);
     switch(data) {
       case PS2_CMD_SET_RATE:
         PS2_send(PS2_CMD_ACK);
         data=PS2_recv();
         KB_set_repeat_delay(PS2_get_typematic_delay(data));
         KB_set_repeat_period(PS2_get_typematic_period(data));
+        break;
+      case PS2_CMD_LEDS:
+        PS2_send(PS2_CMD_ACK);
+        data=PS2_recv()&0x07;
+        PS2_send(PS2_CMD_ACK);
+        if(data&PS2_LED_CAPS_LOCK) {
+          // shift lock is pressed.
+          debug2('^');
+        }
+        if(data&PS2_LED_NUM_LOCK) {
+          // shift lock is pressed.
+          debug2('#');
+        }
+        break;
+      default:
+        PS2_handle_cmds(data);
         break;
     }
   }
@@ -354,7 +372,7 @@ inline void parse_key(uint8_t data) {
 void scan(void) {
   uint8_t data;
   uint8_t esc_flags=SCAN_ESC_NONE;
- 
+  led_init(LED_PIN_7);
   led_on(LED_PIN_7);
   flags=SCAN_FLAG_NONE;
   mapping=MAP_NORMAL;
@@ -431,10 +449,21 @@ void scan(void) {
       }
     }
     if(SW_data_available()) {
+      
       // handle special switches.
       data=SW_recv();
-      printHex(data);
+      //debug2('@');
+      //printHex(data);
       switch(data) {
+        case SW_CAPSENSE:
+          // need to send make for capslock
+          PS2_send(PS2_KEY_CAPS_LOCK);
+          break;
+        case SW_CAPSENSE | 0x80:
+          // need to send break code for capslock
+          PS2_send(PS2_KEY_UP);
+          PS2_send(PS2_KEY_CAPS_LOCK);
+          break;
         case SW_RESTORE:
           switch(mapping) {
             case MAP_VICE:

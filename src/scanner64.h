@@ -21,8 +21,8 @@
 #define MAP_VICE        1
 
 #ifdef atmega162
-#define SW_4080         PIN0
-#define SW_CAPSENSE     PIN1
+#define SW_4080         PIN1
+#define SW_CAPSENSE     PIN0
 #define SW_RESTORE      PIN2
 #else
 #define SW_4080         PIN4
