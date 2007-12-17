@@ -25,13 +25,19 @@
 #include "util.h"
 #include "poll.h"
 
+#ifdef REV3
+#define PIN_MODE (1<<PIN4)
+#else
+#define PIN_MODE (1<<PIN5)
+#endif
+
 
 int main( void ) {
   uint8_t mode;
   USART0_Init( B115200 );
 
   // check for direction
-  mode=(PIND&(1<<4)?PS2_MODE_HOST:PS2_MODE_DEVICE);
+  mode=(PIND&PIN_MODE?PS2_MODE_HOST:PS2_MODE_DEVICE);
   switch(mode) {
     case PS2_MODE_DEVICE:
         debug2('D');
