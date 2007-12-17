@@ -141,6 +141,7 @@ void scan_init(void) {
   // init keyboard matrix scanning engine
   KB_init();
   SW_init(SW_TYPE_INPUT,(1<<SW_RESTORE) | (1<<SW_CAPSENSE) | (1<<SW_4080));
+  led_init(LED_PIN_7);
   
 #ifdef PORT_KEYS
   OCR2=20; //21 counts * 256 cycles/count * 24 times per run * 120 runs/sec
