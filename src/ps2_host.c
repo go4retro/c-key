@@ -146,7 +146,7 @@ void PS2_host_Timer() {
       // we waited 100uS for device to notice us, bring DATA low and CLK hi
       PS2_clear_DATA();
       if(!PS2_set_CLK()) {
-        debug2(':');
+        //debug2(':');
         // kb wants to talk to us.
         PS2_set_DATA();
         PS2_enable_IRQ_CLK_Fall();
