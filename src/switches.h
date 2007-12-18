@@ -24,7 +24,7 @@
 
 void SW_init(uint8_t type,uint8_t mask);
 uint8_t SW_data_available( void );
-uint8_t SW_send( uint8_t sw);
+void SW_send( uint8_t sw);
 uint8_t SW_recv( void );
 void SW_scan(void);
 
