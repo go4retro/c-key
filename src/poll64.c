@@ -26,6 +26,7 @@
 #include "switches.h"
 #include "poll.h"
 #include "poll64.h"
+#include "led.h"
 
 static prog_uint8_t normal[0x84] =  { C64_KEY_NONE,C64_KEY_NONE,C64_KEY_NONE,C64_KEY_SPECIAL+0,C64_KEY_SPECIAL+1,C64_KEY_SPECIAL+2,C64_KEY_SPECIAL+3,C64_KEY_UNMAPPED
                                   ,C64_KEY_NONE,C64_KEY_UNMAPPED,C64_KEY_SPECIAL+4,C64_KEY_SPECIAL+5,C64_KEY_SPECIAL+6,C64_KEY_SPECIAL+40,C64_KEY_BACKARROW,C64_KEY_NONE
@@ -237,7 +238,6 @@ static uint8_t led_state=0;
 
 static uint8_t state=POLL_ST_IDLE;
 
-
 inline void delay_jiffy(void) {
   // 1/60 second delay for funky shifting settling.
   TCNT2=0;
@@ -248,7 +248,7 @@ inline void delay_jiffy(void) {
   TCCR2=0;
 }
 
-void set_switch(uint8_t sw, uint8_t state) {
+void _set_switch(uint8_t sw, uint8_t state) {
   switch(sw) {
     case C64_PKEY_RESTORE:
       SW_send(SW_RESTORE | (state?SW_UP:0));
@@ -273,6 +273,16 @@ void set_switch(uint8_t sw, uint8_t state) {
     break;
   }
 }
+
+void set_switch(uint8_t sw, uint8_t state) {
+  if(state)
+    debug2('d');
+  else
+    debug2('u');
+  printHex(sw);
+  _set_switch(sw,state);
+}
+
 
 inline void reset_shift_override(uint8_t sw, uint8_t brk) {
   // if it is not a repeat, not a meta key, then reset.
@@ -351,7 +361,7 @@ void reset_matrix(void) {
 
   // reset switches...
   do {
-    set_switch(i+=2,FALSE);
+    _set_switch(i+=2,FALSE);
   } while (i!=0);
 }
 
@@ -384,6 +394,8 @@ inline void load_defaults(void) {
 }
 
 void poll_init(void) {
+  led_init(LED_PIN_7);
+  PIN_SET_HIZ(DDRD,PORTD,PIN5);
   XPT_PORT_STROBE_OUT&=(uint8_t)~XPT_PIN_STROBE;
   XPT_DDR_STROBE|=XPT_PIN_STROBE;
   XPT_DDR_DATA=0xff;
@@ -405,6 +417,7 @@ void poll_init(void) {
 #define PS2_PKEY_PRINT_SCREEN   0x7e
 
 inline void map_positional_c64(uint8_t sh, uint8_t code, uint8_t brk) {
+  // TODO I really would like to get rid of these functions.
   switch(code) {
     case 0x80| PS2_PKEY_PAUSE:
       set_matrix(sh,C64_PKEY_RESTORE,brk);
@@ -453,6 +466,7 @@ inline void map_positional_c64(uint8_t sh, uint8_t code, uint8_t brk) {
 }
 
 inline void map_positional_c128(uint8_t sh, uint8_t code, uint8_t brk) {
+  // TODO I really would like to get rid of these functions.
   switch(code) {
     case 0x80| PS2_PKEY_PAUSE:
       set_matrix(sh,C64_PKEY_RESTORE,brk);
@@ -517,9 +531,11 @@ inline void map_positional_c128(uint8_t sh, uint8_t code, uint8_t brk) {
 }
 
 inline void map_symbolic_c64(uint8_t sh, uint8_t code, uint8_t brk) {
+  // TODO I really would like to get rid of these functions.
 }
 
 inline void map_symbolic_c128(uint8_t sh, uint8_t code, uint8_t brk) {
+  // TODO I really would like to get rid of these functions.
 }
 
 inline void remap_personal(uint8_t map, uint8_t* shift, uint8_t* code) {
@@ -593,16 +609,27 @@ inline void map_key(uint8_t sh, uint8_t code,uint8_t brk) {
  
 inline void poll_parse_key(uint8_t code, uint8_t brk) {
   uint8_t sh=meta&POLL_FLAG_SHIFT;
+  
   // this is also where we can check for Ctrl/Alt/Del
   if((code&0x7f)==PS2_KEY_ALT) {
+    // turn on or off the ALT META flag
     meta=(meta&(uint8_t)~POLL_FLAG_ALT) | (brk?0:POLL_FLAG_ALT);
   } else if((code&0x7f)==PS2_KEY_LCTRL) {
+    // turn on or off the CTRL META flag
     meta=(meta&(uint8_t)~POLL_FLAG_CONTROL) | (brk?0:POLL_FLAG_CONTROL);
-  } else if((meta&POLL_CTRL_ALT) && code==(0x80 | PS2_KEY_DELETE)) {
-    debug('^');
-    // reset interface...
-  } else if((meta&POLL_CTRL_ALT) && code==PS2_KEY_BS) {
-    debug('|');
+  } 
+  if((meta&POLL_FLAG_CTRL_ALT)==POLL_FLAG_CTRL_ALT && code==(0x80 | PS2_KEY_DELETE) && !brk) {
+    // CTRL/ALT/DEL is pressed.
+    // bring RESET line low
+    //debug2('^');
+    PIN_SET_LOW(DDRD,PORTD,PIN5);
+    PIN_SET_LOW(DDRD,PORTD,PIN5);
+    PIN_SET_LOW(DDRD,PORTD,PIN5);
+    PIN_SET_HIZ(DDRD,PORTD,PIN5);
+    //goto *0x0000;
+  } else if((meta&POLL_FLAG_CTRL_ALT)==POLL_FLAG_CTRL_ALT && code==PS2_KEY_BS) {
+    // ALT + Backspace.
+    debug2('|');
     // enter config
   } else {
     // now, apply user preferences
@@ -617,43 +644,9 @@ inline void poll_parse_key(uint8_t code, uint8_t brk) {
   }
 }
 
-/*
 void poll(void) {
   uint8_t key;
-  uint8_t ext;
-  uint8_t brk=FALSE;
-  
-  while(TRUE) {
-    if(PS2_data_available() != 0) {
-      // kb sent data...
-      key=PS2_recv();
-      //printHex(key);
-      if(key==PS2_CMD_BAT) {
-        load_defaults();
-        reset_matrix();
-        state=PS2_ST_IDLE;
-      } else if(key==PS2_KEY_EXT || key==PS2_KEY_EXT_2) {
-        ext=key;
-      } else if(key==PS2_KEY_UP) {
-        brk=TRUE;
-      } else if(key<=PS2_KEY_F7) {
-        // deal with key;
-        if(ext==PS2_KEY_EXT_2 && key==PS2_KEY_PAUSE) {
-          poll_parse_key(0x80|PS2_PKEY_PAUSE,FALSE);
-          poll_parse_key(0x80|PS2_PKEY_PAUSE,TRUE);
-        } else {
-          poll_parse_key((ext?0x80:0)|key,brk);
-        }
-        brk=FALSE;
-        ext=0;
-      }
-    }
-  }
-}
-*/  
-
-void poll(void) {
-  uint8_t key;
+  led_on(LED_PIN_7);
   
   for(;;) {
     if(PS2_data_available() != 0) {
