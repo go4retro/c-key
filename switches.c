@@ -36,7 +36,7 @@ uint8_t SW_data_available( void ) {
   return ( SW_RxHead != SW_RxTail ); /* Return 0 (FALSE) if the receive buffer is empty */
 }
 
-uint8_t SW_send( uint8_t sw) {
+void SW_send( uint8_t sw) {
   // 0x80 indicates key up.
   uint8_t state=(sw&0x80);
   sw&=0x7f;
