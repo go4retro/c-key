@@ -18,6 +18,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include <avr/io.h>
+#include <avr/signal.h>
+#include <avr/interrupt.h>
 #include <inttypes.h>
 #include <avr/pgmspace.h>
 #include <avr/eeprom.h>
@@ -27,6 +29,10 @@
 #include "poll.h"
 #include "poll64.h"
 #include "led.h"
+
+#define PS2_PKEY_NONE           0x00
+#define PS2_PKEY_PAUSE          0x7f
+#define PS2_PKEY_PRINT_SCREEN   0x7e
 
 static prog_uint8_t normal[0x84] =  { C64_KEY_NONE,C64_KEY_NONE,C64_KEY_NONE,C64_KEY_SPECIAL+0,C64_KEY_SPECIAL+1,C64_KEY_SPECIAL+2,C64_KEY_SPECIAL+3,C64_KEY_UNMAPPED
                                   ,C64_KEY_NONE,C64_KEY_UNMAPPED,C64_KEY_SPECIAL+4,C64_KEY_SPECIAL+5,C64_KEY_SPECIAL+6,C64_KEY_SPECIAL+40,C64_KEY_BACKARROW,C64_KEY_NONE
@@ -240,16 +246,18 @@ static uint8_t led_state=0;
 static uint8_t state=POLL_ST_IDLE;
 
 inline void delay_jiffy(void) {
+  uint8_t i=TCNT2-1;
   // 1/60 second delay for funky shifting settling.
-  TCNT2=0;
-  // Set OC2 clk  to SYSCLK/256 and Compare Timer Mode
-  TCCR2 = (1<<CS22) | (1<<CS21) | (1<<CS20) | (1<<WGM21);
-  while(!(TIFR & (1<<OCF2)));
-  TIFR=(1<<OCF2);
-  TCCR2=0;
+  //TCNT2=0;
+  // Set OC2 clk  to SYSCLK/1024 and Compare Timer Mode
+  //TCCR2 = (1<<CS22) | (1<<CS21) | (1<<CS20) | (1<<WGM21);
+  while(TCNT2!=i);
+  //while(!(TIFR & (1<<OCF2)));
+  //TIFR=(1<<OCF2);
+  //TCCR2=0;
 }
 
-void _set_switch(uint8_t sw, uint8_t state) {
+void set_switch(uint8_t sw, uint8_t state) {
   switch(sw) {
     case C64_PKEY_RESTORE:
       SW_send(SW_RESTORE | (state?SW_UP:0));
@@ -274,16 +282,6 @@ void _set_switch(uint8_t sw, uint8_t state) {
     break;
   }
 }
-
-void set_switch(uint8_t sw, uint8_t state) {
-  //if(state)
-    //debug2('d');
-  //else
-    //debug2('u');
-  //printHex(sw);
-  _set_switch(sw,state);
-}
-
 
 inline void reset_shift_override(uint8_t sw, uint8_t brk) {
   // if it is not a repeat, not a meta key, then reset.
@@ -362,11 +360,12 @@ void reset_matrix(void) {
 
   // reset switches...
   do {
-    _set_switch(i+=2,FALSE);
+    set_switch(i+=2,FALSE);
   } while (i!=0);
 }
 
 inline void set_LED(uint8_t led) {
+  debug2('L');
   led_state|=led;
   PS2_send(PS2_CMD_LEDS);
   PS2_send(led_state);
@@ -381,42 +380,57 @@ inline void clear_LED(uint8_t led) {
 inline void load_defaults(void) {
   uint8_t data;
   
+  meta=0;
+  config=FALSE;
+  shift_override=FALSE;
   led_state=0;
+
   while(!eeprom_is_ready());
   layout=eeprom_read_byte((void*)0);
   while(!eeprom_is_ready());
   data=eeprom_read_byte((void*)1);
-  if(data)
+
+  if(data&PS2_LED_NUM_LOCK)
     set_LED(PS2_LED_NUM_LOCK);
-  
-  meta=0;
-  config=FALSE;
-  shift_override=FALSE;
 }
 
 void poll_init(void) {
-  led_init(LED_PIN_7);
+  uint8_t i;
+  
+  LED_init(LED_PIN_7);
   PIN_SET_HIZ(DDRD,PORTD,PIN5);
   XPT_PORT_STROBE_OUT&=(uint8_t)~XPT_PIN_STROBE;
   XPT_DDR_STROBE|=XPT_PIN_STROBE;
   XPT_DDR_DATA=0xff;
   SW_init(SW_TYPE_OUTPUT,(1<<SW_RESTORE) | (1<<SW_CAPSENSE) | (1<<SW_4080));
-  // remove for production
-  while(!eeprom_is_ready());
-  eeprom_write_byte((void*)0,0);
-  while(!eeprom_is_ready());
-  eeprom_write_byte((void*)1,0);
-  while(!eeprom_is_ready());
-  eeprom_write_byte((void*)2,0);
   reset_matrix();
+  // remove for production
+  //while(!eeprom_is_ready());
+  //eeprom_write_byte((void*)0,0);
+  //while(!eeprom_is_ready());
+  //eeprom_write_byte((void*)1,0);
+  //while(!eeprom_is_ready());
+  //eeprom_write_byte((void*)2,0);
   // for delays
   OCR2=255; 
+  TCNT2=0;
   
+  // Set OC2 clk  to SYSCLK/1024 and Compare Timer Mode
+  TCCR2 = (1<<CS22) | (1<<CS21) | (1<<CS20) | (1<<WGM21);
+  // set up OC2 IRQ
+  TIMSK |= (1<<OCIE2);
+  
+  // delay for 3 seconds.
+  for(i=0;i<180;i++)
+    delay_jiffy();
+
+  load_defaults();
+
 }
 
-#define PS2_PKEY_NONE           0x00
-#define PS2_PKEY_PAUSE          0x7f
-#define PS2_PKEY_PRINT_SCREEN   0x7e
+void poll_irq(void) {
+  LED_irq();
+}
 
 inline void map_positional_c64(uint8_t sh, uint8_t code, uint8_t brk) {
   // TODO I really would like to get rid of these functions.
@@ -722,6 +736,50 @@ inline void map_key(uint8_t sh, uint8_t code,uint8_t brk) {
   }
 }
 
+void handle_num_lock(void) {
+  if(led_state&PS2_LED_NUM_LOCK)
+    clear_LED(PS2_LED_NUM_LOCK);
+  else
+    set_LED(PS2_LED_NUM_LOCK);
+}
+
+void set_options(uint8_t code, uint8_t brk) {
+  if(!brk) {
+    switch(code) {
+      case PS2_KEY_1:
+        layout=0;
+        LED_blink(LED_PIN_7,1,LED_FLAG_NONE);
+        break;
+      case PS2_KEY_2:
+        layout=1;
+        LED_blink(LED_PIN_7,2,LED_FLAG_NONE);
+        break;
+      case PS2_KEY_3:
+        layout=2;
+        LED_blink(LED_PIN_7,3,LED_FLAG_NONE);
+        break;
+      case PS2_KEY_4:
+        layout=3;
+        LED_blink(LED_PIN_7,4,LED_FLAG_NONE);
+        break;
+      case PS2_KEY_NUM_LOCK:
+        handle_num_lock();
+        break;
+        
+    }
+  }
+}
+
+void update_eeprom(void* address,uint8_t data) {
+  uint8_t tmp;
+  
+  while(!eeprom_is_ready());
+  tmp=eeprom_read_byte(address);
+  if(tmp!=data)
+  while(!eeprom_is_ready());
+  eeprom_write_byte(address,data);
+}
+
 /* 
  * In this function, all keys are mapped to single char.  Relationship:
  * 
@@ -746,6 +804,7 @@ inline void poll_parse_key(uint8_t code, uint8_t brk) {
     // CTRL/ALT/DEL is pressed.
     // bring RESET line low
     //debug2('^');
+    // repeat this a few times so the pulse will be long enough to trigger the NMOS ICs.
     PIN_SET_LOW(DDRD,PORTD,PIN5);
     PIN_SET_LOW(DDRD,PORTD,PIN5);
     PIN_SET_LOW(DDRD,PORTD,PIN5);
@@ -754,16 +813,22 @@ inline void poll_parse_key(uint8_t code, uint8_t brk) {
   } else if((meta&POLL_FLAG_CTRL_ALT)==POLL_FLAG_CTRL_ALT && code==PS2_KEY_BS) {
     // CTRL/ALT/Backspace.
     if(brk) { // only check on key up.
-      if(config) {
+      if(!config) {
         // go into config mode
-        led_blink(2,LED_PIN_7);
-        debug2('|');
+        LED_blink(LED_PIN_7,2,LED_FLAG_NONE);
+        reset_matrix();
       } else {
-        led_blink(10,LED_PIN_7);
-        led_on(LED_PIN_7);
+        LED_blink(LED_PIN_7,10,LED_FLAG_END_ON);
+        // write layout to EEPROM
+        update_eeprom((void*)0,layout);
+        update_eeprom((void*)1,led_state);
+        reset_matrix();
       }
       config=!config;
     }
+  } else if (config) {
+    // do config operations.
+    set_options(code,brk);
   } else {
     // now, apply user preferences
     remap_personal(layout,&sh,&code);
@@ -779,7 +844,7 @@ inline void poll_parse_key(uint8_t code, uint8_t brk) {
 
 void poll(void) {
   uint8_t key;
-  led_on(LED_PIN_7);
+  LED_on(LED_PIN_7);
   
   for(;;) {
     if(PS2_data_available() != 0) {
@@ -787,8 +852,8 @@ void poll(void) {
       key=PS2_recv();
       //printHex(key);
       if(key==PS2_CMD_BAT) {
-        load_defaults();
         reset_matrix();
+        load_defaults();
         state=PS2_ST_IDLE;
       }
       switch(state) {
@@ -808,10 +873,7 @@ void poll(void) {
               break;
             case PS2_KEY_NUM_LOCK:
               // handle NUM_LOCK pressed.
-              if(led_state&PS2_LED_NUM_LOCK)
-                clear_LED(PS2_LED_NUM_LOCK);
-              else
-                set_LED(PS2_LED_NUM_LOCK);
+              handle_num_lock();
               state=PS2_ST_IDLE;
               break;
             case PS2_CMD_ACK:

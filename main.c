@@ -31,9 +31,17 @@
 #define PIN_MODE (1<<PIN5)
 #endif
 
+static uint8_t mode;
+
+SIGNAL(SIG_OUTPUT_COMPARE2) {
+  if(mode==PS2_MODE_DEVICE) {
+    scan_irq();
+  } else {
+    poll_irq();
+  }
+}
 
 int main( void ) {
-  uint8_t mode;
   USART0_Init( B115200 );
 
   // check for direction

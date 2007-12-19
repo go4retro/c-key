@@ -21,26 +21,67 @@
 #include <inttypes.h>
 #include "led.h"
 
-void led_init(uint8_t led) {
-  LED_DDR |=led;
+static uint8_t led_mask;
+static uint8_t led_counter=0;
+static uint8_t led_count[8];
+/*
+ * 00000000 = Off
+ * 11111111 = On
+ * bbbbbbbb = blink b times
+ * 
+ */
+static uint8_t led_program[8];
+
+void LED_init(uint8_t led) {
+  LED_DDR |=(1<<led);
+  led_mask|=(1<<led);
+  LED_off(led);
 }
 
-void led_on(uint8_t led) {
-  LED_PORT |=led;
+void LED_blink(uint8_t led, uint8_t count, uint8_t flags) {
+  led_program[led]=count| flags; 
+  led_count[led]=0;
 }
 
-void led_off(uint8_t led) {
-  LED_PORT &=(uint8_t)~led;
+void LED_on(uint8_t led) {
+  led_program[led]=0xff; 
+  led_count[led]=0;
+} 
+
+void LED_off(uint8_t led) {
+  led_program[led]=0; 
+  led_count[led]=0;
 }
 
-void led_blink(uint8_t times, uint8_t led) {
-  uint16_t i;
-  uint32_t delay;
+void LED_irq(void) {
+  uint8_t i;
   
-  for(i=0;i<times;i++) {
-    led_on(led);
-    for(delay=0;delay<LED_DELAY;delay++) { ; }
-    led_off(led);
-    for(delay=0;delay<LED_DELAY;delay++) { ; }
+  led_counter++;
+  if(led_counter==12) {
+    led_counter=0;
+    for(i=0;i<8;i++) {
+      if(led_mask&(1<<i)) {
+        switch(led_program[i]) {
+          case 0xff:  //LED on
+            LED_PORT|=(1<<i);
+            break;
+          case 0x00:  // LED off
+            LED_PORT&=(uint8_t)~(1<<i);
+            break;
+          default:  // LED blink
+            if(LED_PORT&(1<<i)) {
+              LED_PORT&=(uint8_t)~(1<<i);
+            } else {
+              led_count[i]++;
+              if(led_count[i]<=(led_program[i]&LED_COUNT_MASK)) {
+                LED_PORT|=(1<<i);
+              } else if(led_program[i]&LED_FLAG_END_ON) {
+                LED_PORT|=(1<<i);
+                led_program[i]=0xff;
+              }
+            }
+        }
+      }
+    }
   }
 }
