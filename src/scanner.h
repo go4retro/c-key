@@ -32,6 +32,7 @@
 #define SCAN_MAP_EXT    2
 
 void scan_init(void);
+void scan_irq(void);
 void scan(void);
 
 

@@ -22,20 +22,23 @@
 
 #define LED_DDR         DDRD
 #define LED_PORT        PORTD
-#define LED_PIN_0       (1<<PIN0)
-#define LED_PIN_1       (1<<PIN1)
-#define LED_PIN_2       (1<<PIN2)
-#define LED_PIN_3       (1<<PIN3)
-#define LED_PIN_4       (1<<PIN4)
-#define LED_PIN_5       (1<<PIN5)
-#define LED_PIN_6       (1<<PIN6)
-#define LED_PIN_7       (1<<PIN7)
+#define LED_PIN_0       (PIN0)
+#define LED_PIN_1       (PIN1)
+#define LED_PIN_2       (PIN2)
+#define LED_PIN_3       (PIN3)
+#define LED_PIN_4       (PIN4)
+#define LED_PIN_5       (PIN5)
+#define LED_PIN_6       (PIN6)
+#define LED_PIN_7       (PIN7)
 
-#define LED_DELAY    14745600/2
+#define LED_FLAG_NONE   0
+#define LED_FLAG_END_ON 0x80
+#define LED_COUNT_MASK  ((uint8_t)~LED_FLAG_END_ON)
 
-void led_init(uint8_t led);
-void led_on(uint8_t led);
-void led_off(uint8_t led);
-void led_blink(uint8_t times, uint8_t led);
+void LED_init(uint8_t led);
+void LED_on(uint8_t led);
+void LED_off(uint8_t led);
+void LED_blink(uint8_t led, uint8_t count, uint8_t flags);
+void LED_irq(void);
  
 #endif

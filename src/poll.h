@@ -26,6 +26,7 @@
 #endif
 
 void poll_init(void);
+void poll_irq(void);
 void poll(void);
 
 #endif

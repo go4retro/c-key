@@ -141,7 +141,7 @@ void scan_init(void) {
   // init keyboard matrix scanning engine
   KB_init();
   SW_init(SW_TYPE_INPUT,(1<<SW_RESTORE) | (1<<SW_CAPSENSE) | (1<<SW_4080));
-  led_init(LED_PIN_7);
+  LED_init(LED_PIN_7);
   
 #ifdef PORT_KEYS
   OCR2=20; //21 counts * 256 cycles/count * 24 times per run * 120 runs/sec
@@ -157,11 +157,11 @@ void scan_init(void) {
   
 }
 
-SIGNAL(SIG_OUTPUT_COMPARE2) {
+void scan_irq(void) {
   KB_scan();
   SW_scan();
+  LED_irq();
 }
-
 
 void handle_cmds(void) {
   uint8_t data;
@@ -373,8 +373,7 @@ inline void parse_key(uint8_t data) {
 void scan(void) {
   uint8_t data;
   uint8_t esc_flags=SCAN_ESC_NONE;
-  led_init(LED_PIN_7);
-  led_on(LED_PIN_7);
+  LED_on(LED_PIN_7);
   flags=SCAN_FLAG_NONE;
   mapping=MAP_NORMAL;
   joy0=JOY_NONE;
@@ -391,17 +390,17 @@ void scan(void) {
           case 0x07: //1
             // regular
             mapping=0;
-            led_blink(1,LED_PIN_7);
+            LED_blink(LED_PIN_7,1,LED_FLAG_NONE);
             break;
           case 0x00: //2
             // VICE
             mapping=1;
-            led_blink(2,LED_PIN_7);
+            LED_blink(LED_PIN_7,2,LED_FLAG_NONE);
             break;
           case (0x80 | 0x3e): // enter key up
             esc_flags=SCAN_ESC_NONE;
-            led_blink(10,LED_PIN_7);
-            led_on(LED_PIN_7);
+            LED_blink(LED_PIN_7,10,LED_FLAG_END_ON);
+            LED_on(LED_PIN_7);
             break;
         }
       } else {
@@ -445,7 +444,7 @@ void scan(void) {
           flags &= (uint8_t)~(SCAN_FLAG_LSHIFT | SCAN_FLAG_RSHIFT);
           KB_set_repeat_code(KB_NO_REPEAT);
           // note cmd mode.
-          led_blink(2,LED_PIN_7);
+          LED_blink(LED_PIN_7,2,LED_FLAG_NONE);
         }
       }
     }
