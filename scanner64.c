@@ -30,6 +30,8 @@
 #include "scanner.h"
 #include "scanner64.h"
 
+// TODO I need to clean up this code and make it more like poll64.c
+
 static prog_uint8_t regular[0x58] =  {0xc0,PS2_KEY_Q,0xcf,PS2_KEY_SPACE,0xd0,0xcd,0xce,PS2_KEY_1
                                         ,PS2_KEY_4,PS2_KEY_E,PS2_KEY_S,PS2_KEY_Z,PS2_KEY_LSHIFT,PS2_KEY_A,PS2_KEY_W,PS2_KEY_3
                                         ,0xc1,PS2_KEY_T,PS2_KEY_F,PS2_KEY_C,PS2_KEY_X,PS2_KEY_D,PS2_KEY_R,PS2_KEY_5
@@ -136,6 +138,7 @@ static volatile uint8_t joy1;
 static uint8_t shift_override=FALSE;
 static uint8_t shift_override_state;
 static uint8_t shift_override_key;
+static uint8_t led_divider=0;
 
 void scan_init(void) {
   // init keyboard matrix scanning engine
@@ -144,8 +147,10 @@ void scan_init(void) {
   LED_init(LED_PIN_7);
   
 #ifdef PORT_KEYS
+#define IRQ_DIVIDER 48
   OCR2=20; //21 counts * 256 cycles/count * 24 times per run * 120 runs/sec
 #else  
+#define IRQ_DIVIDER 32
   OCR2=31; //32 counts * 256 cycles/count * 16 times per run * 120 runs/sec
 #endif
   TCNT2=0;
@@ -160,7 +165,11 @@ void scan_init(void) {
 void scan_irq(void) {
   KB_scan();
   SW_scan();
-  LED_irq();
+  led_divider++;
+  if(led_divider==IRQ_DIVIDER) {
+    LED_irq();
+    led_divider=0;
+  }
 }
 
 void handle_cmds(void) {
