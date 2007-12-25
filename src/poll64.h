@@ -1,8 +1,12 @@
 #ifndef _POLL64_H_
 #define _POLL64_H_
 
+#define ADDR_LAYOUT         (void*)0
+#define ADDR_LED_STATE      (void*)1
+#define ADDR_SW_STATE       (void*)2
+
 #define C64_KEY_NONE        0xff
-#define C64_KEY_UNMAPPED    0xff
+#define C64_KEY_UNMAPPED    0xfe
 #define C64_KEY_SPECIAL     0xc0
 
 #define POLL_MAP_NONE       0
@@ -24,11 +28,6 @@
 #define POLL_ST_GET_PAUSE_5   8
 #define POLL_ST_GET_PAUSE_6   9
 #define POLL_ST_GET_PAUSE_7   10
-#define POLL_ST_PRINT_1       11
-#define POLL_ST_PRINT_2       12
-#define POLL_ST_PRINT_UP_1    13
-#define POLL_ST_PRINT_UP_2    14
-#define POLL_ST_PRINT_UP_3    15
 
 #ifdef REV3
 #define C64_KEY_RUNSTOP     0x7A
@@ -229,8 +228,8 @@
 #endif
 
 #ifdef atmega162
-#define SW_4080         PIN0
-#define SW_CAPSENSE     PIN1
+#define SW_4080         PIN1
+#define SW_CAPSENSE     PIN0
 #define SW_RESTORE      PIN2
 #else
 #define SW_4080         PIN4

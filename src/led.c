@@ -20,8 +20,10 @@
 #include <avr/io.h>
 #include <inttypes.h>
 #include "led.h"
+#include "util.h"
 
 static uint8_t led_mask;
+static uint8_t led_status;
 static uint8_t led_counter=0;
 static uint8_t led_count[8];
 /*
@@ -55,6 +57,7 @@ void LED_off(uint8_t led) {
 
 void LED_irq(void) {
   uint8_t i;
+  uint8_t on=FALSE;
   
   led_counter++;
   if(led_counter==12) {
@@ -63,23 +66,36 @@ void LED_irq(void) {
       if(led_mask&(1<<i)) {
         switch(led_program[i]) {
           case 0xff:  //LED on
-            LED_PORT|=(1<<i);
+            on=TRUE;
             break;
           case 0x00:  // LED off
-            LED_PORT&=(uint8_t)~(1<<i);
             break;
           default:  // LED blink
-            if(LED_PORT&(1<<i)) {
-              LED_PORT&=(uint8_t)~(1<<i);
+            if(led_status&(1<<i)) {
             } else {
               led_count[i]++;
               if(led_count[i]<=(led_program[i]&LED_COUNT_MASK)) {
-                LED_PORT|=(1<<i);
+                on=TRUE;
               } else if(led_program[i]&LED_FLAG_END_ON) {
-                LED_PORT|=(1<<i);
+                on=TRUE;
                 led_program[i]=0xff;
               }
             }
+        }
+        if(on) {
+#ifdef INVERSE          
+          LED_PORT&=(uint8_t)~(1<<i);
+#else
+          LED_PORT|=(1<<i);
+#endif
+          led_status|=(1<<i);
+        } else {
+#ifdef INVERSE          
+          LED_PORT|=(1<<i);
+#else
+          LED_PORT&=(uint8_t)~(1<<i);
+#endif
+          led_status&=(uint8_t)~(1<<i);
         }
       }
     }
