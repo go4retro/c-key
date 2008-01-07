@@ -161,8 +161,8 @@ void PS2_host_Timer() {
       }
       break;
     default:
-      debug2('#');
-      debug2('a' + PS2_get_state());
+      debug('#');
+      debug('a' + PS2_get_state());
       break;
   }
 }

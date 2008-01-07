@@ -133,39 +133,38 @@ inline void PS2_disable_IRQ_CLK() {
 void PS2_delay(uint16_t ms) {
   // careful, we use the same timer as the IRQ.
   // set to /1024. and CTC mode
-  OCR0=14;  // 14 is ~1ms
-  TCNT0=0;
-  TCCR0 =(1<<CS02) | (1<<CS00) | (1<<WGM01);
+  OCR=14;  // 14 is ~1ms
+  TCNT=0;
+  TCCR = TCCR_DATA_DELAY;
   do {
-    while(!(TIFR & (1<<OCF0)));
-    TIFR|=(1<<OCF0);
+    while(!(TIFR & TIFR_DATA));
+    TIFR|=TIFR_DATA;
   } while (ms-- > 0);
   // shut timer off.
-  TCCR0=0;
+  TCCR=0;
 }
 
 inline void PS2_enable_IRQ_timer0(uint8_t us) {
 	//TCCR0 &=~(1<<CS01);
 	//TIMSK &= ~(1<<OCIE0);
-	TIFR |= (1<<OCF0);
+	TIFR |= TIFR_DATA;
 	// us is uS....  Need to * 14 to get ticks, then divide by 8...
 	// cheat... * 16 / 8 = *2 = <<1  
 	
 	// clear TCNT0;
-	TCNT0=0;
+	TCNT=0;
 	// set the count...
-	OCR0=(uint8_t)(us<<1);
-  //OCR0=9;
+	OCR=(uint8_t)(us<<1);
 	// set output compare IRQ
-	TIMSK |= (1<<OCIE0);
+	TIMSK |= TIMSK_DATA;
 	// set prescaler to System Clock/8 and Compare Timer
-  TCCR0 =(1<<CS01) | (1<<WGM01);
+  TCCR =TCCR_DATA;
 }
 
 inline void PS2_disable_IRQ_timer0() {
 	// turn off timer
-  TCCR0 =0;
-	TIMSK &=(uint8_t)~(1<<OCIE0);
+  TCCR =0;
+	TIMSK &=(uint8_t)~TIMSK_DATA;
 }
 
 inline uint8_t PS2_get_state(void) {
@@ -237,7 +236,7 @@ void PS2_write_byte(void) {
     /* ERROR! Receive buffer overflow */
   }
 
-  debug2('i');
+  debug('i');
   printHex(PS2_Byte);
   PS2_RxBuf[tmp] = PS2_Byte; /* Store received data in buffer */
 }
@@ -246,7 +245,7 @@ void PS2_read_byte(void) {
   PS2_Bit_Count=0;
   PS2_One_Count=0;
   PS2_Byte = PS2_TxBuf[( PS2_TxTail + 1 ) & PS2_TX_BUFFER_MASK];  /* Start transmition */
-  debug2('o');
+  debug('o');
   printHex(PS2_Byte);
 }
 
@@ -307,7 +306,7 @@ SIGNAL(SIG_INTERRUPT1) {
   }
 }
 
-SIGNAL(SIG_OUTPUT_COMPARE0) {
+SIGNAL(SIG_OUTPUT_COMPARE) {
   if(PS2_Mode==PS2_MODE_DEVICE) {
     PS2_device_Timer();
   } else {

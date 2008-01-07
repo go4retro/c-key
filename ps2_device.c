@@ -281,7 +281,7 @@ void PS2_device_Timer(void) {
       }
       break;
     default:
-      debug2('#');
+      debug('#');
       printHex(PS2_get_state());
       PS2_disable_IRQ_timer0();
       break;

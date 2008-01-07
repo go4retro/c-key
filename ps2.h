@@ -48,6 +48,28 @@
 #define PS2_PIN_DATA		  (1<<PIN2)
 #define PS2_PORT_DDR_DATA	DDRD
 
+#ifdef atmega8
+#define SIG_OUTPUT_COMPARE SIG_OUTPUT_COMPARE2
+#define OCR OCR2
+#define TCNT  TCNT2
+#define TCCR  TCCR2
+#define TCCR_DATA_DELAY (1<<CS22) | (1<<CS21) | (1<<CS20) | (1<<WGM21)
+#define TCCR_DATA (1<<CS21) | (1<<WGM21)
+#define TIFR_DATA (1<<OCF2)
+#define TIMSK_DATA (1<<OCIE2)
+#else
+#define SIG_OUTPUT_COMPARE SIG_OUTPUT_COMPARE0
+#define OCR OCR0
+#define TCNT  TCNT0
+#define TCCR  TCCR0
+#define TCCR_DATA_DELAY (1<<CS02) | (1<<CS00) | (1<<WGM01)
+#define TCCR_DATA (1<<CS01) | (1<<WGM01)
+#define TIFR_DATA (1<<OCF0)
+#define TIMSK_DATA (1<<OCIE0)
+#endif
+
+
+
 #define PS2_ST_IDLE           0
 #define PS2_ST_PREP_START     1
 #define PS2_ST_SEND_START     2
@@ -177,10 +199,6 @@
 #define PS2_KEY_PAGE_DOWN     0x7a
 #define PS2_KEY_PRINT_SCREEN  0x7c
 #define PS2_KEY_PAGE_UP       0x7d
-
-// deprecated ones.
-#define PS2_KEY_BREAK_1       0x14
-#define PS2_KEY_BREAK_2       0x77
 
 // new ones
 #define PS2_KEY_PCTRL         0x14

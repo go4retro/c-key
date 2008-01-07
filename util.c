@@ -18,13 +18,24 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include <inttypes.h>
+#include <avr/eeprom.h>
 #include "usart.h"
 #include "util.h"
 
 static volatile unsigned char hex[]="0123456789ABCDEF";
 
 void printHex(unsigned char b) {
-	debug2(hex[b >> 4]);
-	debug2(hex[b & 15]);
+	debug(hex[b >> 4]);
+	debug(hex[b & 15]);
+}
+
+void update_eeprom(void* address,uint8_t data) {
+  uint8_t tmp;
+  
+  while(!eeprom_is_ready());
+  tmp=eeprom_read_byte(address);
+  if(tmp!=data)
+  while(!eeprom_is_ready());
+  eeprom_write_byte(address,data);
 }
 
