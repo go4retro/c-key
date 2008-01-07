@@ -22,6 +22,7 @@
 #include <avr/interrupt.h>
 #include <inttypes.h>
 #include <avr/pgmspace.h>
+#include <avr/eeprom.h>
 #include "kb.h"
 #include "switches.h"
 #include "ps2.h"
@@ -32,18 +33,18 @@
 
 // TODO I need to clean up this code and make it more like poll64.c
 
-static prog_uint8_t regular[0x58] =  {0xc0,PS2_KEY_Q,0xcf,PS2_KEY_SPACE,0xd0,0xcd,0xce,PS2_KEY_1
-                                        ,PS2_KEY_4,PS2_KEY_E,PS2_KEY_S,PS2_KEY_Z,PS2_KEY_LSHIFT,PS2_KEY_A,PS2_KEY_W,PS2_KEY_3
-                                        ,0xc1,PS2_KEY_T,PS2_KEY_F,PS2_KEY_C,PS2_KEY_X,PS2_KEY_D,PS2_KEY_R,PS2_KEY_5
-                                        ,0xc3,PS2_KEY_U,PS2_KEY_H,PS2_KEY_B,PS2_KEY_V,PS2_KEY_G,PS2_KEY_Y,0xc2
-                                        ,0xc5,PS2_KEY_O,PS2_KEY_K,PS2_KEY_M,PS2_KEY_N,PS2_KEY_J,PS2_KEY_I,0xc4
-                                        ,PS2_KEY_MINUS,0xc7,0xc9,PS2_KEY_PERIOD,PS2_KEY_COMMA,PS2_KEY_L,PS2_KEY_P,0xc6
-                                        ,0xd1,0xcc,0xcb,PS2_KEY_RSHIFT,PS2_KEY_SLASH,0xca,0xc8,0x5d
-                                        ,0xd2,0xd3,0xd4,0xd5,0xd6,0xd7,PS2_KEY_ENTER,PS2_KEY_BS
-                                        ,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff
-                                        ,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff
-                                        ,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff
-                                        };
+static prog_uint8_t regular[0x58] =  { SCAN_CBM_KEY_SPECIAL+0,PS2_KEY_Q,SCAN_CBM_KEY_SPECIAL+0x0f,PS2_KEY_SPACE,SCAN_CBM_KEY_SPECIAL+0x10,SCAN_CBM_KEY_SPECIAL+0x0d,SCAN_CBM_KEY_SPECIAL+0x0e,PS2_KEY_1
+                                      ,PS2_KEY_4,PS2_KEY_E,PS2_KEY_S,PS2_KEY_Z,PS2_KEY_LSHIFT,PS2_KEY_A,PS2_KEY_W,PS2_KEY_3
+                                      ,SCAN_CBM_KEY_SPECIAL+1,PS2_KEY_T,PS2_KEY_F,PS2_KEY_C,PS2_KEY_X,PS2_KEY_D,PS2_KEY_R,PS2_KEY_5
+                                      ,SCAN_CBM_KEY_SPECIAL+3,PS2_KEY_U,PS2_KEY_H,PS2_KEY_B,PS2_KEY_V,PS2_KEY_G,PS2_KEY_Y,SCAN_CBM_KEY_SPECIAL+2
+                                      ,SCAN_CBM_KEY_SPECIAL+5,PS2_KEY_O,PS2_KEY_K,PS2_KEY_M,PS2_KEY_N,PS2_KEY_J,PS2_KEY_I,SCAN_CBM_KEY_SPECIAL+4
+                                      ,PS2_KEY_MINUS,SCAN_CBM_KEY_SPECIAL+7,SCAN_CBM_KEY_SPECIAL+9,PS2_KEY_PERIOD,PS2_KEY_COMMA,PS2_KEY_L,PS2_KEY_P,SCAN_CBM_KEY_SPECIAL+6
+                                      ,SCAN_CBM_KEY_SPECIAL+0x11,SCAN_CBM_KEY_SPECIAL+0x0c,SCAN_CBM_KEY_SPECIAL+0x0b,PS2_KEY_RSHIFT,PS2_KEY_SLASH,SCAN_CBM_KEY_SPECIAL+0x0a,SCAN_CBM_KEY_SPECIAL+8,PS2_KEY_BACKSLASH
+                                      ,SCAN_CBM_KEY_SPECIAL+0x12,SCAN_CBM_KEY_SPECIAL+0x13,SCAN_CBM_KEY_SPECIAL+0x14,SCAN_CBM_KEY_SPECIAL+0x15,SCAN_CBM_KEY_SPECIAL+0x16,SCAN_CBM_KEY_SPECIAL+0x17,PS2_KEY_ENTER,PS2_KEY_BS
+                                      ,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE
+                                      ,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE
+                                      ,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE
+                                     };
                                         
 static prog_uint8_t mappings[2][25][2][2] = {
                                           // default mappings
@@ -103,8 +104,8 @@ static prog_uint8_t mappings[2][25][2][2] = {
                                         };
                                         
 static prog_uint8_t joy_table[2][8]={
-                                    {JOY_RIGHT,0,0,JOY_FIRE,0,JOY_LEFT,JOY_DOWN,JOY_UP},
-                                    {0,JOY_DOWN,JOY_LEFT,JOY_RIGHT,JOY_FIRE,0,0,JOY_UP}
+                                    {POLL_JOY_RIGHT,0,0,POLL_JOY_FIRE,0,POLL_JOY_LEFT,POLL_JOY_DOWN,POLL_JOY_UP},
+                                    {0,POLL_JOY_DOWN,POLL_JOY_LEFT,POLL_JOY_RIGHT,POLL_JOY_FIRE,0,0,POLL_JOY_UP}
                                    };
 static prog_uint8_t joy_mapping[2][9][2]= {
                                                {
@@ -131,13 +132,15 @@ static prog_uint8_t joy_mapping[2][9][2]= {
                                                 }
                                                };
                                           
-static volatile uint8_t flags;
-static volatile uint8_t mapping;
-static volatile uint8_t joy0;
-static volatile uint8_t joy1;
+static uint8_t meta;
+static uint8_t layout;
+static uint8_t joy0;
+static uint8_t joy1;
+
 static uint8_t shift_override=FALSE;
 static uint8_t shift_override_state;
 static uint8_t shift_override_key;
+
 static uint8_t led_divider=0;
 
 void scan_init(void) {
@@ -145,6 +148,14 @@ void scan_init(void) {
   KB_init();
   SW_init(SW_TYPE_INPUT,(1<<SW_RESTORE) | (1<<SW_CAPSENSE) | (1<<SW_4080));
   LED_init(LED_PIN_7);
+  meta=SCAN_FLAG_NONE;
+  layout=SCAN_LAYOUT_SYMBOLIC;
+  joy0=POLL_JOY_NONE;
+  joy1=POLL_JOY_NONE;
+  
+  // initially, load defaults from EEPROM
+  while(!eeprom_is_ready());
+  layout=eeprom_read_byte(SCAN_ADDR_LAYOUT)%SCAN_LAYOUT_NUM;
   
 #ifdef PORT_KEYS
 #define IRQ_DIVIDER 48
@@ -154,12 +165,10 @@ void scan_init(void) {
   OCR2=31; //32 counts * 256 cycles/count * 16 times per run * 120 runs/sec
 #endif
   TCNT2=0;
-  
   // Set OC2 clk  to SYSCLK/256 and Compare Timer Mode
   TCCR2 = (1<<CS22) | (1<<CS21) | (1<<WGM21);
   // set up OC2 IRQ
   TIMSK |= (1<<OCIE2);
-  
 }
 
 void scan_irq(void) {
@@ -172,40 +181,6 @@ void scan_irq(void) {
   }
 }
 
-void handle_cmds(void) {
-  uint8_t data;
-  
-  while(PS2_data_available()) {
-    data=PS2_recv();
-    //debug2('%');
-    //printHex(data);
-    switch(data) {
-      case PS2_CMD_SET_RATE:
-        PS2_send(PS2_CMD_ACK);
-        data=PS2_recv();
-        KB_set_repeat_delay(PS2_get_typematic_delay(data));
-        KB_set_repeat_period(PS2_get_typematic_period(data));
-        break;
-      case PS2_CMD_LEDS:
-        PS2_send(PS2_CMD_ACK);
-        data=PS2_recv()&0x07;
-        PS2_send(PS2_CMD_ACK);
-        if(data&PS2_LED_CAPS_LOCK) {
-          // shift lock is pressed.
-          debug2('^');
-        }
-        if(data&PS2_LED_NUM_LOCK) {
-          // shift lock is pressed.
-          debug2('#');
-        }
-        break;
-      default:
-        PS2_handle_cmds(data);
-        break;
-    }
-  }
-}
-
 void check_override(void) {
   if(shift_override) {
     if((shift_override_state & SCAN_MAP_EXT) == SCAN_MAP_EXT)
@@ -215,9 +190,9 @@ void check_override(void) {
     
     if((shift_override_state & SCAN_MAP_SHIFT) == 0) {
       // we need to apply shifts now.
-      if(flags&SCAN_FLAG_LSHIFT)
+      if(meta&SCAN_FLAG_LSHIFT)
         PS2_send(PS2_KEY_LSHIFT);
-      if(flags&SCAN_FLAG_RSHIFT)
+      if(meta&SCAN_FLAG_RSHIFT)
         PS2_send(PS2_KEY_RSHIFT);
     } else {
       // let off shift key
@@ -228,45 +203,45 @@ void check_override(void) {
   }
 }
 
-void send_key_code(uint8_t state,uint8_t key,uint8_t action) {
+void send_key_code(uint8_t sh,uint8_t key,uint8_t state) {
   if(key != 0) {
-    if(action==KEY_UP && shift_override && shift_override_key==key && shift_override_state==state) {
+    if(state==FALSE && shift_override && shift_override_key==key && shift_override_state==sh) {
       // it's us, we're unpressing the key.
       check_override();
     } else {
-      if(shift_override && (shift_override_key!=key || shift_override_state!=state)) {
+      if(shift_override && (shift_override_key!=key || shift_override_state!=sh)) {
         // we are a new keypress.
         check_override();
       }
       if(!shift_override) {
         // we have a new valid key
-        if(action == KEY_DOWN && (flags & SCAN_FLAG_SHIFT) && (state & SCAN_MAP_SHIFT) == 0) {
+        if(state && (meta & SCAN_FLAG_SHIFT) && (sh & SCAN_MAP_SHIFT) == 0) {
           // we are in shift mode and this key needs shift off.
-          if(flags&SCAN_FLAG_LSHIFT) {
+          if(meta&SCAN_FLAG_LSHIFT) {
             PS2_send(PS2_KEY_UP);
             PS2_send(PS2_KEY_LSHIFT);
           }
-          if(flags&SCAN_FLAG_RSHIFT) {
+          if(meta&SCAN_FLAG_RSHIFT) {
             PS2_send(PS2_KEY_UP);
             PS2_send(PS2_KEY_RSHIFT);
           }
           shift_override=TRUE;
           shift_override_key=key;
-          shift_override_state=state;
-        } else if(action == KEY_DOWN && !(flags & SCAN_FLAG_SHIFT)&& (state & SCAN_MAP_SHIFT) == SCAN_MAP_SHIFT) {
+          shift_override_state=sh;
+        } else if(state && !(meta & SCAN_FLAG_SHIFT)&& (sh & SCAN_MAP_SHIFT) == SCAN_MAP_SHIFT) {
           // we are not in shift mode and we need a shift.
           PS2_send(PS2_KEY_LSHIFT);
           shift_override=TRUE;
           shift_override_key=key;
-          shift_override_state=state;
+          shift_override_state=sh;
         }
       }
-      if((state & SCAN_MAP_EXT) == SCAN_MAP_EXT)
+      if((sh & SCAN_MAP_EXT) == SCAN_MAP_EXT)
         PS2_send(PS2_KEY_EXT);
-      switch(action) {
-        case KEY_UP:
+      switch(state) {
+        case FALSE:
           PS2_send(PS2_KEY_UP);
-        case KEY_DOWN:
+        case TRUE:
           PS2_send(key);
           break;
       }
@@ -277,28 +252,28 @@ void send_key_code(uint8_t state,uint8_t key,uint8_t action) {
 uint8_t get_joy_direction(uint8_t *joy) {
   uint8_t i=9;
   switch (*joy & 0x0f) {
-    case JOY_UP:              // 0
+    case POLL_JOY_UP:              // 0
       i=0;
       break;
-    case JOY_UP | JOY_LEFT:   // 1
+    case POLL_JOY_UP | POLL_JOY_LEFT:   // 1
       i=1;
       break;
-    case JOY_LEFT:            // 2
+    case POLL_JOY_LEFT:            // 2
       i=2;
       break;
-    case JOY_DOWN | JOY_LEFT: // 3
+    case POLL_JOY_DOWN | POLL_JOY_LEFT: // 3
       i=3;
       break;
-    case JOY_DOWN:            // 4
+    case POLL_JOY_DOWN:            // 4
       i=4;
       break;
-    case JOY_DOWN | JOY_RIGHT:// 5
+    case POLL_JOY_DOWN | POLL_JOY_RIGHT:// 5
       i=5;
       break;
-    case JOY_RIGHT:           // 6
+    case POLL_JOY_RIGHT:           // 6
       i=6;
       break;
-    case JOY_RIGHT | JOY_UP:  // 7
+    case POLL_JOY_RIGHT | POLL_JOY_UP:  // 7
       i=7;
       break;
   }
@@ -311,9 +286,9 @@ void do_joy(uint8_t *joy, uint8_t data, uint8_t map[8],uint8_t table[9][2]) {
   
   // get new button
   new=pgm_read_byte(&map[data&0x07]);
-  if((data & 0x80) != 0) {
+  if((data & KB_KEY_UP) != 0) {
     
-    if(new == JOY_FIRE) {
+    if(new == POLL_JOY_FIRE) {
       // fire not pressed
       i=8;
     } else {
@@ -322,12 +297,12 @@ void do_joy(uint8_t *joy, uint8_t data, uint8_t map[8],uint8_t table[9][2]) {
     }
     if(i<9) {
       KB_set_repeat_code(KB_NO_REPEAT);
-      send_key_code(pgm_read_byte(&table[i][0]),pgm_read_byte(&table[i][1]),KEY_UP);
+      send_key_code(pgm_read_byte(&table[i][0]),pgm_read_byte(&table[i][1]),FALSE);
     }
     (*joy)&=(uint8_t)~new;
   } else {
     (*joy)|=new;
-    if(new == JOY_FIRE) {
+    if(new == POLL_JOY_FIRE) {
       // fire pressed
       i=8;
     } else {
@@ -335,7 +310,7 @@ void do_joy(uint8_t *joy, uint8_t data, uint8_t map[8],uint8_t table[9][2]) {
       i=get_joy_direction(joy);
     }
     if(i<9) {
-      send_key_code(pgm_read_byte(&table[i][0]),pgm_read_byte(&table[i][1]),KEY_DOWN);
+      send_key_code(pgm_read_byte(&table[i][0]),pgm_read_byte(&table[i][1]),TRUE);
       KB_set_repeat_code(data);
     }
   }
@@ -343,29 +318,29 @@ void do_joy(uint8_t *joy, uint8_t data, uint8_t map[8],uint8_t table[9][2]) {
 
 inline void parse_key(uint8_t data) {
   uint8_t key;
-  uint8_t key_action=(data & 0x80?KEY_UP:KEY_DOWN);
-  uint8_t code=data & (uint8_t)~(0x80);
+  uint8_t state=(data & KB_KEY_UP?FALSE:TRUE);
+  uint8_t code=data & (uint8_t)~(KB_KEY_UP);
   
   if(code < 0x58) {
     key=pgm_read_byte(&regular[code]);
-    if(key < 0xc0) {
+    if(key < SCAN_CBM_KEY_SPECIAL) {
       // cancel override, if in effect.
       check_override();
-      if(key_action==KEY_UP) {
+      if(!state) {
         PS2_send(PS2_KEY_UP);
       }
       PS2_send(key);
-    } else if(key != 0xff) {
+    } else if(key != SCAN_CBM_KEY_NONE) {
       key&=0x3f;
-      if((flags & SCAN_FLAG_SHIFT)) {
+      if((meta & SCAN_FLAG_SHIFT)) {
         // pressing a shifted char
-        send_key_code(pgm_read_byte(&mappings[mapping][key][1][0]),pgm_read_byte(&mappings[mapping][key][1][1]),key_action);
+        send_key_code(pgm_read_byte(&mappings[layout][key][1][0]),pgm_read_byte(&mappings[layout][key][1][1]),state);
       } else {
-        send_key_code(pgm_read_byte(&mappings[mapping][key][0][0]),pgm_read_byte(&mappings[mapping][key][0][1]),key_action);
+        send_key_code(pgm_read_byte(&mappings[layout][key][0][0]),pgm_read_byte(&mappings[layout][key][0][1]),state);
       }
     }
     // if we pressed a key, make it the new repeat key.
-    if(key_action==KEY_DOWN)
+    if(state)
       KB_set_repeat_code(code);
   } else if(code > 0x57 && code < 0x5d) {
     // joy0, when JP4 is set to scan.
@@ -381,76 +356,101 @@ inline void parse_key(uint8_t data) {
 
 void scan(void) {
   uint8_t data;
-  uint8_t esc_flags=SCAN_ESC_NONE;
+  uint8_t state;
   LED_on(LED_PIN_7);
-  flags=SCAN_FLAG_NONE;
-  mapping=MAP_NORMAL;
-  joy0=JOY_NONE;
-  joy1=JOY_NONE;
   
   for(;;) {
-    handle_cmds();
+    while(PS2_data_available()) {
+      data=PS2_recv();
+      //debug('%');
+      //printHex(data);
+      switch(data) {
+        case PS2_CMD_SET_RATE:
+          PS2_send(PS2_CMD_ACK);
+          data=PS2_recv();
+          KB_set_repeat_delay(PS2_get_typematic_delay(data));
+          KB_set_repeat_period(PS2_get_typematic_period(data));
+          break;
+        case PS2_CMD_LEDS:
+          PS2_send(PS2_CMD_ACK);
+          data=PS2_recv()&0x07;
+          PS2_send(PS2_CMD_ACK);
+          if(data&PS2_LED_CAPS_LOCK) {
+            // shift lock is pressed.
+            debug('^');
+          }
+          if(data&PS2_LED_NUM_LOCK) {
+            // shift lock is pressed.
+            debug('#');
+          }
+          break;
+        default:
+          PS2_handle_cmds(data);
+          break;
+      }
+    }
     if(KB_data_available()) {
       data = KB_recv();
-      //printHex(data);
-      //debug2(data);
-      if(esc_flags == SCAN_ESC) {
+      state=(data&KB_KEY_UP?FALSE:TRUE);
+      if((meta & SCAN_FLAG_CONFIG) == SCAN_FLAG_CONFIG) {
         switch(data) {
-          case 0x07: //1
-            // regular
-            mapping=0;
+          case SCAN_C64_KEY_1:
+            // symbolic
+            layout=SCAN_LAYOUT_SYMBOLIC;
             LED_blink(LED_PIN_7,1,LED_FLAG_NONE);
             break;
-          case 0x00: //2
-            // VICE
-            mapping=1;
+          case SCAN_C64_KEY_2: 
+            // positional
+            layout=SCAN_LAYOUT_POSITIONAL;
             LED_blink(LED_PIN_7,2,LED_FLAG_NONE);
             break;
-          case (0x80 | 0x3e): // enter key up
-            esc_flags=SCAN_ESC_NONE;
+          case (KB_KEY_UP | SCAN_C64_KEY_RETURN):
+            meta&=(uint8_t)~SCAN_FLAG_CONFIG;
+            // write layout to EEPROM
+            update_eeprom(SCAN_ADDR_LAYOUT,layout);
             LED_blink(LED_PIN_7,10,LED_FLAG_END_ON);
-            LED_on(LED_PIN_7);
             break;
         }
       } else {
-        // transform keypresses.
-        switch(data) {
-          case 0x33:  // right shift
-            esc_flags|=SCAN_ESC_1;
-            flags|=SCAN_FLAG_RSHIFT;
+        if((data&0x7f) ==SCAN_C64_KEY_RSHIFT)
+          meta=(meta&(uint8_t)~SCAN_FLAG_RSHIFT) | (state?SCAN_FLAG_RSHIFT:0);
+        else if((data&0x7f) ==SCAN_C64_KEY_LSHIFT)
+          meta=(meta&(uint8_t)~SCAN_FLAG_LSHIFT) | (state?SCAN_FLAG_LSHIFT:0);
+        else if((data&0x7f) ==SCAN_C64_KEY_CMDR)
+          meta=(meta&(uint8_t)~SCAN_FLAG_CMDR) | (state?SCAN_FLAG_CMDR:0);
+
+        /*switch(data) {  // the above is a shorter codepath.
+          case SCAN_C64_KEY_RSHIFT:
+            meta|=SCAN_FLAG_RSHIFT;
             break;
-          case 0xb3:
-            esc_flags&=(uint8_t)~SCAN_ESC_1;
-            flags &= (uint8_t)~SCAN_FLAG_RSHIFT;
+          case KB_KEY_UP | SCAN_C64_KEY_RSHIFT:
+            meta &= (uint8_t)~SCAN_FLAG_RSHIFT;
             break;
-          case 0x0c:  // left shift
-            esc_flags|=SCAN_ESC_2;
-            flags|=SCAN_FLAG_LSHIFT;
+          case SCAN_C64_KEY_LSHIFT:
+            meta|=SCAN_FLAG_LSHIFT;
             break;
-          case 0x8c:
-            esc_flags&=(uint8_t)~SCAN_ESC_2;
-            flags &= (uint8_t)~SCAN_FLAG_LSHIFT;
+          case KB_KEY_UP | SCAN_C64_KEY_LSHIFT:
+            meta &= (uint8_t)~SCAN_FLAG_LSHIFT;
             break;
-          case 0x02:  // commodore down
-            esc_flags|=SCAN_ESC_3;
+          case SCAN_C64_KEY_CMDR:
+            meta|=SCAN_FLAG_CMDR;
             break;
-          case 0x82:  // commodore up
-            esc_flags&=(uint8_t)~SCAN_ESC_3;
+          case KB_KEY_UP | SCAN_C64_KEY_CMDR:
+            meta &= (uint8_t)~SCAN_FLAG_CMDR;
             break;
-        }
+        }*/
         //printHex(data);
         parse_key(data);
         // if KEY_UP AND data is the key repeating, stop.
-        if((data & 0x80) && (data & 0x7f) == KB_get_repeat_code()) {
+        if((data & KB_KEY_UP) && (data & 0x7f) == KB_get_repeat_code()) {
           KB_set_repeat_code(KB_NO_REPEAT);
         }
-        if(esc_flags == SCAN_ESC) {
-          // probably should do this when they release the keys...
+        // if we match config keypresses, switch into config mode.
+        if((meta & SCAN_FLAG_CONFIG) == SCAN_FLAG_CONFIG) {
           // turn off KEYS...
-          parse_key(0x80 | 0x02); // CMDR
-          parse_key(0x80 | 0x0c); // LSHIFT
-          parse_key(0x80 | 0x33); // RSHIFT
-          flags &= (uint8_t)~(SCAN_FLAG_LSHIFT | SCAN_FLAG_RSHIFT);
+          parse_key(KB_KEY_UP | SCAN_C64_KEY_CMDR);
+          parse_key(KB_KEY_UP | SCAN_C64_KEY_LSHIFT);
+          parse_key(KB_KEY_UP | SCAN_C64_KEY_RSHIFT);
           KB_set_repeat_code(KB_NO_REPEAT);
           // note cmd mode.
           LED_blink(LED_PIN_7,2,LED_FLAG_NONE);
@@ -461,40 +461,40 @@ void scan(void) {
       
       // handle special switches.
       data=SW_recv();
-      //debug2('@');
+      //debug('@');
       //printHex(data);
       switch(data) {
         case SW_CAPSENSE:
           // need to send make for capslock
           PS2_send(PS2_KEY_CAPS_LOCK);
           break;
-        case SW_CAPSENSE | 0x80:
+        case SW_CAPSENSE | KB_KEY_UP:
           // need to send break code for capslock
           PS2_send(PS2_KEY_UP);
           PS2_send(PS2_KEY_CAPS_LOCK);
           break;
         case SW_RESTORE:
-          switch(mapping) {
-            case MAP_VICE:
+          switch(layout) {
+            case SCAN_LAYOUT_POSITIONAL:
               PS2_send(PS2_KEY_EXT);
               PS2_send(PS2_KEY_PAGE_UP);
               break;
             default:
               // send Pause/Break...
               PS2_send(PS2_KEY_EXT_2);
-              PS2_send(PS2_KEY_BREAK_1);
-              PS2_send(PS2_KEY_BREAK_2);
+              PS2_send(PS2_KEY_PCTRL);
+              PS2_send(PS2_KEY_PAUSE);
               PS2_send(PS2_KEY_EXT_2);
               PS2_send(PS2_KEY_UP);
-              PS2_send(PS2_KEY_BREAK_1);
+              PS2_send(PS2_KEY_PCTRL);
               PS2_send(PS2_KEY_UP);
-              PS2_send(PS2_KEY_BREAK_2);
+              PS2_send(PS2_KEY_PAUSE);
               break;
           }
           break;
-        case (SW_RESTORE | 0x80):
-          switch(mapping) {
-            case MAP_VICE:
+        case (SW_RESTORE | KB_KEY_UP):
+          switch(layout) {
+            case SCAN_LAYOUT_POSITIONAL:
               PS2_send(PS2_KEY_EXT);
               PS2_send(PS2_KEY_UP);
               PS2_send(PS2_KEY_PAGE_UP);

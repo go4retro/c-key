@@ -1,0 +1,4 @@
+ATMEGA162:
+	EFUSE:	0xff
+	HFUSE:	0xd1
+	LFUSE:	0xff

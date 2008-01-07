@@ -31,7 +31,7 @@
 #define PIN_MODE (1<<PIN5)
 #endif
 
-static uint8_t mode;
+static volatile uint8_t mode;
 
 SIGNAL(SIG_OUTPUT_COMPARE2) {
   if(mode==PS2_MODE_DEVICE) {
@@ -48,23 +48,24 @@ int main( void ) {
   mode=(PIND&PIN_MODE?PS2_MODE_HOST:PS2_MODE_DEVICE);
   switch(mode) {
     case PS2_MODE_DEVICE:
-        debug2('D');
+        debug('D');
         break;
     case PS2_MODE_HOST:
-        debug2('H');
+        debug('H');
         break;
     default:
-        debug2('E');
+        debug('E');
         break;
   }
   
   PS2_init(mode);
-    poll_init();
+  poll_init();  // do it here to reset cross-point switch everytime.
   if(mode==PS2_MODE_DEVICE) {
     scan_init();
     sei();
     scan();
   } else {
+    poll_init();
     sei();
     poll();
   }

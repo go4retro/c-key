@@ -30,205 +30,205 @@
 #include "poll64.h"
 #include "led.h"
 
-static prog_uint8_t normal[0x84] =  { C64_KEY_UNMAPPED,C64_KEY_NONE,C64_KEY_NONE,C64_KEY_SPECIAL+0,C64_KEY_SPECIAL+1,C64_KEY_SPECIAL+2,C64_KEY_SPECIAL+3,C64_KEY_SPECIAL+41
-                                  ,C64_KEY_NONE,C64_KEY_UNMAPPED,C64_KEY_SPECIAL+4,C64_KEY_SPECIAL+5,C64_KEY_SPECIAL+6,C64_KEY_SPECIAL+40,C64_KEY_BACKARROW,C64_KEY_NONE
-                                  ,C64_KEY_NONE,C64_KEY_SPECIAL+8,C64_KEY_SPECIAL+9,C64_KEY_NONE,C64_KEY_SPECIAL+10,C64_KEY_Q,C64_KEY_1,C64_KEY_NONE
-                                  ,C64_KEY_NONE,C64_KEY_NONE,C64_KEY_Z,C64_KEY_S,C64_KEY_A,C64_KEY_W,C64_KEY_SPECIAL+11,C64_KEY_NONE
-                                  ,C64_KEY_NONE,C64_KEY_C,C64_KEY_X,C64_KEY_D,C64_KEY_E,C64_KEY_4,C64_KEY_3,C64_KEY_NONE
-                                  ,C64_KEY_NONE,C64_KEY_SPACE,C64_KEY_V,C64_KEY_F,C64_KEY_T,C64_KEY_R,C64_KEY_5,C64_KEY_NONE
-                                  ,C64_KEY_NONE,C64_KEY_N,C64_KEY_B,C64_KEY_H,C64_KEY_G,C64_KEY_Y,C64_KEY_SPECIAL+12,C64_KEY_NONE
-                                  ,C64_KEY_NONE,C64_KEY_NONE,C64_KEY_M,C64_KEY_J,C64_KEY_U,C64_KEY_SPECIAL+13,C64_KEY_SPECIAL+14,C64_KEY_NONE
-                                  ,C64_KEY_NONE,C64_KEY_COMMA,C64_KEY_K,C64_KEY_I,C64_KEY_O,C64_KEY_SPECIAL+15,C64_KEY_SPECIAL+16,C64_KEY_NONE
-                                  ,C64_KEY_NONE,C64_KEY_PERIOD,C64_KEY_SLASH,C64_KEY_L,C64_KEY_SPECIAL+17,C64_KEY_P,C64_KEY_SPECIAL+18,C64_KEY_NONE
-                                  ,C64_KEY_NONE,C64_KEY_NONE,C64_KEY_SPECIAL+19,C64_KEY_NONE,C64_KEY_SPECIAL+20,C64_KEY_SPECIAL+21,C64_KEY_NONE,C64_KEY_NONE
-                                  ,C64_KEY_UNMAPPED,C64_KEY_RSHIFT,C64_KEY_RETURN,C64_KEY_SPECIAL+22,C64_KEY_NONE,C64_KEY_SPECIAL+23,C64_KEY_NONE,C64_KEY_NONE
-                                  ,C64_KEY_NONE,C64_KEY_NONE,C64_KEY_NONE,C64_KEY_NONE,C64_KEY_NONE,C64_KEY_NONE,C64_KEY_DELETE,C64_KEY_NONE
-                                  ,C64_KEY_NONE,C64_KEY_SPECIAL+24,C64_KEY_NONE,C64_KEY_SPECIAL+25,C64_KEY_SPECIAL+26,C64_KEY_NONE,C64_KEY_NONE,C64_KEY_NONE
-                                  ,C64_KEY_SPECIAL+27,C64_KEY_SPECIAL+28,C64_KEY_SPECIAL+29,C64_KEY_SPECIAL+30,C64_KEY_SPECIAL+31,C64_KEY_SPECIAL+32,C64_KEY_SPECIAL+33,C64_KEY_UNMAPPED
-                                  ,C64_KEY_UNMAPPED,C64_KEY_SPECIAL+34,C64_KEY_SPECIAL+35,C64_KEY_SPECIAL+36,C64_KEY_SPECIAL+37,C64_KEY_SPECIAL+38,C64_KEY_SPECIAL+39,C64_KEY_NONE
-                                  ,C64_KEY_NONE,C64_KEY_NONE,C64_KEY_NONE,C64_KEY_SPECIAL+7};
+static prog_uint8_t normal[0x84] =  { POLL_CBM_KEY_UNMAPPED,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+0,POLL_CBM_KEY_SPECIAL+1,POLL_CBM_KEY_SPECIAL+2,POLL_CBM_KEY_SPECIAL+3,POLL_CBM_KEY_SPECIAL+41
+                                  ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_UNMAPPED,POLL_CBM_KEY_SPECIAL+4,POLL_CBM_KEY_SPECIAL+5,POLL_CBM_KEY_SPECIAL+6,POLL_CBM_KEY_SPECIAL+40,POLL_C64_KEY_BACKARROW,POLL_CBM_KEY_NONE
+                                  ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+8,POLL_CBM_KEY_SPECIAL+9,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+10,POLL_C64_KEY_Q,POLL_C64_KEY_1,POLL_CBM_KEY_NONE
+                                  ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_C64_KEY_Z,POLL_C64_KEY_S,POLL_C64_KEY_A,POLL_C64_KEY_W,POLL_CBM_KEY_SPECIAL+11,POLL_CBM_KEY_NONE
+                                  ,POLL_CBM_KEY_NONE,POLL_C64_KEY_C,POLL_C64_KEY_X,POLL_C64_KEY_D,POLL_C64_KEY_E,POLL_C64_KEY_4,POLL_C64_KEY_3,POLL_CBM_KEY_NONE
+                                  ,POLL_CBM_KEY_NONE,POLL_C64_KEY_SPACE,POLL_C64_KEY_V,POLL_C64_KEY_F,POLL_C64_KEY_T,POLL_C64_KEY_R,POLL_C64_KEY_5,POLL_CBM_KEY_NONE
+                                  ,POLL_CBM_KEY_NONE,POLL_C64_KEY_N,POLL_C64_KEY_B,POLL_C64_KEY_H,POLL_C64_KEY_G,POLL_C64_KEY_Y,POLL_CBM_KEY_SPECIAL+12,POLL_CBM_KEY_NONE
+                                  ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_C64_KEY_M,POLL_C64_KEY_J,POLL_C64_KEY_U,POLL_CBM_KEY_SPECIAL+13,POLL_CBM_KEY_SPECIAL+14,POLL_CBM_KEY_NONE
+                                  ,POLL_CBM_KEY_NONE,POLL_C64_KEY_COMMA,POLL_C64_KEY_K,POLL_C64_KEY_I,POLL_C64_KEY_O,POLL_CBM_KEY_SPECIAL+15,POLL_CBM_KEY_SPECIAL+16,POLL_CBM_KEY_NONE
+                                  ,POLL_CBM_KEY_NONE,POLL_C64_KEY_PERIOD,POLL_C64_KEY_SLASH,POLL_C64_KEY_L,POLL_CBM_KEY_SPECIAL+17,POLL_C64_KEY_P,POLL_CBM_KEY_SPECIAL+18,POLL_CBM_KEY_NONE
+                                  ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+19,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+20,POLL_CBM_KEY_SPECIAL+21,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE
+                                  ,POLL_CBM_KEY_UNMAPPED,POLL_C64_KEY_RSHIFT,POLL_C64_KEY_RETURN,POLL_CBM_KEY_SPECIAL+22,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+23,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE
+                                  ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_C64_KEY_DELETE,POLL_CBM_KEY_NONE
+                                  ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+24,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+25,POLL_CBM_KEY_SPECIAL+26,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE
+                                  ,POLL_CBM_KEY_SPECIAL+27,POLL_CBM_KEY_SPECIAL+28,POLL_CBM_KEY_SPECIAL+29,POLL_CBM_KEY_SPECIAL+30,POLL_CBM_KEY_SPECIAL+31,POLL_CBM_KEY_SPECIAL+32,POLL_CBM_KEY_SPECIAL+33,POLL_CBM_KEY_UNMAPPED
+                                  ,POLL_CBM_KEY_UNMAPPED,POLL_CBM_KEY_SPECIAL+34,POLL_CBM_KEY_SPECIAL+35,POLL_CBM_KEY_SPECIAL+36,POLL_CBM_KEY_SPECIAL+37,POLL_CBM_KEY_SPECIAL+38,POLL_CBM_KEY_SPECIAL+39,POLL_CBM_KEY_NONE
+                                  ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+7};
                                   
 static prog_uint8_t layouts[4][42][2] = {
                                       // c64 positional mapping.
                                          {
-                                          {POLL_MAP_NONE | C64_KEY_F5,POLL_MAP_SHIFT | C64_KEY_F5},                 // 0 F5 ->  F5/Sh+F5
-                                          {POLL_MAP_NONE | C64_KEY_F3,POLL_MAP_SHIFT | C64_KEY_F3},                 // 1 F3 ->  F3/Sh+F3 
-                                          {POLL_MAP_NONE | C64_KEY_F1,POLL_MAP_SHIFT | C64_KEY_F1},                 // 2 F1 ->  Sh+F1/Sh+F1
-                                          {POLL_MAP_SHIFT | C64_KEY_F1,POLL_MAP_SHIFT | C64_KEY_F1},                // 3 F2 ->  Sh+F1/Sh+F1
-                                          {POLL_MAP_SHIFT | C64_KEY_F7, POLL_MAP_SHIFT | C64_KEY_F7},               // 4 F8 ->  Sh+F7/Sh+F7  
-                                          {POLL_MAP_SHIFT | C64_KEY_F5,POLL_MAP_SHIFT | C64_KEY_F5},                // 5 F6 ->  Sh+F5/Sh+F5
-                                          {POLL_MAP_SHIFT | C64_KEY_F3,POLL_MAP_SHIFT | C64_KEY_F3},                // 6 F4 ->  Sh+F3/Sh+F3
-                                          {POLL_MAP_NONE | C64_KEY_F7,POLL_MAP_SHIFT | C64_KEY_F7},                 // 7 F7 ->  F7/F7
-                                          {POLL_MAP_NONE | C64_KEY_CBM,POLL_MAP_SHIFT | C64_KEY_CBM},               // 8 Left ALT ->  CBM/Sh+CBM
-                                          {POLL_MAP_NONE | C64_KEY_LSHIFT,POLL_MAP_SHIFT | C64_KEY_LSHIFT},         // 9 Left Shift -> LeftSh/LeftSh
-                                          {POLL_MAP_NONE | C64_KEY_CTRL,POLL_MAP_SHIFT | C64_KEY_CTRL},             // 10 Left Control -> CTRL/SH+CTRL
-                                          {POLL_MAP_NONE | C64_KEY_2,POLL_MAP_NONE | C64_KEY_AT},                   // 11 2 ->  2/@
-                                          {POLL_MAP_NONE | C64_KEY_6,POLL_MAP_NONE | C64_KEY_UPARROW},              // 12 6 ->  6/^
-                                          {POLL_MAP_NONE | C64_KEY_7,POLL_MAP_SHIFT | C64_KEY_6},                   // 13 7 ->  7/&
-                                          {POLL_MAP_NONE | C64_KEY_8, POLL_MAP_NONE | C64_KEY_ASTERIX},             // 14 8 ->  8/*
-                                          {POLL_MAP_NONE | C64_KEY_0,POLL_MAP_SHIFT | C64_KEY_9},                   // 15 0 ->  0/)
-                                          {POLL_MAP_NONE | C64_KEY_9,POLL_MAP_SHIFT | C64_KEY_8},                   // 16 9 ->  9/(
-                                          {POLL_MAP_NONE | C64_KEY_SEMICOLON,POLL_MAP_NONE | C64_KEY_COLON},        // 17 ; ->  ;/:
-                                          {POLL_MAP_NONE | C64_KEY_MINUS,POLL_MAP_SHIFT | C64_KEY_MINUS},           // 18 - ->  -/Sh+-
-                                          {POLL_MAP_SHIFT | C64_KEY_7,POLL_MAP_SHIFT | C64_KEY_2},                  // 19 ' ->  '/"
-                                          {POLL_MAP_SHIFT | C64_KEY_COLON,POLL_MAP_SHIFT | C64_KEY_AT},             // 20 [ ->  [/Sh+@
-                                          {POLL_MAP_NONE | C64_KEY_EQUALS,POLL_MAP_NONE | C64_KEY_PLUS},            // 21 = ->  =/+
-                                          {POLL_MAP_SHIFT | C64_KEY_SEMICOLON,POLL_MAP_SHIFT | C64_KEY_ASTERIX},    // 22 ] ->  ]/Sh+*
-                                          {POLL_MAP_NONE | C64_KEY_POUND,POLL_MAP_SHIFT | C64_KEY_POUND},           // 23 \ ->  pound/Sh+pound
-                                          {POLL_MAP_NONE | C64_KEY_1, POLL_MAP_NONE | C64_KEY_1},                   // 24 Num 1 ->  1/1
-                                          {POLL_MAP_NONE | C64_KEY_4,POLL_MAP_NONE | C64_KEY_4},                    // 25 Num 4 ->  4/4
-                                          {POLL_MAP_NONE | C64_KEY_7,POLL_MAP_NONE | C64_KEY_7},                    // 26 Num 7 ->  7/7
-                                          {POLL_MAP_NONE | C64_KEY_0,POLL_MAP_NONE | C64_KEY_0},                    // 27 Num 0 ->  0/0
-                                          {POLL_MAP_NONE | C64_KEY_PERIOD,POLL_MAP_NONE | C64_KEY_PERIOD},          // 28 Num . ->  ./.
-                                          {POLL_MAP_NONE | C64_KEY_2,POLL_MAP_NONE | C64_KEY_2},                    // 29 Num 2 ->  2/2
-                                          {POLL_MAP_NONE | C64_KEY_5,POLL_MAP_NONE | C64_KEY_5},                    // 30 Num 5 ->  5/5
-                                          {POLL_MAP_NONE | C64_KEY_6,POLL_MAP_NONE | C64_KEY_6},                    // 31 Num 6 ->  6/6
-                                          {POLL_MAP_NONE | C64_KEY_8,POLL_MAP_NONE | C64_KEY_8},                    // 32 Num 8 ->  8/8
-                                          {POLL_MAP_NONE | C64_KEY_RUNSTOP,POLL_MAP_SHIFT | C64_KEY_RUNSTOP},       // 33 Esc ->  RunStop/Sh+RunStop
-                                          {POLL_MAP_NONE | C64_KEY_PLUS, POLL_MAP_NONE | C64_KEY_PLUS},             // 34 Num + ->  +/+
-                                          {POLL_MAP_NONE | C64_KEY_3,POLL_MAP_NONE | C64_KEY_3},                    // 35 Num 3 ->  3/3
-                                          {POLL_MAP_NONE | C64_KEY_MINUS,POLL_MAP_NONE | C64_KEY_MINUS},            // 36 Num - ->  -/-
-                                          {POLL_MAP_NONE | C64_KEY_ASTERIX,POLL_MAP_NONE | C64_KEY_ASTERIX},        // 37 Num * ->  */*
-                                          {POLL_MAP_NONE | C64_KEY_9,POLL_MAP_NONE | C64_KEY_9},                    // 38 Num 9 ->  9/9
-                                          {POLL_MAP_NONE | C64_KEY_NONE,POLL_MAP_SHIFT | C64_KEY_NONE},             // 39 Scroll Lock -> None/Sh+None
-                                          {POLL_MAP_NONE | C64_KEY_UNMAPPED,POLL_MAP_SHIFT | C64_KEY_UNMAPPED},     // 40 TAB ->  unmapped/Sh+unmapped
-                                          {POLL_MAP_SHIFT | C64_KEY_PLUS,POLL_MAP_SHIFT | C64_KEY_UPARROW},         // 41 F12 ->  Sh++/Sh+^
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F5,POLL_MAP_SHIFT | POLL_C64_KEY_F5},                 // 0 F5 ->  F5/Sh+F5
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F3,POLL_MAP_SHIFT | POLL_C64_KEY_F3},                 // 1 F3 ->  F3/Sh+F3 
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F1,POLL_MAP_SHIFT | POLL_C64_KEY_F1},                 // 2 F1 ->  Sh+F1/Sh+F1
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F1,POLL_MAP_SHIFT | POLL_C64_KEY_F1},                // 3 F2 ->  Sh+F1/Sh+F1
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F7, POLL_MAP_SHIFT | POLL_C64_KEY_F7},               // 4 F8 ->  Sh+F7/Sh+F7  
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F5,POLL_MAP_SHIFT | POLL_C64_KEY_F5},                // 5 F6 ->  Sh+F5/Sh+F5
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F3,POLL_MAP_SHIFT | POLL_C64_KEY_F3},                // 6 F4 ->  Sh+F3/Sh+F3
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F7,POLL_MAP_SHIFT | POLL_C64_KEY_F7},                 // 7 F7 ->  F7/F7
+                                          {POLL_MAP_NONE | POLL_C64_KEY_CBM,POLL_MAP_SHIFT | POLL_C64_KEY_CBM},               // 8 Left ALT ->  CBM/Sh+CBM
+                                          {POLL_MAP_NONE | POLL_C64_KEY_LSHIFT,POLL_MAP_SHIFT | POLL_C64_KEY_LSHIFT},         // 9 Left Shift -> LeftSh/LeftSh
+                                          {POLL_MAP_NONE | POLL_C64_KEY_CTRL,POLL_MAP_SHIFT | POLL_C64_KEY_CTRL},             // 10 Left Control -> CTRL/SH+CTRL
+                                          {POLL_MAP_NONE | POLL_C64_KEY_2,POLL_MAP_NONE | POLL_C64_KEY_AT},                   // 11 2 ->  2/@
+                                          {POLL_MAP_NONE | POLL_C64_KEY_6,POLL_MAP_NONE | POLL_C64_KEY_UPARROW},              // 12 6 ->  6/^
+                                          {POLL_MAP_NONE | POLL_C64_KEY_7,POLL_MAP_SHIFT | POLL_C64_KEY_6},                   // 13 7 ->  7/&
+                                          {POLL_MAP_NONE | POLL_C64_KEY_8, POLL_MAP_NONE | POLL_C64_KEY_ASTERIX},             // 14 8 ->  8/*
+                                          {POLL_MAP_NONE | POLL_C64_KEY_0,POLL_MAP_SHIFT | POLL_C64_KEY_9},                   // 15 0 ->  0/)
+                                          {POLL_MAP_NONE | POLL_C64_KEY_9,POLL_MAP_SHIFT | POLL_C64_KEY_8},                   // 16 9 ->  9/(
+                                          {POLL_MAP_NONE | POLL_C64_KEY_SEMICOLON,POLL_MAP_NONE | POLL_C64_KEY_COLON},        // 17 ; ->  ;/:
+                                          {POLL_MAP_NONE | POLL_C64_KEY_MINUS,POLL_MAP_SHIFT | POLL_C64_KEY_MINUS},           // 18 - ->  -/Sh+-
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_7,POLL_MAP_SHIFT | POLL_C64_KEY_2},                  // 19 ' ->  '/"
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_COLON,POLL_MAP_SHIFT | POLL_C64_KEY_AT},             // 20 [ ->  [/Sh+@
+                                          {POLL_MAP_NONE | POLL_C64_KEY_EQUALS,POLL_MAP_NONE | POLL_C64_KEY_PLUS},            // 21 = ->  =/+
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_SEMICOLON,POLL_MAP_SHIFT | POLL_C64_KEY_ASTERIX},    // 22 ] ->  ]/Sh+*
+                                          {POLL_MAP_NONE | POLL_C64_KEY_POUND,POLL_MAP_SHIFT | POLL_C64_KEY_POUND},           // 23 \ ->  pound/Sh+pound
+                                          {POLL_MAP_NONE | POLL_C64_KEY_1, POLL_MAP_NONE | POLL_C64_KEY_1},                   // 24 Num 1 ->  1/1
+                                          {POLL_MAP_NONE | POLL_C64_KEY_4,POLL_MAP_NONE | POLL_C64_KEY_4},                    // 25 Num 4 ->  4/4
+                                          {POLL_MAP_NONE | POLL_C64_KEY_7,POLL_MAP_NONE | POLL_C64_KEY_7},                    // 26 Num 7 ->  7/7
+                                          {POLL_MAP_NONE | POLL_C64_KEY_0,POLL_MAP_NONE | POLL_C64_KEY_0},                    // 27 Num 0 ->  0/0
+                                          {POLL_MAP_NONE | POLL_C64_KEY_PERIOD,POLL_MAP_NONE | POLL_C64_KEY_PERIOD},          // 28 Num . ->  ./.
+                                          {POLL_MAP_NONE | POLL_C64_KEY_2,POLL_MAP_NONE | POLL_C64_KEY_2},                    // 29 Num 2 ->  2/2
+                                          {POLL_MAP_NONE | POLL_C64_KEY_5,POLL_MAP_NONE | POLL_C64_KEY_5},                    // 30 Num 5 ->  5/5
+                                          {POLL_MAP_NONE | POLL_C64_KEY_6,POLL_MAP_NONE | POLL_C64_KEY_6},                    // 31 Num 6 ->  6/6
+                                          {POLL_MAP_NONE | POLL_C64_KEY_8,POLL_MAP_NONE | POLL_C64_KEY_8},                    // 32 Num 8 ->  8/8
+                                          {POLL_MAP_NONE | POLL_C64_KEY_RUNSTOP,POLL_MAP_SHIFT | POLL_C64_KEY_RUNSTOP},       // 33 Esc ->  RunStop/Sh+RunStop
+                                          {POLL_MAP_NONE | POLL_C64_KEY_PLUS, POLL_MAP_NONE | POLL_C64_KEY_PLUS},             // 34 Num + ->  +/+
+                                          {POLL_MAP_NONE | POLL_C64_KEY_3,POLL_MAP_NONE | POLL_C64_KEY_3},                    // 35 Num 3 ->  3/3
+                                          {POLL_MAP_NONE | POLL_C64_KEY_MINUS,POLL_MAP_NONE | POLL_C64_KEY_MINUS},            // 36 Num - ->  -/-
+                                          {POLL_MAP_NONE | POLL_C64_KEY_ASTERIX,POLL_MAP_NONE | POLL_C64_KEY_ASTERIX},        // 37 Num * ->  */*
+                                          {POLL_MAP_NONE | POLL_C64_KEY_9,POLL_MAP_NONE | POLL_C64_KEY_9},                    // 38 Num 9 ->  9/9
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_NONE,POLL_MAP_SHIFT | POLL_CBM_KEY_NONE},             // 39 Scroll Lock -> None/Sh+None
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_CBM_KEY_UNMAPPED},     // 40 TAB ->  unmapped/Sh+unmapped
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_PLUS,POLL_MAP_SHIFT | POLL_C64_KEY_UPARROW},         // 41 F12 ->  Sh++/Sh+^
                                          }
                                          ,
                                          {
                                           // c128 positional
-                                          {POLL_MAP_NONE | C64_KEY_F5,POLL_MAP_SHIFT | C64_KEY_F5},                 // 0 F5 ->  F5/Sh+F5
-                                          {POLL_MAP_NONE | C64_KEY_F3,POLL_MAP_SHIFT | C64_KEY_F3},                 // 1 F3 ->  F3/Sh+F3
-                                          {POLL_MAP_NONE | C64_KEY_F1,POLL_MAP_SHIFT | C64_KEY_F1},                 // 2 F1 ->  F1/Sh+F1
-                                          {POLL_MAP_SHIFT | C64_KEY_F1,POLL_MAP_SHIFT | C64_KEY_F1},                // 3 F2 ->  Sh+F1/Sh+F1
-                                          {POLL_MAP_SHIFT | C64_KEY_F7, POLL_MAP_SHIFT | C64_KEY_F7},               // 4 F8 ->  Sh+F7/Sh+F7
-                                          {POLL_MAP_SHIFT | C64_KEY_F5,POLL_MAP_SHIFT | C64_KEY_F5},                // 5 F6 ->  Sh+F5/Sh+F5
-                                          {POLL_MAP_SHIFT | C64_KEY_F3,POLL_MAP_SHIFT | C64_KEY_F3},                // 6 F4 ->  Sh+F3/Sh+F3
-                                          {POLL_MAP_NONE | C64_KEY_F7,POLL_MAP_SHIFT | C64_KEY_F7},                 // 7 F7 ->  F7/Sh+F7
-                                          {POLL_MAP_NONE | C64_KEY_CBM,POLL_MAP_SHIFT | C64_KEY_CBM},               // 8 Left ALT -> CBM/Sh+CBM 
-                                          {POLL_MAP_NONE | C64_KEY_LSHIFT,POLL_MAP_SHIFT | C64_KEY_LSHIFT},         // 9 Left Shift -> LShift/LShift
-                                          {POLL_MAP_NONE | C64_KEY_CTRL,POLL_MAP_SHIFT | C64_KEY_CTRL},             // 10 Left Control -> CTRL/Sh+CTRL
-                                          {POLL_MAP_NONE | C64_KEY_2,POLL_MAP_NONE | C64_KEY_AT},                   // 11 2 ->  2/@
-                                          {POLL_MAP_NONE | C64_KEY_6,POLL_MAP_NONE | C64_KEY_UPARROW},              // 12 6 ->  6/^
-                                          {POLL_MAP_NONE | C64_KEY_7,POLL_MAP_SHIFT | C64_KEY_6},                   // 13 7 ->  7/&
-                                          {POLL_MAP_NONE | C64_KEY_8, POLL_MAP_NONE | C64_KEY_ASTERIX},             // 14 8 ->  8/*
-                                          {POLL_MAP_NONE | C64_KEY_0,POLL_MAP_SHIFT | C64_KEY_9},                   // 15 0 ->  0/)
-                                          {POLL_MAP_NONE | C64_KEY_9,POLL_MAP_SHIFT | C64_KEY_8},                   // 16 9 ->  9/(
-                                          {POLL_MAP_NONE | C64_KEY_SEMICOLON,POLL_MAP_NONE | C64_KEY_COLON},        // 17 ; ->  ;/:
-                                          {POLL_MAP_NONE | C64_KEY_MINUS,POLL_MAP_SHIFT | C64_KEY_MINUS},           // 18 - ->  -/Sh+-
-                                          {POLL_MAP_SHIFT | C64_KEY_7,POLL_MAP_SHIFT | C64_KEY_2},                  // 19 ' ->  '/"
-                                          {POLL_MAP_SHIFT | C64_KEY_COLON,POLL_MAP_SHIFT | C64_KEY_AT},             // 20 [ ->  [/Sh+@
-                                          {POLL_MAP_NONE | C64_KEY_EQUALS,POLL_MAP_NONE | C64_KEY_PLUS},            // 21 = ->  =/+
-                                          {POLL_MAP_SHIFT | C64_KEY_SEMICOLON,POLL_MAP_SHIFT | C64_KEY_ASTERIX},    // 22 ] ->  ]/Sh+*
-                                          {POLL_MAP_NONE | C64_KEY_POUND,POLL_MAP_SHIFT | C64_KEY_POUND},           // 23 | ->  pound/Sh+pound
-                                          {POLL_MAP_NONE | C128_KEY_NUM_1, POLL_MAP_SHIFT | C128_KEY_NUM_1},        // 24 Num 1 -> Num 1/Sh+Num 1
-                                          {POLL_MAP_NONE | C128_KEY_NUM_4,POLL_MAP_SHIFT | C128_KEY_NUM_4},         // 25 Num 4 -> Num 4/Sh+Num 4
-                                          {POLL_MAP_NONE | C128_KEY_NUM_7,POLL_MAP_SHIFT | C128_KEY_NUM_7},         // 26 Num 7 ->  Num 7/Sh+Num 7
-                                          {POLL_MAP_NONE | C128_KEY_NUM_0,POLL_MAP_SHIFT | C128_KEY_NUM_0},         // 27 Num 0 -> Num 0/Sh+Num 0
-                                          {POLL_MAP_NONE | C128_KEY_NUM_PERIOD,POLL_MAP_SHIFT | C128_KEY_NUM_PERIOD},// 28 Num . -> Num ./Sh+Num .
-                                          {POLL_MAP_NONE | C128_KEY_NUM_2,POLL_MAP_SHIFT | C128_KEY_NUM_2},         // 29 Num 2 -> Num 2/Sh+Num 2
-                                          {POLL_MAP_NONE | C128_KEY_NUM_5,POLL_MAP_SHIFT | C128_KEY_NUM_5},         // 30 Num 5 -> Num 5/Sh+Num 5
-                                          {POLL_MAP_NONE | C128_KEY_NUM_6,POLL_MAP_SHIFT | C128_KEY_NUM_6},         // 31 Num 6 -> Num 6/Sh+Num 6
-                                          {POLL_MAP_NONE | C128_KEY_NUM_8,POLL_MAP_SHIFT | C128_KEY_NUM_8},         // 32 Num 8 -> Num 8/Sh+Num 8
-                                          {POLL_MAP_NONE | C128_KEY_ESC,POLL_MAP_SHIFT | C128_KEY_ESC},             // 33 Esc -> ESC/Sh+ESC
-                                          {POLL_MAP_NONE | C128_KEY_NUM_PLUS, POLL_MAP_SHIFT | C128_KEY_NUM_PLUS},  // 34 Num + -> Num +/Sh+Num +
-                                          {POLL_MAP_NONE | C128_KEY_NUM_3,POLL_MAP_SHIFT | C128_KEY_NUM_3},         // 35 Num 3 -> Num 3/Sh+Num 3
-                                          {POLL_MAP_NONE | C128_KEY_NUM_MINUS,POLL_MAP_SHIFT | C128_KEY_NUM_MINUS}, // 36 Num - -> Num -/Sh+Num - 
-                                          {POLL_MAP_NONE | C64_KEY_ASTERIX,POLL_MAP_NONE | C64_KEY_ASTERIX},        // 37 Num * -> Num */Sh+Num *
-                                          {POLL_MAP_NONE | C128_KEY_NUM_9,POLL_MAP_SHIFT | C128_KEY_NUM_9},         // 38 Num 9 -> Num 9/Sh+Num 9
-                                          {POLL_MAP_NONE | C128_KEY_NOSCROLL,POLL_MAP_NONE | C128_KEY_LINEFEED},    // 39 Scroll Lock -> NoScroll/LineFeed
-                                          {POLL_MAP_NONE | C128_KEY_TAB,POLL_MAP_SHIFT | C128_KEY_TAB},             // 40 TAB -> TAB/Sh+TAB
-                                          {POLL_MAP_SHIFT | C64_KEY_PLUS,POLL_MAP_SHIFT | C64_KEY_UPARROW},         // 41 F12 ->  Sh++/Sh+^
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F5,POLL_MAP_SHIFT | POLL_C64_KEY_F5},                 // 0 F5 ->  F5/Sh+F5
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F3,POLL_MAP_SHIFT | POLL_C64_KEY_F3},                 // 1 F3 ->  F3/Sh+F3
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F1,POLL_MAP_SHIFT | POLL_C64_KEY_F1},                 // 2 F1 ->  F1/Sh+F1
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F1,POLL_MAP_SHIFT | POLL_C64_KEY_F1},                // 3 F2 ->  Sh+F1/Sh+F1
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F7, POLL_MAP_SHIFT | POLL_C64_KEY_F7},               // 4 F8 ->  Sh+F7/Sh+F7
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F5,POLL_MAP_SHIFT | POLL_C64_KEY_F5},                // 5 F6 ->  Sh+F5/Sh+F5
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F3,POLL_MAP_SHIFT | POLL_C64_KEY_F3},                // 6 F4 ->  Sh+F3/Sh+F3
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F7,POLL_MAP_SHIFT | POLL_C64_KEY_F7},                 // 7 F7 ->  F7/Sh+F7
+                                          {POLL_MAP_NONE | POLL_C64_KEY_CBM,POLL_MAP_SHIFT | POLL_C64_KEY_CBM},               // 8 Left ALT -> CBM/Sh+CBM 
+                                          {POLL_MAP_NONE | POLL_C64_KEY_LSHIFT,POLL_MAP_SHIFT | POLL_C64_KEY_LSHIFT},         // 9 Left Shift -> LShift/LShift
+                                          {POLL_MAP_NONE | POLL_C64_KEY_CTRL,POLL_MAP_SHIFT | POLL_C64_KEY_CTRL},             // 10 Left Control -> CTRL/Sh+CTRL
+                                          {POLL_MAP_NONE | POLL_C64_KEY_2,POLL_MAP_NONE | POLL_C64_KEY_AT},                   // 11 2 ->  2/@
+                                          {POLL_MAP_NONE | POLL_C64_KEY_6,POLL_MAP_NONE | POLL_C64_KEY_UPARROW},              // 12 6 ->  6/^
+                                          {POLL_MAP_NONE | POLL_C64_KEY_7,POLL_MAP_SHIFT | POLL_C64_KEY_6},                   // 13 7 ->  7/&
+                                          {POLL_MAP_NONE | POLL_C64_KEY_8, POLL_MAP_NONE | POLL_C64_KEY_ASTERIX},             // 14 8 ->  8/*
+                                          {POLL_MAP_NONE | POLL_C64_KEY_0,POLL_MAP_SHIFT | POLL_C64_KEY_9},                   // 15 0 ->  0/)
+                                          {POLL_MAP_NONE | POLL_C64_KEY_9,POLL_MAP_SHIFT | POLL_C64_KEY_8},                   // 16 9 ->  9/(
+                                          {POLL_MAP_NONE | POLL_C64_KEY_SEMICOLON,POLL_MAP_NONE | POLL_C64_KEY_COLON},        // 17 ; ->  ;/:
+                                          {POLL_MAP_NONE | POLL_C64_KEY_MINUS,POLL_MAP_SHIFT | POLL_C64_KEY_MINUS},           // 18 - ->  -/Sh+-
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_7,POLL_MAP_SHIFT | POLL_C64_KEY_2},                  // 19 ' ->  '/"
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_COLON,POLL_MAP_SHIFT | POLL_C64_KEY_AT},             // 20 [ ->  [/Sh+@
+                                          {POLL_MAP_NONE | POLL_C64_KEY_EQUALS,POLL_MAP_NONE | POLL_C64_KEY_PLUS},            // 21 = ->  =/+
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_SEMICOLON,POLL_MAP_SHIFT | POLL_C64_KEY_ASTERIX},    // 22 ] ->  ]/Sh+*
+                                          {POLL_MAP_NONE | POLL_C64_KEY_POUND,POLL_MAP_SHIFT | POLL_C64_KEY_POUND},           // 23 | ->  pound/Sh+pound
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_1, POLL_MAP_SHIFT | POLL_C128_KEY_NUM_1},        // 24 Num 1 -> Num 1/Sh+Num 1
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_4,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_4},         // 25 Num 4 -> Num 4/Sh+Num 4
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_7,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_7},         // 26 Num 7 ->  Num 7/Sh+Num 7
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_0,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_0},         // 27 Num 0 -> Num 0/Sh+Num 0
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_PERIOD,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_PERIOD},// 28 Num . -> Num ./Sh+Num .
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_2,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_2},         // 29 Num 2 -> Num 2/Sh+Num 2
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_5,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_5},         // 30 Num 5 -> Num 5/Sh+Num 5
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_6,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_6},         // 31 Num 6 -> Num 6/Sh+Num 6
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_8,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_8},         // 32 Num 8 -> Num 8/Sh+Num 8
+                                          {POLL_MAP_NONE | POLL_C128_KEY_ESC,POLL_MAP_SHIFT | POLL_C128_KEY_ESC},             // 33 Esc -> ESC/Sh+ESC
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_PLUS, POLL_MAP_SHIFT | POLL_C128_KEY_NUM_PLUS},  // 34 Num + -> Num +/Sh+Num +
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_3,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_3},         // 35 Num 3 -> Num 3/Sh+Num 3
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_MINUS,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_MINUS}, // 36 Num - -> Num -/Sh+Num - 
+                                          {POLL_MAP_NONE | POLL_C64_KEY_ASTERIX,POLL_MAP_NONE | POLL_C64_KEY_ASTERIX},        // 37 Num * -> Num */Sh+Num *
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_9,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_9},         // 38 Num 9 -> Num 9/Sh+Num 9
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NOSCROLL,POLL_MAP_NONE | POLL_C128_KEY_LINEFEED},    // 39 Scroll Lock -> NoScroll/LineFeed
+                                          {POLL_MAP_NONE | POLL_C128_KEY_TAB,POLL_MAP_SHIFT | POLL_C128_KEY_TAB},             // 40 TAB -> TAB/Sh+TAB
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_PLUS,POLL_MAP_SHIFT | POLL_C64_KEY_UPARROW},         // 41 F12 ->  Sh++/Sh+^
                                          }
                                          ,
                                          {
-                                          {POLL_MAP_NONE | C64_KEY_F5,POLL_MAP_SHIFT | C64_KEY_F5},                 // 0 F5 ->  F5/Sh+F5
-                                          {POLL_MAP_NONE | C64_KEY_F3,POLL_MAP_SHIFT | C64_KEY_F3},                 // 1 F3 ->  F3/Sh+F3
-                                          {POLL_MAP_NONE | C64_KEY_F1,POLL_MAP_SHIFT | C64_KEY_F1},                 // 2 F1 ->  F1/Sh+F1
-                                          {POLL_MAP_SHIFT | C64_KEY_F1,POLL_MAP_SHIFT | C64_KEY_F1},                // 3 F2 ->  Sh+F1/Sh+F2
-                                          {POLL_MAP_SHIFT | C64_KEY_F7, POLL_MAP_SHIFT | C64_KEY_F7},               // 4 F8 ->  Sh+F7/Sh+F7
-                                          {POLL_MAP_SHIFT | C64_KEY_F5,POLL_MAP_SHIFT | C64_KEY_F5},                // 5 F6 ->  Sh+F5/Sh+F5
-                                          {POLL_MAP_SHIFT | C64_KEY_F3,POLL_MAP_SHIFT | C64_KEY_F3},                // 6 F4 ->  Sh+F3/Sh+F3  
-                                          {POLL_MAP_NONE | C64_KEY_F7,POLL_MAP_SHIFT | C64_KEY_F7},                 // 7 F7 ->  F7/Sh+F7
-                                          {POLL_MAP_NONE | C64_KEY_NONE,POLL_MAP_SHIFT | C64_KEY_NONE},             // 8 Left ALT -> Nothing/Sh+Nothing
-                                          {POLL_MAP_NONE | C64_KEY_LSHIFT,POLL_MAP_SHIFT | C64_KEY_LSHIFT},         // 9 Left Shift -> Left Shift/Sh+Left Shift
-                                          {POLL_MAP_NONE | C64_KEY_CBM,POLL_MAP_SHIFT | C64_KEY_CBM},               // 10 Left  Control -> CBM/Sh+CBM
-                                          {POLL_MAP_NONE | C64_KEY_2,POLL_MAP_SHIFT | C64_KEY_2},                   // 11 2 ->  2/Sh+2
-                                          {POLL_MAP_NONE | C64_KEY_6,POLL_MAP_SHIFT | C64_KEY_6},                   // 12 6 ->  6/Sh+6
-                                          {POLL_MAP_NONE | C64_KEY_7,POLL_MAP_SHIFT | C64_KEY_7},                   // 13 7 ->  7/Sh+7
-                                          {POLL_MAP_NONE | C64_KEY_8, POLL_MAP_SHIFT | C64_KEY_8},                  // 14 8 ->  8/Sh+8
-                                          {POLL_MAP_NONE | C64_KEY_0,POLL_MAP_SHIFT | C64_KEY_0},                   // 15 0 ->  0/Sh+0
-                                          {POLL_MAP_NONE | C64_KEY_9,POLL_MAP_SHIFT | C64_KEY_9},                   // 16 9 ->  9/Sh+9
-                                          {POLL_MAP_NONE | C64_KEY_SEMICOLON,POLL_MAP_SHIFT | C64_KEY_SEMICOLON},   // 17 ; ->  ;/Sh+;
-                                          {POLL_MAP_NONE | C64_KEY_PLUS,POLL_MAP_SHIFT | C64_KEY_PLUS},             // 18 - ->  +/Sh++
-                                          {POLL_MAP_NONE | C64_KEY_SEMICOLON,POLL_MAP_SHIFT | C64_KEY_SEMICOLON},   // 19 ' ->  ;/Sh+;
-                                          {POLL_MAP_NONE | C64_KEY_AT,POLL_MAP_SHIFT | C64_KEY_AT},                 // 20 [ ->  @/Sh+@
-                                          {POLL_MAP_NONE | C64_KEY_MINUS,POLL_MAP_SHIFT | C64_KEY_MINUS},           // 21 = ->  -/Sh+-
-                                          {POLL_MAP_NONE | C64_KEY_ASTERIX,POLL_MAP_SHIFT | C64_KEY_ASTERIX},       // 22 ] ->  */Sh+*
-                                          {POLL_MAP_NONE | C64_KEY_POUND,POLL_MAP_SHIFT | C64_KEY_POUND},           // 23 | ->  pound/Sh+pound
-                                          {POLL_MAP_NONE | C64_KEY_1, POLL_MAP_NONE | C64_KEY_1},                   // 24 Num 1 ->  1/1
-                                          {POLL_MAP_NONE | C64_KEY_4,POLL_MAP_NONE | C64_KEY_4},                    // 25 Num 4 ->  4/4
-                                          {POLL_MAP_NONE | C64_KEY_7,POLL_MAP_NONE | C64_KEY_7},                    // 26 Num 7 ->  7/7
-                                          {POLL_MAP_NONE | C64_KEY_0,POLL_MAP_NONE | C64_KEY_0},                    // 27 Num 0 ->  0/0
-                                          {POLL_MAP_NONE | C64_KEY_PERIOD,POLL_MAP_NONE | C64_KEY_PERIOD},          // 28 Num Dot ->  ./.
-                                          {POLL_MAP_NONE | C64_KEY_2,POLL_MAP_NONE | C64_KEY_2},                    // 29 Num 2 ->  2/2
-                                          {POLL_MAP_NONE | C64_KEY_5,POLL_MAP_NONE | C64_KEY_5},                    // 30 Num 5 ->  5/5
-                                          {POLL_MAP_NONE | C64_KEY_6,POLL_MAP_NONE | C64_KEY_6},                    // 31 Num 6 ->  6/6
-                                          {POLL_MAP_NONE | C64_KEY_8,POLL_MAP_NONE | C64_KEY_8},                    // 32 Num 8 ->  8/8
-                                          {POLL_MAP_NONE | C64_KEY_RUNSTOP,POLL_MAP_SHIFT | C64_KEY_RUNSTOP},       // 33 Esc -> RunStop/Sh+RunStop
-                                          {POLL_MAP_NONE | C64_KEY_PLUS, POLL_MAP_NONE | C64_KEY_PLUS},             // 34 Num + ->  +/+
-                                          {POLL_MAP_NONE | C64_KEY_3,POLL_MAP_NONE | C64_KEY_3},                    // 35 Num 3 ->  3/3
-                                          {POLL_MAP_NONE | C64_KEY_MINUS,POLL_MAP_NONE | C64_KEY_MINUS},            // 36 - Num - ->  -/-
-                                          {POLL_MAP_NONE | C64_KEY_ASTERIX,POLL_MAP_NONE | C64_KEY_ASTERIX},        // 37 - Num * ->  */*
-                                          {POLL_MAP_NONE | C64_KEY_9,POLL_MAP_NONE | C64_KEY_9},                    // 38 - Num 9 ->  9/9
-                                          {POLL_MAP_NONE | C64_KEY_NONE,POLL_MAP_SHIFT | C64_KEY_NONE},             // 39 - Scroll Lock -> None/Sh+None
-                                          {POLL_MAP_NONE | C64_KEY_CTRL,POLL_MAP_SHIFT | C64_KEY_CTRL},             // 40 - TAB ->  CTRL/Sh+CTRL
-                                          {POLL_MAP_SHIFT | C64_KEY_UNMAPPED,POLL_MAP_SHIFT | C64_KEY_UNMAPPED},         // 41 F12 ->  None/Shift+None
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F5,POLL_MAP_SHIFT | POLL_C64_KEY_F5},                 // 0 F5 ->  F5/Sh+F5
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F3,POLL_MAP_SHIFT | POLL_C64_KEY_F3},                 // 1 F3 ->  F3/Sh+F3
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F1,POLL_MAP_SHIFT | POLL_C64_KEY_F1},                 // 2 F1 ->  F1/Sh+F1
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F1,POLL_MAP_SHIFT | POLL_C64_KEY_F1},                // 3 F2 ->  Sh+F1/Sh+F2
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F7, POLL_MAP_SHIFT | POLL_C64_KEY_F7},               // 4 F8 ->  Sh+F7/Sh+F7
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F5,POLL_MAP_SHIFT | POLL_C64_KEY_F5},                // 5 F6 ->  Sh+F5/Sh+F5
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F3,POLL_MAP_SHIFT | POLL_C64_KEY_F3},                // 6 F4 ->  Sh+F3/Sh+F3  
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F7,POLL_MAP_SHIFT | POLL_C64_KEY_F7},                 // 7 F7 ->  F7/Sh+F7
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_NONE,POLL_MAP_SHIFT | POLL_CBM_KEY_NONE},             // 8 Left ALT -> Nothing/Sh+Nothing
+                                          {POLL_MAP_NONE | POLL_C64_KEY_LSHIFT,POLL_MAP_SHIFT | POLL_C64_KEY_LSHIFT},         // 9 Left Shift -> Left Shift/Sh+Left Shift
+                                          {POLL_MAP_NONE | POLL_C64_KEY_CBM,POLL_MAP_SHIFT | POLL_C64_KEY_CBM},               // 10 Left  Control -> CBM/Sh+CBM
+                                          {POLL_MAP_NONE | POLL_C64_KEY_2,POLL_MAP_SHIFT | POLL_C64_KEY_2},                   // 11 2 ->  2/Sh+2
+                                          {POLL_MAP_NONE | POLL_C64_KEY_6,POLL_MAP_SHIFT | POLL_C64_KEY_6},                   // 12 6 ->  6/Sh+6
+                                          {POLL_MAP_NONE | POLL_C64_KEY_7,POLL_MAP_SHIFT | POLL_C64_KEY_7},                   // 13 7 ->  7/Sh+7
+                                          {POLL_MAP_NONE | POLL_C64_KEY_8, POLL_MAP_SHIFT | POLL_C64_KEY_8},                  // 14 8 ->  8/Sh+8
+                                          {POLL_MAP_NONE | POLL_C64_KEY_0,POLL_MAP_SHIFT | POLL_C64_KEY_0},                   // 15 0 ->  0/Sh+0
+                                          {POLL_MAP_NONE | POLL_C64_KEY_9,POLL_MAP_SHIFT | POLL_C64_KEY_9},                   // 16 9 ->  9/Sh+9
+                                          {POLL_MAP_NONE | POLL_C64_KEY_SEMICOLON,POLL_MAP_SHIFT | POLL_C64_KEY_SEMICOLON},   // 17 ; ->  ;/Sh+;
+                                          {POLL_MAP_NONE | POLL_C64_KEY_PLUS,POLL_MAP_SHIFT | POLL_C64_KEY_PLUS},             // 18 - ->  +/Sh++
+                                          {POLL_MAP_NONE | POLL_C64_KEY_SEMICOLON,POLL_MAP_SHIFT | POLL_C64_KEY_SEMICOLON},   // 19 ' ->  ;/Sh+;
+                                          {POLL_MAP_NONE | POLL_C64_KEY_AT,POLL_MAP_SHIFT | POLL_C64_KEY_AT},                 // 20 [ ->  @/Sh+@
+                                          {POLL_MAP_NONE | POLL_C64_KEY_MINUS,POLL_MAP_SHIFT | POLL_C64_KEY_MINUS},           // 21 = ->  -/Sh+-
+                                          {POLL_MAP_NONE | POLL_C64_KEY_ASTERIX,POLL_MAP_SHIFT | POLL_C64_KEY_ASTERIX},       // 22 ] ->  */Sh+*
+                                          {POLL_MAP_NONE | POLL_C64_KEY_POUND,POLL_MAP_SHIFT | POLL_C64_KEY_POUND},           // 23 | ->  pound/Sh+pound
+                                          {POLL_MAP_NONE | POLL_C64_KEY_1, POLL_MAP_NONE | POLL_C64_KEY_1},                   // 24 Num 1 ->  1/1
+                                          {POLL_MAP_NONE | POLL_C64_KEY_4,POLL_MAP_NONE | POLL_C64_KEY_4},                    // 25 Num 4 ->  4/4
+                                          {POLL_MAP_NONE | POLL_C64_KEY_7,POLL_MAP_NONE | POLL_C64_KEY_7},                    // 26 Num 7 ->  7/7
+                                          {POLL_MAP_NONE | POLL_C64_KEY_0,POLL_MAP_NONE | POLL_C64_KEY_0},                    // 27 Num 0 ->  0/0
+                                          {POLL_MAP_NONE | POLL_C64_KEY_PERIOD,POLL_MAP_NONE | POLL_C64_KEY_PERIOD},          // 28 Num Dot ->  ./.
+                                          {POLL_MAP_NONE | POLL_C64_KEY_2,POLL_MAP_NONE | POLL_C64_KEY_2},                    // 29 Num 2 ->  2/2
+                                          {POLL_MAP_NONE | POLL_C64_KEY_5,POLL_MAP_NONE | POLL_C64_KEY_5},                    // 30 Num 5 ->  5/5
+                                          {POLL_MAP_NONE | POLL_C64_KEY_6,POLL_MAP_NONE | POLL_C64_KEY_6},                    // 31 Num 6 ->  6/6
+                                          {POLL_MAP_NONE | POLL_C64_KEY_8,POLL_MAP_NONE | POLL_C64_KEY_8},                    // 32 Num 8 ->  8/8
+                                          {POLL_MAP_NONE | POLL_C64_KEY_RUNSTOP,POLL_MAP_SHIFT | POLL_C64_KEY_RUNSTOP},       // 33 Esc -> RunStop/Sh+RunStop
+                                          {POLL_MAP_NONE | POLL_C64_KEY_PLUS, POLL_MAP_NONE | POLL_C64_KEY_PLUS},             // 34 Num + ->  +/+
+                                          {POLL_MAP_NONE | POLL_C64_KEY_3,POLL_MAP_NONE | POLL_C64_KEY_3},                    // 35 Num 3 ->  3/3
+                                          {POLL_MAP_NONE | POLL_C64_KEY_MINUS,POLL_MAP_NONE | POLL_C64_KEY_MINUS},            // 36 - Num - ->  -/-
+                                          {POLL_MAP_NONE | POLL_C64_KEY_ASTERIX,POLL_MAP_NONE | POLL_C64_KEY_ASTERIX},        // 37 - Num * ->  */*
+                                          {POLL_MAP_NONE | POLL_C64_KEY_9,POLL_MAP_NONE | POLL_C64_KEY_9},                    // 38 - Num 9 ->  9/9
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_NONE,POLL_MAP_SHIFT | POLL_CBM_KEY_NONE},             // 39 - Scroll Lock -> None/Sh+None
+                                          {POLL_MAP_NONE | POLL_C64_KEY_CTRL,POLL_MAP_SHIFT | POLL_C64_KEY_CTRL},             // 40 - TAB ->  CTRL/Sh+CTRL
+                                          {POLL_MAP_SHIFT | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_CBM_KEY_UNMAPPED},         // 41 F12 ->  None/Shift+None
                                          }
                                          ,
                                          {
-                                          {POLL_MAP_NONE | C64_KEY_F5,POLL_MAP_SHIFT | C64_KEY_F5},                 // 0 F5 ->  F5/Sh+F5
-                                          {POLL_MAP_NONE | C64_KEY_F3,POLL_MAP_SHIFT | C64_KEY_F3},                 // 1 F3 ->  F3/Sh+F3
-                                          {POLL_MAP_NONE | C64_KEY_F1,POLL_MAP_SHIFT | C64_KEY_F1},                 // 2 F1 ->  F1/Sh+F1
-                                          {POLL_MAP_SHIFT | C64_KEY_F1,POLL_MAP_SHIFT | C64_KEY_F1},                // 3 F2 ->  Sh+F1/Sh+F2
-                                          {POLL_MAP_SHIFT | C64_KEY_F7, POLL_MAP_SHIFT | C64_KEY_F7},               // 4 F8 ->  Sh+F7/Sh+F7
-                                          {POLL_MAP_SHIFT | C64_KEY_F5,POLL_MAP_SHIFT | C64_KEY_F5},                // 5 F6 ->  Sh+F5/Sh+F5
-                                          {POLL_MAP_SHIFT | C64_KEY_F3,POLL_MAP_SHIFT | C64_KEY_F3},                // 6 F4 ->  Sh+F3/Sh+F3  
-                                          {POLL_MAP_NONE | C64_KEY_F7,POLL_MAP_SHIFT | C64_KEY_F7},                 // 7 F7 ->  F7/Sh+F7
-                                          {POLL_MAP_NONE | C64_KEY_NONE,POLL_MAP_SHIFT | C64_KEY_NONE},             // 8 Left ALT -> Nothing/Sh+Nothing
-                                          {POLL_MAP_NONE | C64_KEY_LSHIFT,POLL_MAP_SHIFT | C64_KEY_LSHIFT},         // 9 Left Shift -> Left Shift/Sh+Left Shift
-                                          {POLL_MAP_NONE | C64_KEY_CBM,POLL_MAP_SHIFT | C64_KEY_CBM},               // 10 Left  Control -> CBM/Sh+CBM
-                                          {POLL_MAP_NONE | C64_KEY_2,POLL_MAP_SHIFT | C64_KEY_2},                   // 11 2 ->  2/Sh+2
-                                          {POLL_MAP_NONE | C64_KEY_6,POLL_MAP_SHIFT | C64_KEY_6},                   // 12 6 ->  6/Sh+6
-                                          {POLL_MAP_NONE | C64_KEY_7,POLL_MAP_SHIFT | C64_KEY_7},                   // 13 7 ->  7/Sh+7
-                                          {POLL_MAP_NONE | C64_KEY_8, POLL_MAP_SHIFT | C64_KEY_8},                  // 14 8 ->  8/Sh+8
-                                          {POLL_MAP_NONE | C64_KEY_0,POLL_MAP_SHIFT | C64_KEY_0},                   // 15 0 ->  0/Sh+0
-                                          {POLL_MAP_NONE | C64_KEY_9,POLL_MAP_SHIFT | C64_KEY_9},                   // 16 9 ->  9/Sh+9
-                                          {POLL_MAP_NONE | C64_KEY_SEMICOLON,POLL_MAP_SHIFT | C64_KEY_SEMICOLON},   // 17 ; ->  ;/Sh+;
-                                          {POLL_MAP_NONE | C64_KEY_PLUS,POLL_MAP_SHIFT | C64_KEY_PLUS},             // 18 - ->  +/Sh++
-                                          {POLL_MAP_NONE | C64_KEY_SEMICOLON,POLL_MAP_SHIFT | C64_KEY_SEMICOLON},   // 19 ' ->  ;/Sh+;
-                                          {POLL_MAP_NONE | C64_KEY_AT,POLL_MAP_SHIFT | C64_KEY_AT},                 // 20 [ ->  @/Sh+@
-                                          {POLL_MAP_NONE | C64_KEY_MINUS,POLL_MAP_SHIFT | C64_KEY_MINUS},           // 21 = ->  -/Sh+-
-                                          {POLL_MAP_NONE | C64_KEY_ASTERIX,POLL_MAP_SHIFT | C64_KEY_ASTERIX},       // 22 ] ->  */Sh+*
-                                          {POLL_MAP_NONE | C64_KEY_POUND,POLL_MAP_SHIFT | C64_KEY_POUND},           // 23 | ->  pound/Sh+pound
-                                          {POLL_MAP_NONE | C128_KEY_NUM_1, POLL_MAP_SHIFT | C128_KEY_NUM_1},        // 24 Num 1 -> Num 1/Sh+Num 1
-                                          {POLL_MAP_NONE | C128_KEY_NUM_4,POLL_MAP_SHIFT | C128_KEY_NUM_4},         // 25 Num 4 -> Num 4/Sh+Num 4
-                                          {POLL_MAP_NONE | C128_KEY_NUM_7,POLL_MAP_SHIFT | C128_KEY_NUM_7},         // 26 Num 7 ->  Num 7/Sh+Num 7
-                                          {POLL_MAP_NONE | C128_KEY_NUM_0,POLL_MAP_SHIFT | C128_KEY_NUM_0},         // 27 Num 0 -> Num 0/Sh+Num 0
-                                          {POLL_MAP_NONE | C128_KEY_NUM_PERIOD,POLL_MAP_SHIFT | C128_KEY_NUM_PERIOD},// 28 Num . -> Num ./Sh+Num .
-                                          {POLL_MAP_NONE | C128_KEY_NUM_2,POLL_MAP_SHIFT | C128_KEY_NUM_2},         // 29 Num 2 -> Num 2/Sh+Num 2
-                                          {POLL_MAP_NONE | C128_KEY_NUM_5,POLL_MAP_SHIFT | C128_KEY_NUM_5},         // 30 Num 5 -> Num 5/Sh+Num 5
-                                          {POLL_MAP_NONE | C128_KEY_NUM_6,POLL_MAP_SHIFT | C128_KEY_NUM_6},         // 31 Num 6 -> Num 6/Sh+Num 6
-                                          {POLL_MAP_NONE | C128_KEY_NUM_8,POLL_MAP_SHIFT | C128_KEY_NUM_8},         // 32 Num 8 -> Num 8/Sh+Num 8
-                                          {POLL_MAP_NONE | C64_KEY_RUNSTOP,POLL_MAP_SHIFT | C64_KEY_RUNSTOP},       // 33 Esc -> RunStop/Sh+RunStop
-                                          {POLL_MAP_NONE | C128_KEY_NUM_PLUS, POLL_MAP_SHIFT | C128_KEY_NUM_PLUS},  // 34 Num + -> Num +/Sh+Num +
-                                          {POLL_MAP_NONE | C128_KEY_NUM_3,POLL_MAP_SHIFT | C128_KEY_NUM_3},         // 35 Num 3 -> Num 3/Sh+Num 3
-                                          {POLL_MAP_NONE | C128_KEY_NUM_MINUS,POLL_MAP_SHIFT | C128_KEY_NUM_MINUS}, // 36 Num - -> Num -/Sh+Num - 
-                                          {POLL_MAP_NONE | C64_KEY_ASTERIX,POLL_MAP_NONE | C64_KEY_ASTERIX},        // 37 Num * -> Num */Sh+Num *
-                                          {POLL_MAP_NONE | C128_KEY_NUM_9,POLL_MAP_SHIFT | C128_KEY_NUM_9},         // 38 Num 9 -> Num 9/Sh+Num 9
-                                          {POLL_MAP_NONE | C64_KEY_NONE,POLL_MAP_SHIFT | C64_KEY_NONE},             // 39 - Scroll Lock -> None/Sh+None
-                                          {POLL_MAP_NONE | C64_KEY_CTRL,POLL_MAP_SHIFT | C64_KEY_CTRL},             // 40 - TAB ->  CTRL/Sh+CTRL
-                                          {POLL_MAP_SHIFT | C64_KEY_PLUS,POLL_MAP_SHIFT | C64_KEY_UPARROW},         // 41 F12 ->  Sh++/Sh+^
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F5,POLL_MAP_SHIFT | POLL_C64_KEY_F5},                 // 0 F5 ->  F5/Sh+F5
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F3,POLL_MAP_SHIFT | POLL_C64_KEY_F3},                 // 1 F3 ->  F3/Sh+F3
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F1,POLL_MAP_SHIFT | POLL_C64_KEY_F1},                 // 2 F1 ->  F1/Sh+F1
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F1,POLL_MAP_SHIFT | POLL_C64_KEY_F1},                // 3 F2 ->  Sh+F1/Sh+F2
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F7, POLL_MAP_SHIFT | POLL_C64_KEY_F7},               // 4 F8 ->  Sh+F7/Sh+F7
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F5,POLL_MAP_SHIFT | POLL_C64_KEY_F5},                // 5 F6 ->  Sh+F5/Sh+F5
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_F3,POLL_MAP_SHIFT | POLL_C64_KEY_F3},                // 6 F4 ->  Sh+F3/Sh+F3  
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F7,POLL_MAP_SHIFT | POLL_C64_KEY_F7},                 // 7 F7 ->  F7/Sh+F7
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_NONE,POLL_MAP_SHIFT | POLL_CBM_KEY_NONE},             // 8 Left ALT -> Nothing/Sh+Nothing
+                                          {POLL_MAP_NONE | POLL_C64_KEY_LSHIFT,POLL_MAP_SHIFT | POLL_C64_KEY_LSHIFT},         // 9 Left Shift -> Left Shift/Sh+Left Shift
+                                          {POLL_MAP_NONE | POLL_C64_KEY_CBM,POLL_MAP_SHIFT | POLL_C64_KEY_CBM},               // 10 Left  Control -> CBM/Sh+CBM
+                                          {POLL_MAP_NONE | POLL_C64_KEY_2,POLL_MAP_SHIFT | POLL_C64_KEY_2},                   // 11 2 ->  2/Sh+2
+                                          {POLL_MAP_NONE | POLL_C64_KEY_6,POLL_MAP_SHIFT | POLL_C64_KEY_6},                   // 12 6 ->  6/Sh+6
+                                          {POLL_MAP_NONE | POLL_C64_KEY_7,POLL_MAP_SHIFT | POLL_C64_KEY_7},                   // 13 7 ->  7/Sh+7
+                                          {POLL_MAP_NONE | POLL_C64_KEY_8, POLL_MAP_SHIFT | POLL_C64_KEY_8},                  // 14 8 ->  8/Sh+8
+                                          {POLL_MAP_NONE | POLL_C64_KEY_0,POLL_MAP_SHIFT | POLL_C64_KEY_0},                   // 15 0 ->  0/Sh+0
+                                          {POLL_MAP_NONE | POLL_C64_KEY_9,POLL_MAP_SHIFT | POLL_C64_KEY_9},                   // 16 9 ->  9/Sh+9
+                                          {POLL_MAP_NONE | POLL_C64_KEY_SEMICOLON,POLL_MAP_SHIFT | POLL_C64_KEY_SEMICOLON},   // 17 ; ->  ;/Sh+;
+                                          {POLL_MAP_NONE | POLL_C64_KEY_PLUS,POLL_MAP_SHIFT | POLL_C64_KEY_PLUS},             // 18 - ->  +/Sh++
+                                          {POLL_MAP_NONE | POLL_C64_KEY_SEMICOLON,POLL_MAP_SHIFT | POLL_C64_KEY_SEMICOLON},   // 19 ' ->  ;/Sh+;
+                                          {POLL_MAP_NONE | POLL_C64_KEY_AT,POLL_MAP_SHIFT | POLL_C64_KEY_AT},                 // 20 [ ->  @/Sh+@
+                                          {POLL_MAP_NONE | POLL_C64_KEY_MINUS,POLL_MAP_SHIFT | POLL_C64_KEY_MINUS},           // 21 = ->  -/Sh+-
+                                          {POLL_MAP_NONE | POLL_C64_KEY_ASTERIX,POLL_MAP_SHIFT | POLL_C64_KEY_ASTERIX},       // 22 ] ->  */Sh+*
+                                          {POLL_MAP_NONE | POLL_C64_KEY_POUND,POLL_MAP_SHIFT | POLL_C64_KEY_POUND},           // 23 | ->  pound/Sh+pound
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_1, POLL_MAP_SHIFT | POLL_C128_KEY_NUM_1},        // 24 Num 1 -> Num 1/Sh+Num 1
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_4,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_4},         // 25 Num 4 -> Num 4/Sh+Num 4
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_7,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_7},         // 26 Num 7 ->  Num 7/Sh+Num 7
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_0,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_0},         // 27 Num 0 -> Num 0/Sh+Num 0
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_PERIOD,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_PERIOD},// 28 Num . -> Num ./Sh+Num .
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_2,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_2},         // 29 Num 2 -> Num 2/Sh+Num 2
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_5,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_5},         // 30 Num 5 -> Num 5/Sh+Num 5
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_6,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_6},         // 31 Num 6 -> Num 6/Sh+Num 6
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_8,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_8},         // 32 Num 8 -> Num 8/Sh+Num 8
+                                          {POLL_MAP_NONE | POLL_C64_KEY_RUNSTOP,POLL_MAP_SHIFT | POLL_C64_KEY_RUNSTOP},       // 33 Esc -> RunStop/Sh+RunStop
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_PLUS, POLL_MAP_SHIFT | POLL_C128_KEY_NUM_PLUS},  // 34 Num + -> Num +/Sh+Num +
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_3,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_3},         // 35 Num 3 -> Num 3/Sh+Num 3
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_MINUS,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_MINUS}, // 36 Num - -> Num -/Sh+Num - 
+                                          {POLL_MAP_NONE | POLL_C64_KEY_ASTERIX,POLL_MAP_NONE | POLL_C64_KEY_ASTERIX},        // 37 Num * -> Num */Sh+Num *
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NUM_9,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_9},         // 38 Num 9 -> Num 9/Sh+Num 9
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_NONE,POLL_MAP_SHIFT | POLL_CBM_KEY_NONE},             // 39 - Scroll Lock -> None/Sh+None
+                                          {POLL_MAP_NONE | POLL_C64_KEY_CTRL,POLL_MAP_SHIFT | POLL_C64_KEY_CTRL},             // 40 - TAB ->  CTRL/Sh+CTRL
+                                          {POLL_MAP_SHIFT | POLL_C64_KEY_PLUS,POLL_MAP_SHIFT | POLL_C64_KEY_UPARROW},         // 41 F12 ->  Sh++/Sh+^
                                          }
                                       };
                                           
@@ -262,25 +262,15 @@ inline void delay_jiffy(void) {
   //TCCR2=0;
 }
 
-inline void update_eeprom(void* address,uint8_t data) {
-  uint8_t tmp;
-  
-  while(!eeprom_is_ready());
-  tmp=eeprom_read_byte(address);
-  if(tmp!=data)
-  while(!eeprom_is_ready());
-  eeprom_write_byte(address,data);
-}
-
 void set_switch(uint8_t sw, uint8_t state) {
   switch(sw) {
-    case C64_PKEY_RESTORE:
+    case POLL_C64_PKEY_RESTORE:
       SW_send(SW_RESTORE | (state?0:SW_UP));
       break;
-    case C128_PKEY_4080:
+    case POLL_C128_PKEY_4080:
       SW_send(SW_4080 | (state?0:SW_UP));
       break;
-    case C128_PKEY_CAPSENSE:
+    case POLL_C128_PKEY_CAPSENSE:
       SW_send(SW_CAPSENSE | (state?0:SW_UP));
       break;
     default:
@@ -296,10 +286,10 @@ void set_switch(uint8_t sw, uint8_t state) {
 inline void reset_shift_override(uint8_t sw, uint8_t state) {
   // if it is not a repeat, not a meta key, then reset.
   if(shift_override 
-     && ((sw != C64_KEY_LSHIFT  // if it is a shift, keep override
-          && sw != C64_KEY_RSHIFT
-          && sw != C64_KEY_CTRL    // if it is ctrl or cbm, keep.
-          && sw != C64_KEY_CBM
+     && ((sw != POLL_C64_KEY_LSHIFT  // if it is a shift, keep override
+          && sw != POLL_C64_KEY_RSHIFT
+          && sw != POLL_C64_KEY_CTRL    // if it is ctrl or cbm, keep.
+          && sw != POLL_C64_KEY_CBM
           && sw != shift_override_key // if it is a repeat, keep
          )
          || (sw == shift_override_key && !state)
@@ -307,8 +297,8 @@ inline void reset_shift_override(uint8_t sw, uint8_t state) {
      ) {
     // turn off key.
     set_switch(shift_override_key,FALSE);
-    set_switch(C64_KEY_LSHIFT,meta & POLL_FLAG_LSHIFT);
-    set_switch(C64_KEY_RSHIFT,meta & POLL_FLAG_RSHIFT);
+    set_switch(POLL_C64_KEY_LSHIFT,meta & POLL_FLAG_LSHIFT);
+    set_switch(POLL_C64_KEY_RSHIFT,meta & POLL_FLAG_RSHIFT);
     shift_override=FALSE;
   }
 }
@@ -320,27 +310,27 @@ void set_matrix(uint8_t sh, uint8_t sw, uint8_t state) {
   
   // reset override, if applicable.
   reset_shift_override(sw,state);
-  if(sw==C64_KEY_LSHIFT) {
+  if(sw==POLL_C64_KEY_LSHIFT) {
     //if(!state)
     //  shift&=(uint8_t)~POLL_FLAG_LSHIFT;
     //else
     //  shift|=(uint8_t)POLL_FLAG_LSHIFT;
     meta=(meta&(uint8_t)~POLL_FLAG_LSHIFT) | (state?POLL_FLAG_LSHIFT:0);
-    set_switch(C64_KEY_LSHIFT,state);
-  } else if(sw==C64_KEY_RSHIFT) {
+    set_switch(POLL_C64_KEY_LSHIFT,state);
+  } else if(sw==POLL_C64_KEY_RSHIFT) {
     //if(!state)
     //  shift&=(uint8_t)~POLL_FLAG_RSHIFT;
     //else
     //  shift|=(uint8_t)POLL_FLAG_RSHIFT;
     meta=(meta&(uint8_t)~POLL_FLAG_RSHIFT) | (state?POLL_FLAG_RSHIFT:0);
-    set_switch(C64_KEY_RSHIFT,state);
+    set_switch(POLL_C64_KEY_RSHIFT,state);
   } else if(state) {
     // key down
     if(!(shift_override && sw == shift_override_key)) {
       if(!(meta & POLL_FLAG_SHIFT) && sh) {
         //debug2('S');
         // we need to do a virtual shift.
-        set_switch(C64_KEY_LSHIFT,TRUE);
+        set_switch(POLL_C64_KEY_LSHIFT,TRUE);
         // set special key.
         shift_override=TRUE;
         shift_override_key=sw;
@@ -349,8 +339,8 @@ void set_matrix(uint8_t sh, uint8_t sw, uint8_t state) {
         //debug2('U');
         // we need to take off the shift keys...
         // set special key.
-        set_switch(C64_KEY_LSHIFT,FALSE);
-        set_switch(C64_KEY_RSHIFT,FALSE);
+        set_switch(POLL_C64_KEY_LSHIFT,FALSE);
+        set_switch(POLL_C64_KEY_RSHIFT,FALSE);
         shift_override=TRUE;
         shift_override_key=sw;
         shift_override_state=sh;
@@ -377,7 +367,7 @@ void reset_matrix(void) {
   // turn off all but 4080 
   sw_state&=(1<<SW_4080);
   // now, set 4080, as a courtesy
-  set_switch(C128_PKEY_4080,sw_state&(1<<SW_4080));
+  set_switch(POLL_C128_PKEY_4080,sw_state&(1<<SW_4080));
 }
 
 inline void set_LED(uint8_t led) {
@@ -404,11 +394,11 @@ void toggle_4080_key(uint8_t state) {
   if(state) {
     if(sw_state&(1<<SW_4080)) {
       // turn it off
-      set_switch(C128_PKEY_4080,FALSE);
+      set_switch(POLL_C128_PKEY_4080,FALSE);
       sw_state&=(uint8_t)~(1<<SW_4080);
     } else {
       // turn it on
-      set_switch(C128_PKEY_4080,TRUE);
+      set_switch(POLL_C128_PKEY_4080,TRUE);
       sw_state|=(1<<SW_4080);
     }
   }
@@ -417,12 +407,12 @@ void toggle_caps_lock_key(uint8_t state) {
   if(state) {
     if(sw_state&(1<<SW_CAPSENSE)) {
       // turn it off
-      set_switch(C128_PKEY_CAPSENSE,FALSE);
+      set_switch(POLL_C128_PKEY_CAPSENSE,FALSE);
       sw_state&=(uint8_t)~(1<<SW_CAPSENSE);
       clear_LED(PS2_LED_CAPS_LOCK);
     } else {
       // turn it on
-      set_switch(C128_PKEY_CAPSENSE,TRUE);
+      set_switch(POLL_C128_PKEY_CAPSENSE,TRUE);
       sw_state|=(1<<SW_CAPSENSE);
       set_LED(PS2_LED_CAPS_LOCK);
     }
@@ -451,9 +441,9 @@ void poll_init(void) {
 
   // initially, load defaults from EEPROM
   while(!eeprom_is_ready());
-  layout=eeprom_read_byte(ADDR_LAYOUT);
+  layout=eeprom_read_byte(POLL_ADDR_LAYOUT);
   while(!eeprom_is_ready());
-  led_state=eeprom_read_byte(ADDR_LED_STATE);
+  led_state=eeprom_read_byte(POLL_ADDR_LED_STATE);
 
   OCR2=255; 
   TCNT2=0;
@@ -471,53 +461,53 @@ inline void map_positional_c64(uint8_t sh, uint8_t code, uint8_t state) {
   // TODO I really would like to get rid of these functions.
   switch(code) {
     case 0x80| PS2_KEY_PAUSE:
-      set_matrix(sh,C64_PKEY_RESTORE,state);
+      set_matrix(sh,POLL_C64_PKEY_RESTORE,state);
       break;
     case PS2_KEY_CAPS_LOCK:
   // soft caps lock?
       break;
     case 0x80 | PS2_KEY_NUM_SLASH:
-      set_matrix(FALSE,C64_KEY_SLASH,state);
+      set_matrix(FALSE,POLL_C64_KEY_SLASH,state);
       break;
     case 0x80 | PS2_KEY_INSERT:
-      set_matrix(TRUE,C64_KEY_DELETE,state);
+      set_matrix(TRUE,POLL_C64_KEY_DELETE,state);
       break;
     case 0x80 | PS2_KEY_DELETE:
-      set_matrix(FALSE,C64_KEY_DELETE,state);
+      set_matrix(FALSE,POLL_C64_KEY_DELETE,state);
       break;
     case 0x80 | PS2_KEY_HOME:
-      set_matrix(sh,C64_KEY_HOME,state);
+      set_matrix(sh,POLL_C64_KEY_HOME,state);
       break;
     case 0x80 | PS2_KEY_NUM_ENTER:
-      set_matrix(sh,C64_KEY_RETURN,state);
+      set_matrix(sh,POLL_C64_KEY_RETURN,state);
       break;
     case 0x80 | PS2_KEY_CRSR_DOWN:
-      set_matrix(FALSE,C64_KEY_CRSR_DOWN,state);
+      set_matrix(FALSE,POLL_C64_KEY_CRSR_DOWN,state);
       break;
     case 0x80 | PS2_KEY_CRSR_UP:
-      set_matrix(TRUE,C64_KEY_CRSR_DOWN,state);
+      set_matrix(TRUE,POLL_C64_KEY_CRSR_DOWN,state);
       break;
     case 0x80 | PS2_KEY_CRSR_RIGHT:
-      set_matrix(FALSE,C64_KEY_CRSR_RIGHT,state);
+      set_matrix(FALSE,POLL_C64_KEY_CRSR_RIGHT,state);
       break;
     case 0x80 | PS2_KEY_CRSR_LEFT:
-      set_matrix(TRUE,C64_KEY_CRSR_RIGHT,state);
+      set_matrix(TRUE,POLL_C64_KEY_CRSR_RIGHT,state);
       break;
     case PS2_KEY_ESC:
     case 0x80 | PS2_KEY_END:
-      set_matrix(sh,C64_KEY_RUNSTOP,state);
+      set_matrix(sh,POLL_C64_KEY_RUNSTOP,state);
       break;
     case 0x80 | PS2_KEY_RCTRL:
-      set_matrix(sh,C64_KEY_CTRL,state);
+      set_matrix(sh,POLL_C64_KEY_CTRL,state);
       break;
     case 0x80 | PS2_KEY_RALT:
-      set_matrix(sh,C64_KEY_CBM,state);
+      set_matrix(sh,POLL_C64_KEY_CBM,state);
       break;
     case 0x80 | PS2_KEY_PAGE_UP:
-      set_matrix(sh,C64_KEY_CRSR_DOWN,state);
+      set_matrix(sh,POLL_C64_KEY_CRSR_DOWN,state);
       break;
     case 0x80 | PS2_KEY_PAGE_DOWN:
-      set_matrix(sh,C64_KEY_CRSR_RIGHT,state);
+      set_matrix(sh,POLL_C64_KEY_CRSR_RIGHT,state);
       break;
   }
 }
@@ -526,63 +516,63 @@ inline void map_positional_c128(uint8_t sh, uint8_t code, uint8_t state) {
   // TODO I really would like to get rid of these functions.
   switch(code) {
     case 0x80| PS2_KEY_PAUSE:
-      set_matrix(sh,C64_PKEY_RESTORE,state);
+      set_matrix(sh,POLL_C64_PKEY_RESTORE,state);
       break;
     case 0x80 | PS2_KEY_NUM_SLASH:
-      set_matrix(FALSE,C64_KEY_SLASH,state);
+      set_matrix(FALSE,POLL_C64_KEY_SLASH,state);
       break;
     case 0x80 | PS2_KEY_INSERT:
-      set_matrix(TRUE,C64_KEY_DELETE,state);
+      set_matrix(TRUE,POLL_C64_KEY_DELETE,state);
       break;
     case 0x80 | PS2_KEY_DELETE:
-      set_matrix(FALSE,C64_KEY_DELETE,state);
+      set_matrix(FALSE,POLL_C64_KEY_DELETE,state);
       break;
     case 0x80 | PS2_KEY_HOME:
-      set_matrix(sh,C64_KEY_HOME,state);
+      set_matrix(sh,POLL_C64_KEY_HOME,state);
       break;
     case 0x80 | PS2_KEY_END:
-      set_matrix(sh,C64_KEY_RUNSTOP,state);
+      set_matrix(sh,POLL_C64_KEY_RUNSTOP,state);
       break;
     case 0x80 | PS2_KEY_RCTRL:
-      set_matrix(sh,C64_KEY_CTRL,state);
+      set_matrix(sh,POLL_C64_KEY_CTRL,state);
       break;
     // changed stuff
     case PS2_KEY_ESC:
-      set_matrix(sh,C128_KEY_ESC,state);
+      set_matrix(sh,POLL_C128_KEY_ESC,state);
       break;
     case 0x80 | PS2_KEY_CRSR_DOWN:
-      set_matrix(sh,C128_KEY_CRSR_DOWN,state);
+      set_matrix(sh,POLL_C128_KEY_CRSR_DOWN,state);
       break;
     case 0x80 | PS2_KEY_CRSR_UP:
-      set_matrix(sh,C128_KEY_CRSR_UP,state);
+      set_matrix(sh,POLL_C128_KEY_CRSR_UP,state);
       break;
     case 0x80 | PS2_KEY_CRSR_RIGHT:
-      set_matrix(sh,C128_KEY_CRSR_RIGHT,state);
+      set_matrix(sh,POLL_C128_KEY_CRSR_RIGHT,state);
       break;
     case 0x80 | PS2_KEY_CRSR_LEFT:
-      set_matrix(sh,C128_KEY_CRSR_LEFT,state);
+      set_matrix(sh,POLL_C128_KEY_CRSR_LEFT,state);
       break;
     case 0x80 | PS2_KEY_RALT:
-      set_matrix(sh,C128_KEY_ALT,state);
+      set_matrix(sh,POLL_C128_KEY_ALT,state);
       break;
     case PS2_KEY_CAPS_LOCK:
       toggle_caps_lock_key(state);
       break;
     case 0x80 | PS2_KEY_NUM_ENTER:
-      set_matrix(sh,C128_KEY_ENTER,state);
+      set_matrix(sh,POLL_C128_KEY_ENTER,state);
       break;
     // new stuff.
     case 0x80 | PS2_KEY_PAGE_UP:
-      set_matrix(sh,C64_KEY_CRSR_DOWN,state);
+      set_matrix(sh,POLL_C64_KEY_CRSR_DOWN,state);
       break;
     case 0x80 | PS2_KEY_PAGE_DOWN:
-      set_matrix(sh,C64_KEY_CRSR_RIGHT,state);
+      set_matrix(sh,POLL_C64_KEY_CRSR_RIGHT,state);
       break;
     case 0x80 | PS2_KEY_PRINT_SCREEN:
       if(sh) {
         toggle_4080_key(state);
       } else
-        set_matrix(FALSE,C128_KEY_HELP,state);
+        set_matrix(FALSE,POLL_C128_KEY_HELP,state);
       break;
   }
 }
@@ -594,30 +584,45 @@ inline void map_symbolic_c64(uint8_t sh, uint8_t code, uint8_t state) {
       //set_matrix(sh,C64_PKEY_RESTORE,state);
       break;
     case 0x80 | PS2_KEY_NUM_SLASH:
-      set_matrix(FALSE,C64_KEY_SLASH,state);
+      set_matrix(FALSE,POLL_C64_KEY_SLASH,state);
       break;
     case 0x80 | PS2_KEY_INSERT:
-      set_matrix(TRUE,C64_KEY_POUND,state);
+      set_matrix(TRUE,POLL_C64_KEY_POUND,state);
       break;
     case 0x80 | PS2_KEY_DELETE:
-      set_matrix(FALSE,C64_KEY_UPARROW,state);
+      set_matrix(FALSE,POLL_C64_KEY_UPARROW,state);
       break;
     case 0x80 | PS2_KEY_HOME:
-      set_matrix(sh,C64_KEY_HOME,state);
+      set_matrix(sh,POLL_C64_KEY_HOME,state);
+      break;
+    case 0x80 | PS2_KEY_NUM_ENTER:
+      set_matrix(sh,POLL_C64_KEY_RETURN,state);
+      break;
+    case 0x80 | PS2_KEY_CRSR_DOWN:
+      set_matrix(FALSE,POLL_C64_KEY_CRSR_DOWN,state);
+      break;
+    case 0x80 | PS2_KEY_CRSR_UP:
+      set_matrix(TRUE,POLL_C64_KEY_CRSR_DOWN,state);
+      break;
+    case 0x80 | PS2_KEY_CRSR_RIGHT:
+      set_matrix(FALSE,POLL_C64_KEY_CRSR_RIGHT,state);
+      break;
+    case 0x80 | PS2_KEY_CRSR_LEFT:
+      set_matrix(TRUE,POLL_C64_KEY_CRSR_RIGHT,state);
       break;
     case 0x80 | PS2_KEY_END:
-      //set_matrix(sh,C64_KEY_RUNSTOP,state);
+      //set_matrix(sh,POLL_C64_KEY_RUNSTOP,state);
       break;
     case 0x80 | PS2_KEY_RCTRL:
       // joystick fire...
-      //set_matrix(sh,C64_KEY_CTRL,state);
+      //set_matrix(sh,POLL_C64_KEY_CTRL,state);
       break;
     // new stuff.
     case 0x80 | PS2_KEY_PAGE_UP:
-      set_matrix(sh,C64_PKEY_RESTORE,state);
+      set_matrix(sh,POLL_C64_PKEY_RESTORE,state);
       break;
     case 0x80 | PS2_KEY_PAGE_DOWN:
-      //set_matrix(sh,C64_KEY_CRSR_RIGHT,state);
+      //set_matrix(sh,POLL_C64_KEY_CRSR_RIGHT,state);
       break;
    }
 }
@@ -626,63 +631,63 @@ inline void map_symbolic_c128(uint8_t sh, uint8_t code, uint8_t state) {
   // TODO I really would like to get rid of these functions.
   switch(code) {
     case 0x80| PS2_KEY_PAUSE:
-      set_matrix(sh,C64_PKEY_RESTORE,state);
+      set_matrix(sh,POLL_C64_PKEY_RESTORE,state);
       break;
     case 0x80 | PS2_KEY_NUM_SLASH:
-      set_matrix(FALSE,C64_KEY_SLASH,state);
+      set_matrix(FALSE,POLL_C64_KEY_SLASH,state);
       break;
     case 0x80 | PS2_KEY_INSERT:
-      set_matrix(TRUE,C64_KEY_DELETE,state);
+      set_matrix(TRUE,POLL_C64_KEY_DELETE,state);
       break;
     case 0x80 | PS2_KEY_DELETE:
-      set_matrix(FALSE,C64_KEY_DELETE,state);
+      set_matrix(FALSE,POLL_C64_KEY_DELETE,state);
       break;
     case 0x80 | PS2_KEY_HOME:
-      set_matrix(sh,C64_KEY_HOME,state);
+      set_matrix(sh,POLL_C64_KEY_HOME,state);
       break;
     case 0x80 | PS2_KEY_END:
-      set_matrix(sh,C64_KEY_RUNSTOP,state);
+      set_matrix(sh,POLL_C64_KEY_RUNSTOP,state);
       break;
     case 0x80 | PS2_KEY_RCTRL:
-      set_matrix(sh,C64_KEY_CTRL,state);
+      set_matrix(sh,POLL_C64_KEY_CTRL,state);
       break;
     // changed stuff
     case PS2_KEY_ESC:
-      set_matrix(sh,C128_KEY_ESC,state);
+      set_matrix(sh,POLL_C128_KEY_ESC,state);
       break;
     case 0x80 | PS2_KEY_CRSR_DOWN:
-      set_matrix(sh,C128_KEY_CRSR_DOWN,state);
+      set_matrix(sh,POLL_C128_KEY_CRSR_DOWN,state);
       break;
     case 0x80 | PS2_KEY_CRSR_UP:
-      set_matrix(sh,C128_KEY_CRSR_UP,state);
+      set_matrix(sh,POLL_C128_KEY_CRSR_UP,state);
       break;
     case 0x80 | PS2_KEY_CRSR_RIGHT:
-      set_matrix(sh,C128_KEY_CRSR_RIGHT,state);
+      set_matrix(sh,POLL_C128_KEY_CRSR_RIGHT,state);
       break;
     case 0x80 | PS2_KEY_CRSR_LEFT:
-      set_matrix(sh,C128_KEY_CRSR_LEFT,state);
+      set_matrix(sh,POLL_C128_KEY_CRSR_LEFT,state);
       break;
     case 0x80 | PS2_KEY_RALT:
-      set_matrix(sh,C128_KEY_ALT,state);
+      set_matrix(sh,POLL_C128_KEY_ALT,state);
       break;
     case PS2_KEY_CAPS_LOCK:
       toggle_caps_lock_key(state);
       break;
     case 0x80 | PS2_KEY_NUM_ENTER:
-      set_matrix(sh,C128_KEY_ENTER,state);
+      set_matrix(sh,POLL_C128_KEY_ENTER,state);
       break;
     // new stuff.
     case 0x80 | PS2_KEY_PAGE_UP:
-      set_matrix(sh,C64_KEY_CRSR_DOWN,state);
+      set_matrix(sh,POLL_C64_KEY_CRSR_DOWN,state);
       break;
     case 0x80 | PS2_KEY_PAGE_DOWN:
-      set_matrix(sh,C64_KEY_CRSR_RIGHT,state);
+      set_matrix(sh,POLL_C64_KEY_CRSR_RIGHT,state);
       break;
     case 0x80 | PS2_KEY_PRINT_SCREEN:
       if(sh)
         toggle_4080_key(state);
       else
-        set_matrix(FALSE,C128_KEY_HELP,state);
+        set_matrix(FALSE,POLL_C128_KEY_HELP,state);
       break;
   }
 }
@@ -714,7 +719,9 @@ inline void remap_keypad(uint8_t* sh,uint8_t* code) {
 }
 
 inline void map_key(uint8_t sh, uint8_t code,uint8_t state) {
-  uint8_t map=C64_KEY_UNMAPPED;
+  uint8_t map=POLL_CBM_KEY_UNMAPPED;
+  debug('l');
+  printHex(layout);
   
   if(!state && code==PS2_KEY_NUM_LOCK) {
       // handle NUM_LOCK pressed.
@@ -724,15 +731,15 @@ inline void map_key(uint8_t sh, uint8_t code,uint8_t state) {
   } else if(code<=PS2_KEY_F7) {
     // look it up.
     map=pgm_read_byte(&normal[code]);
-    if(map<C64_KEY_SPECIAL) {
+    if(map<POLL_CBM_KEY_SPECIAL) {
       set_matrix(sh,map,state);
-    } else if(map<C64_KEY_UNMAPPED) {
+    } else if(map<POLL_CBM_KEY_UNMAPPED) {
       // special key.
-      map=pgm_read_byte(&layouts[layout][map-C64_KEY_SPECIAL][(meta&POLL_FLAG_SHIFT)!=0]);
+      map=pgm_read_byte(&layouts[layout][map-POLL_CBM_KEY_SPECIAL][(meta&POLL_FLAG_SHIFT)!=0]);
       set_matrix(map&0x01,map&0xfe,state);
     }
   }
-  if(map==C64_KEY_UNMAPPED) {
+  if(map==POLL_CBM_KEY_UNMAPPED) {
     // extended key.
     // map to layout.
     switch(layout) {
@@ -817,9 +824,9 @@ void poll_parse_key(uint8_t code, uint8_t state) {
       } else {
         LED_blink(LED_PIN_7,10,LED_FLAG_END_ON);
         // write layout to EEPROM
-        update_eeprom(ADDR_LAYOUT,layout);
+        update_eeprom(POLL_ADDR_LAYOUT,layout);
         // update NUM LOCK initial state.
-        update_eeprom(ADDR_LED_STATE,led_state&PS2_LED_NUM_LOCK);
+        update_eeprom(POLL_ADDR_LED_STATE,led_state&PS2_LED_NUM_LOCK);
         reset_matrix();
       }
       config=!config;
@@ -840,6 +847,7 @@ void poll_parse_key(uint8_t code, uint8_t state) {
   }
 }
 
+// This function, normalizes the PS2 keycodes in
 void poll(void) {
   uint8_t key;
   LED_on(LED_PIN_7);

@@ -114,7 +114,7 @@ void KB_decode(uint8_t in, uint8_t old, uint8_t base) {
       // we have keys no longer pressed.
       for(j=0;j<8;j++) {
         if(result & 1) {
-          KB_store((base+j) | 0x80);
+          KB_store((base+j) | KB_KEY_UP);
         }
         result=result>>1;
       }
@@ -135,7 +135,7 @@ void KB_scan(void) {
   // this should be called 120 times/sec
   uint8_t j;
   uint8_t in;
-  unsigned int tmp;
+  uint16_t tmp;
   // this is where we scan.
   // we scan at 120Hz
   switch(KB_state) {
@@ -153,7 +153,7 @@ void KB_scan(void) {
       // set pin low:
       tmp=(1<<KB_scan_idx);
       j=(tmp & 0xff);
-      in=((tmp & 0xff00) >> 8);
+      in=(tmp >> 8);
       KB_DDR_ROW_LOW=j;
       KB_DDR_ROW_HIGH=in;
       KB_PORT_ROW_LOW_OUT=(uint8_t)~j;
