@@ -1,6 +1,9 @@
 #ifndef _POLL64_H_
 #define _POLL64_H_
 
+#define POLL_IRQ_DIVIDER (240)
+#define POLL_LED_IRQ_DIVIDER (14745600/1024/2/POLL_IRQ_DIVIDER/3)   // 3/s
+
 #define POLL_ADDR_LAYOUT         (void*)0
 #define POLL_ADDR_LED_STATE      (void*)1
 #define POLL_ADDR_SW_STATE       (void*)2
@@ -16,6 +19,7 @@
 #define POLL_LAYOUT_POSITIONAL_C128 1
 #define POLL_LAYOUT_SYMBOLIC_C64    2
 #define POLL_LAYOUT_SYMBOLIC_C128   3
+#define POLL_LAYOUT_NUM             4
 
 #define POLL_ST_IDLE          0
 #define POLL_ST_GET_X_KEY     1
@@ -94,7 +98,8 @@
 #define POLL_C64_KEY_PERIOD      0x84
 #define POLL_C64_KEY_RSHIFT      0x0C
 #define POLL_C64_KEY_F1          0x04
-#define POLL_C128_KEY_NOSCROLL   0x3A
+
+#define POLL_C128_KEY_NO_SCROLL  0x3A
 #define POLL_C128_KEY_NUM_3      0xB2
 #define POLL_C128_KEY_NUM_1      0xBA
 #define POLL_C128_KEY_NUM_PERIOD 0x1A
@@ -185,7 +190,7 @@
 #define POLL_C64_KEY_RSHIFT    0x76
 #define POLL_C64_KEY_F1        0x7E
 
-#define POLL_C128_KEY_NOSCROLL   0x08
+#define POLL_C128_KEY_NO_SCROLL  0x08
 #define POLL_C128_KEY_NUM_3      0x80
 #define POLL_C128_KEY_NUM_1      0x88
 #define POLL_C128_KEY_NUM_PERIOD 0x28

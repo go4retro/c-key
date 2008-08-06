@@ -180,6 +180,7 @@
 #define PS2_KEY_NUM_LOCK      0x77
 #define PS2_KEY_NUM_3         0x7a
 #define PS2_KEY_NUM_9         0x7d
+#define PS2_KEY_NO_SCROLL     0x7e
 #define PS2_KEY_F7            0x83
 
 // extended keys
@@ -268,5 +269,6 @@ void PS2_check_CLK(void);
 void PS2_handle_cmds(uint8_t data);
 unsigned int PS2_get_typematic_delay(uint8_t rate);
 unsigned int PS2_get_typematic_period(uint8_t rate);
+void PS2_set_debug(uint8_t b);
 
 #endif

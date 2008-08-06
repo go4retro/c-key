@@ -44,7 +44,8 @@ static volatile uint8_t PS2_One_Count;
 
 static volatile uint8_t PS2_Mode;
 static volatile uint8_t PS2_LEDs;
-static volatile uint8_t PS2_CodeSet;
+static uint8_t PS2_CodeSet;
+static volatile uint8_t PS2_debug;
 
 void PS2_clear_buffers(void) {
   PS2_TxHead=0;
@@ -58,6 +59,7 @@ void PS2_init(uint8_t mode) {
   PS2_Mode=mode;
   PS2_LEDs=0;
   PS2_CodeSet=2;
+  PS2_debug=FALSE;
   
 	PS2_set_CLK();
 	PS2_set_DATA();
@@ -236,8 +238,10 @@ void PS2_write_byte(void) {
     /* ERROR! Receive buffer overflow */
   }
 
-  debug('i');
-  printHex(PS2_Byte);
+  if(PS2_debug) {
+    debug('i');
+    printHex(PS2_Byte);
+  }
   PS2_RxBuf[tmp] = PS2_Byte; /* Store received data in buffer */
 }
 
@@ -245,8 +249,10 @@ void PS2_read_byte(void) {
   PS2_Bit_Count=0;
   PS2_One_Count=0;
   PS2_Byte = PS2_TxBuf[( PS2_TxTail + 1 ) & PS2_TX_BUFFER_MASK];  /* Start transmition */
-  debug('o');
-  printHex(PS2_Byte);
+  if(PS2_debug) {
+    debug('o');
+    printHex(PS2_Byte);
+  }
 }
 
 void PS2_commit_read_byte(void) {
@@ -374,4 +380,9 @@ unsigned int PS2_get_typematic_delay(uint8_t rate) {
 unsigned int PS2_get_typematic_period(uint8_t rate) {
   return ((8 + (rate & 0x07)) * (1 << ((rate & 0x18) >> 3)) << 2);
 }
+
+void PS2_set_debug(uint8_t b) {
+  PS2_debug=b;
+}
+
 

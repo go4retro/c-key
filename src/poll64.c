@@ -30,8 +30,8 @@
 #include "poll64.h"
 #include "led.h"
 
-static prog_uint8_t normal[0x84] =  { POLL_CBM_KEY_UNMAPPED,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+0,POLL_CBM_KEY_SPECIAL+1,POLL_CBM_KEY_SPECIAL+2,POLL_CBM_KEY_SPECIAL+3,POLL_CBM_KEY_SPECIAL+41
-                                  ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_UNMAPPED,POLL_CBM_KEY_SPECIAL+4,POLL_CBM_KEY_SPECIAL+5,POLL_CBM_KEY_SPECIAL+6,POLL_CBM_KEY_SPECIAL+40,POLL_C64_KEY_BACKARROW,POLL_CBM_KEY_NONE
+static prog_uint8_t normal[0x84] =  { POLL_CBM_KEY_UNMAPPED,POLL_CBM_KEY_SPECIAL+41,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+0,POLL_CBM_KEY_SPECIAL+1,POLL_CBM_KEY_SPECIAL+2,POLL_CBM_KEY_SPECIAL+3,POLL_CBM_KEY_SPECIAL+44
+                                  ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+42,POLL_CBM_KEY_SPECIAL+4,POLL_CBM_KEY_SPECIAL+5,POLL_CBM_KEY_SPECIAL+6,POLL_CBM_KEY_SPECIAL+40,POLL_C64_KEY_BACKARROW,POLL_CBM_KEY_NONE
                                   ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+8,POLL_CBM_KEY_SPECIAL+9,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+10,POLL_C64_KEY_Q,POLL_C64_KEY_1,POLL_CBM_KEY_NONE
                                   ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_C64_KEY_Z,POLL_C64_KEY_S,POLL_C64_KEY_A,POLL_C64_KEY_W,POLL_CBM_KEY_SPECIAL+11,POLL_CBM_KEY_NONE
                                   ,POLL_CBM_KEY_NONE,POLL_C64_KEY_C,POLL_C64_KEY_X,POLL_C64_KEY_D,POLL_C64_KEY_E,POLL_C64_KEY_4,POLL_C64_KEY_3,POLL_CBM_KEY_NONE
@@ -45,20 +45,20 @@ static prog_uint8_t normal[0x84] =  { POLL_CBM_KEY_UNMAPPED,POLL_CBM_KEY_NONE,PO
                                   ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_C64_KEY_DELETE,POLL_CBM_KEY_NONE
                                   ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+24,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+25,POLL_CBM_KEY_SPECIAL+26,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE
                                   ,POLL_CBM_KEY_SPECIAL+27,POLL_CBM_KEY_SPECIAL+28,POLL_CBM_KEY_SPECIAL+29,POLL_CBM_KEY_SPECIAL+30,POLL_CBM_KEY_SPECIAL+31,POLL_CBM_KEY_SPECIAL+32,POLL_CBM_KEY_SPECIAL+33,POLL_CBM_KEY_UNMAPPED
-                                  ,POLL_CBM_KEY_UNMAPPED,POLL_CBM_KEY_SPECIAL+34,POLL_CBM_KEY_SPECIAL+35,POLL_CBM_KEY_SPECIAL+36,POLL_CBM_KEY_SPECIAL+37,POLL_CBM_KEY_SPECIAL+38,POLL_CBM_KEY_SPECIAL+39,POLL_CBM_KEY_NONE
+                                  ,POLL_CBM_KEY_SPECIAL+43,POLL_CBM_KEY_SPECIAL+34,POLL_CBM_KEY_SPECIAL+35,POLL_CBM_KEY_SPECIAL+36,POLL_CBM_KEY_SPECIAL+37,POLL_CBM_KEY_SPECIAL+38,POLL_CBM_KEY_SPECIAL+39,POLL_CBM_KEY_NONE
                                   ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+7};
                                   
-static prog_uint8_t layouts[4][42][2] = {
+static prog_uint8_t layouts[4][45][2] = {
                                       // c64 positional mapping.
                                          {
                                           {POLL_MAP_NONE | POLL_C64_KEY_F5,POLL_MAP_SHIFT | POLL_C64_KEY_F5},                 // 0 F5 ->  F5/Sh+F5
                                           {POLL_MAP_NONE | POLL_C64_KEY_F3,POLL_MAP_SHIFT | POLL_C64_KEY_F3},                 // 1 F3 ->  F3/Sh+F3 
-                                          {POLL_MAP_NONE | POLL_C64_KEY_F1,POLL_MAP_SHIFT | POLL_C64_KEY_F1},                 // 2 F1 ->  Sh+F1/Sh+F1
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F1,POLL_MAP_SHIFT | POLL_C64_KEY_F1},                 // 2 F1 ->  F1/Sh+F1
                                           {POLL_MAP_SHIFT | POLL_C64_KEY_F1,POLL_MAP_SHIFT | POLL_C64_KEY_F1},                // 3 F2 ->  Sh+F1/Sh+F1
                                           {POLL_MAP_SHIFT | POLL_C64_KEY_F7, POLL_MAP_SHIFT | POLL_C64_KEY_F7},               // 4 F8 ->  Sh+F7/Sh+F7  
                                           {POLL_MAP_SHIFT | POLL_C64_KEY_F5,POLL_MAP_SHIFT | POLL_C64_KEY_F5},                // 5 F6 ->  Sh+F5/Sh+F5
                                           {POLL_MAP_SHIFT | POLL_C64_KEY_F3,POLL_MAP_SHIFT | POLL_C64_KEY_F3},                // 6 F4 ->  Sh+F3/Sh+F3
-                                          {POLL_MAP_NONE | POLL_C64_KEY_F7,POLL_MAP_SHIFT | POLL_C64_KEY_F7},                 // 7 F7 ->  F7/F7
+                                          {POLL_MAP_NONE | POLL_C64_KEY_F7,POLL_MAP_SHIFT | POLL_C64_KEY_F7},                 // 7 F7 ->  F7/Sh+F7
                                           {POLL_MAP_NONE | POLL_C64_KEY_CBM,POLL_MAP_SHIFT | POLL_C64_KEY_CBM},               // 8 Left ALT ->  CBM/Sh+CBM
                                           {POLL_MAP_NONE | POLL_C64_KEY_LSHIFT,POLL_MAP_SHIFT | POLL_C64_KEY_LSHIFT},         // 9 Left Shift -> LeftSh/LeftSh
                                           {POLL_MAP_NONE | POLL_C64_KEY_CTRL,POLL_MAP_SHIFT | POLL_C64_KEY_CTRL},             // 10 Left Control -> CTRL/SH+CTRL
@@ -90,9 +90,12 @@ static prog_uint8_t layouts[4][42][2] = {
                                           {POLL_MAP_NONE | POLL_C64_KEY_MINUS,POLL_MAP_NONE | POLL_C64_KEY_MINUS},            // 36 Num - ->  -/-
                                           {POLL_MAP_NONE | POLL_C64_KEY_ASTERIX,POLL_MAP_NONE | POLL_C64_KEY_ASTERIX},        // 37 Num * ->  */*
                                           {POLL_MAP_NONE | POLL_C64_KEY_9,POLL_MAP_NONE | POLL_C64_KEY_9},                    // 38 Num 9 ->  9/9
-                                          {POLL_MAP_NONE | POLL_CBM_KEY_NONE,POLL_MAP_SHIFT | POLL_CBM_KEY_NONE},             // 39 Scroll Lock -> None/Sh+None
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_CBM_KEY_UNMAPPED},     // 39 Scroll Lock -> unmapped/Sh+unmapped
                                           {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_CBM_KEY_UNMAPPED},     // 40 TAB ->  unmapped/Sh+unmapped
-                                          {POLL_MAP_SHIFT | POLL_C64_KEY_PLUS,POLL_MAP_SHIFT | POLL_C64_KEY_UPARROW},         // 41 F12 ->  Sh++/Sh+^
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_0},            // 41 F9 ->  /Sh+0
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_PLUS},         // 42 F10 ->  /Sh++
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_EQUALS},       // 43 F11 ->  /Sh+=
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_UPARROW},      // 44 F12 ->  /Sh+^
                                          }
                                          ,
                                          {
@@ -136,9 +139,12 @@ static prog_uint8_t layouts[4][42][2] = {
                                           {POLL_MAP_NONE | POLL_C128_KEY_NUM_MINUS,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_MINUS}, // 36 Num - -> Num -/Sh+Num - 
                                           {POLL_MAP_NONE | POLL_C64_KEY_ASTERIX,POLL_MAP_NONE | POLL_C64_KEY_ASTERIX},        // 37 Num * -> Num */Sh+Num *
                                           {POLL_MAP_NONE | POLL_C128_KEY_NUM_9,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_9},         // 38 Num 9 -> Num 9/Sh+Num 9
-                                          {POLL_MAP_NONE | POLL_C128_KEY_NOSCROLL,POLL_MAP_NONE | POLL_C128_KEY_LINEFEED},    // 39 Scroll Lock -> NoScroll/LineFeed
+                                          {POLL_MAP_NONE | POLL_C128_KEY_NO_SCROLL,POLL_MAP_NONE | POLL_C128_KEY_LINEFEED},   // 39 Scroll Lock -> NoScroll/LineFeed
                                           {POLL_MAP_NONE | POLL_C128_KEY_TAB,POLL_MAP_SHIFT | POLL_C128_KEY_TAB},             // 40 TAB -> TAB/Sh+TAB
-                                          {POLL_MAP_SHIFT | POLL_C64_KEY_PLUS,POLL_MAP_SHIFT | POLL_C64_KEY_UPARROW},         // 41 F12 ->  Sh++/Sh+^
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_0},            // 41 F9 ->  /Sh+0
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_PLUS},         // 42 F10 ->  /Sh++
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_EQUALS},       // 43 F11 ->  /Sh+=
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_UPARROW},      // 44 F12 ->  /Sh+^
                                          }
                                          ,
                                          {
@@ -183,7 +189,10 @@ static prog_uint8_t layouts[4][42][2] = {
                                           {POLL_MAP_NONE | POLL_C64_KEY_9,POLL_MAP_NONE | POLL_C64_KEY_9},                    // 38 - Num 9 ->  9/9
                                           {POLL_MAP_NONE | POLL_CBM_KEY_NONE,POLL_MAP_SHIFT | POLL_CBM_KEY_NONE},             // 39 - Scroll Lock -> None/Sh+None
                                           {POLL_MAP_NONE | POLL_C64_KEY_CTRL,POLL_MAP_SHIFT | POLL_C64_KEY_CTRL},             // 40 - TAB ->  CTRL/Sh+CTRL
-                                          {POLL_MAP_SHIFT | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_CBM_KEY_UNMAPPED},         // 41 F12 ->  None/Shift+None
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_0},            // 41 F9 ->  /Sh+0
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_PLUS},         // 42 F10 ->  /Sh++
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_EQUALS},       // 43 F11 ->  /Sh+=
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_UPARROW},      // 44 F12 ->  /Sh+^
                                          }
                                          ,
                                          {
@@ -228,7 +237,10 @@ static prog_uint8_t layouts[4][42][2] = {
                                           {POLL_MAP_NONE | POLL_C128_KEY_NUM_9,POLL_MAP_SHIFT | POLL_C128_KEY_NUM_9},         // 38 Num 9 -> Num 9/Sh+Num 9
                                           {POLL_MAP_NONE | POLL_CBM_KEY_NONE,POLL_MAP_SHIFT | POLL_CBM_KEY_NONE},             // 39 - Scroll Lock -> None/Sh+None
                                           {POLL_MAP_NONE | POLL_C64_KEY_CTRL,POLL_MAP_SHIFT | POLL_C64_KEY_CTRL},             // 40 - TAB ->  CTRL/Sh+CTRL
-                                          {POLL_MAP_SHIFT | POLL_C64_KEY_PLUS,POLL_MAP_SHIFT | POLL_C64_KEY_UPARROW},         // 41 F12 ->  Sh++/Sh+^
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_0},            // 41 F9 ->  /Sh+0
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_PLUS},         // 42 F10 ->  /Sh++
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_EQUALS},       // 43 F11 ->  /Sh+=
+                                          {POLL_MAP_NONE | POLL_CBM_KEY_UNMAPPED,POLL_MAP_SHIFT | POLL_C64_KEY_UPARROW},      // 44 F12 ->  /Sh+^
                                          }
                                       };
                                           
@@ -243,11 +255,19 @@ static uint8_t shift_override_state;
 
 static uint8_t sw_state=0;
 static uint8_t led_state=0;
+static uint8_t led_counter=0;
+static uint8_t debug=0;
+
+
 
 static uint8_t state=POLL_ST_IDLE;
 
 void poll_irq(void) {
-  LED_irq();
+  led_counter++;
+  if(led_counter==POLL_LED_IRQ_DIVIDER) {
+    led_counter=0;
+    LED_irq();
+  }
 }
 
 inline void delay_jiffy(void) {
@@ -263,6 +283,10 @@ inline void delay_jiffy(void) {
 }
 
 void set_switch(uint8_t sw, uint8_t state) {
+  if(debug) {
+    debug(state?'d':'u');
+    printHex(sw);
+  }
   switch(sw) {
     case POLL_C64_PKEY_RESTORE:
       SW_send(SW_RESTORE | (state?0:SW_UP));
@@ -366,7 +390,7 @@ void reset_matrix(void) {
 
   // turn off all but 4080 
   sw_state&=(1<<SW_4080);
-  // now, set 4080, as a courtesy
+  // now, set 4080
   set_switch(POLL_C128_PKEY_4080,sw_state&(1<<SW_4080));
 }
 
@@ -437,23 +461,25 @@ void poll_init(void) {
   XPT_DDR_DATA=0xff;
   SW_init(SW_TYPE_OUTPUT,(1<<SW_RESTORE) | (1<<SW_CAPSENSE) | (1<<SW_4080));
 
-  reset_matrix();
-
   // initially, load defaults from EEPROM
   while(!eeprom_is_ready());
-  layout=eeprom_read_byte(POLL_ADDR_LAYOUT);
+  layout=eeprom_read_byte(POLL_ADDR_LAYOUT)%POLL_LAYOUT_NUM;
   while(!eeprom_is_ready());
   led_state=eeprom_read_byte(POLL_ADDR_LED_STATE);
+  while(!eeprom_is_ready());
+  sw_state=eeprom_read_byte(POLL_ADDR_SW_STATE)&(1<<SW_4080);
 
-  OCR2=255; 
-  TCNT2=0;
+  reset_matrix();
+
+  OCR2=POLL_IRQ_DIVIDER; 
+  //TCNT2=0;
   // Set OC2 clk  to SYSCLK/1024 and Compare Timer Mode
   TCCR2 = (1<<CS22) | (1<<CS21) | (1<<CS20) | (1<<WGM21);
   // set up OC2 IRQ
   TIMSK |= (1<<OCIE2);
-  meta=0;
-  config=FALSE;
-  shift_override=FALSE;
+  //meta=POLL_FLAG_NONE;
+  //config=FALSE;
+  //shift_override=FALSE;
   
 }
 
@@ -464,7 +490,7 @@ inline void map_positional_c64(uint8_t sh, uint8_t code, uint8_t state) {
       set_matrix(sh,POLL_C64_PKEY_RESTORE,state);
       break;
     case PS2_KEY_CAPS_LOCK:
-  // soft caps lock?
+      // soft caps lock?
       break;
     case 0x80 | PS2_KEY_NUM_SLASH:
       set_matrix(FALSE,POLL_C64_KEY_SLASH,state);
@@ -537,9 +563,6 @@ inline void map_positional_c128(uint8_t sh, uint8_t code, uint8_t state) {
       set_matrix(sh,POLL_C64_KEY_CTRL,state);
       break;
     // changed stuff
-    case PS2_KEY_ESC:
-      set_matrix(sh,POLL_C128_KEY_ESC,state);
-      break;
     case 0x80 | PS2_KEY_CRSR_DOWN:
       set_matrix(sh,POLL_C128_KEY_CRSR_DOWN,state);
       break;
@@ -652,9 +675,6 @@ inline void map_symbolic_c128(uint8_t sh, uint8_t code, uint8_t state) {
       set_matrix(sh,POLL_C64_KEY_CTRL,state);
       break;
     // changed stuff
-    case PS2_KEY_ESC:
-      set_matrix(sh,POLL_C128_KEY_ESC,state);
-      break;
     case 0x80 | PS2_KEY_CRSR_DOWN:
       set_matrix(sh,POLL_C128_KEY_CRSR_DOWN,state);
       break;
@@ -720,8 +740,6 @@ inline void remap_keypad(uint8_t* sh,uint8_t* code) {
 
 inline void map_key(uint8_t sh, uint8_t code,uint8_t state) {
   uint8_t map=POLL_CBM_KEY_UNMAPPED;
-  debug('l');
-  printHex(layout);
   
   if(!state && code==PS2_KEY_NUM_LOCK) {
       // handle NUM_LOCK pressed.
@@ -736,7 +754,8 @@ inline void map_key(uint8_t sh, uint8_t code,uint8_t state) {
     } else if(map<POLL_CBM_KEY_UNMAPPED) {
       // special key.
       map=pgm_read_byte(&layouts[layout][map-POLL_CBM_KEY_SPECIAL][(meta&POLL_FLAG_SHIFT)!=0]);
-      set_matrix(map&0x01,map&0xfe,state);
+      if(map<POLL_CBM_KEY_UNMAPPED)
+        set_matrix(map&0x01,map&0xfe,state);
     }
   }
   if(map==POLL_CBM_KEY_UNMAPPED) {
@@ -777,6 +796,10 @@ inline void set_options(uint8_t code, uint8_t state) {
       case PS2_KEY_4:
         layout=3;
         LED_blink(LED_PIN_7,4,LED_FLAG_NONE);
+        break;
+      case PS2_KEY_EQUALS:
+        debug=!debug;
+        PS2_set_debug(debug);
         break;
       case PS2_KEY_NUM_LOCK:
         toggle_num_lock();
@@ -819,15 +842,17 @@ void poll_parse_key(uint8_t code, uint8_t state) {
     if(!state) { // only check on key up.
       if(!config) {
         // go into config mode
-        LED_blink(LED_PIN_7,2,LED_FLAG_NONE);
+        LED_blink(LED_PIN_7,10,LED_FLAG_NONE);
         reset_matrix();
       } else {
         LED_blink(LED_PIN_7,10,LED_FLAG_END_ON);
+        reset_matrix();
         // write layout to EEPROM
         update_eeprom(POLL_ADDR_LAYOUT,layout);
         // update NUM LOCK initial state.
         update_eeprom(POLL_ADDR_LED_STATE,led_state&PS2_LED_NUM_LOCK);
-        reset_matrix();
+        // update 40/80 column switch
+        update_eeprom(POLL_ADDR_SW_STATE,sw_state&(1<<SW_4080));
       }
       config=!config;
     }
@@ -850,7 +875,7 @@ void poll_parse_key(uint8_t code, uint8_t state) {
 // This function, normalizes the PS2 keycodes in
 void poll(void) {
   uint8_t key;
-  LED_on(LED_PIN_7);
+  LED_blink(LED_PIN_7,layout+1,LED_FLAG_END_ON);
   
   for(;;) {
     if(PS2_data_available() != 0) {

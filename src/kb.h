@@ -44,8 +44,7 @@
 #define KB_ST_PREP        1
 #define KB_ST_READ        2
 #ifdef PORT_KEYS
-#define KB_ST_QUIESCE      3
-#define KB_ST_READ_PORTS  4
+#define KB_ST_READ_PORTS  3
 #endif
 
 #define KB_KEY_UP 0x80
