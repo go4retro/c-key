@@ -1,6 +1,9 @@
 #ifndef _SCANNER64_H_
 #define _SCANNER64_H_
 
+#define SCAN_IRQ_DIVIDER (28)
+#define SCAN_LED_IRQ_DIVIDER (14745600/256/2/SCAN_IRQ_DIVIDER/3)   // 3/s
+
 #define SCAN_ADDR_LAYOUT         (void*)8
 
 #define SCAN_CBM_KEY_NONE        0xff
@@ -21,10 +24,8 @@
 #define SCAN_FLAG_CTRL   4
 #define SCAN_FLAG_CMDR   8
 
-#define SCAN_FLAG_CONFIG (SCAN_FLAG_SHIFT |SCAN_FLAG_CMDR)
-
-#define SCAN_LAYOUT_SYMBOLIC      0
-#define SCAN_LAYOUT_POSITIONAL    1
+#define SCAN_LAYOUT_SYMBOLIC_C64      0
+#define SCAN_LAYOUT_POSITIONAL_C64    1
 #define SCAN_LAYOUT_NUM           2
 
 #define SCAN_C64_KEY_RSHIFT     0x33
@@ -32,8 +33,11 @@
 #define SCAN_C64_KEY_CMDR       0x02
 #define SCAN_C64_KEY_1          0x07
 #define SCAN_C64_KEY_2          0x00
+#define SCAN_C64_KEY_3          0x0f
+#define SCAN_C64_KEY_EQUALS     0x32
 #define SCAN_C64_KEY_RETURN     0x3e
 #define SCAN_C64_KEY_CTRL       0x05
+#define SCAN_C64_KEY_DEL        0x3f
 
 #ifdef atmega162
 #define SW_4080         PIN1

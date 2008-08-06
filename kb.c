@@ -35,39 +35,43 @@ static unsigned char PORT_cache[2];
 #endif
 
 static volatile uint8_t KB_repeat_code;
-static volatile unsigned int KB_repeat_count;
-static volatile unsigned int KB_repeat_match;
-static volatile unsigned int KB_repeat_delay;
-static volatile unsigned int KB_repeat_period;
-static volatile unsigned int KB_curr_value;
+static volatile uint16_t KB_repeat_count;
+static volatile uint16_t KB_repeat_match;
+static volatile uint16_t KB_repeat_delay;
+static volatile uint16_t KB_repeat_period;
+static volatile uint16_t KB_curr_value;
 
 void KB_init() {
   KB_state=KB_ST_READ;
-  KB_scan_idx=0;
+  //KB_scan_idx=0;
   
   // set keyboard repeat to 0.
   KB_repeat_code=KB_NO_REPEAT;
-  KB_repeat_count=0;
+  //KB_repeat_count=0;
   
   KB_set_repeat_delay(250);   // wait 250 ms
   KB_set_repeat_period(32);   // once every 32 ms
-  
+
+#ifdef PORT_KEYS  
+  KB_PORT_ROW_LOW_OUT=0xff;
+  KB_PORT_ROW_HIGH_OUT=0xff;
+#endif
   // set COL to input
-  KB_DDR_COL=0x00;
+  //KB_DDR_COL=0x00;
   // turn on pullups.
   KB_PORT_COL_OUT=0xff;
   
   
 }
 
-void KB_set_repeat_delay(unsigned int ms) {
+void KB_set_repeat_delay(uint16_t ms) {
   // 1800 ticks/sec, .5 ms per tick.
   KB_repeat_delay=ms<<1;
   KB_repeat_match=KB_repeat_delay;
   KB_repeat_count=0;
 }
 
-void KB_set_repeat_period(unsigned int period) {
+void KB_set_repeat_period(uint16_t period) {
   KB_repeat_period=period<<1;
 }
 
@@ -141,17 +145,32 @@ void KB_scan(void) {
   switch(KB_state) {
     default:
     case KB_ST_READ:
-      if(KB_repeat_code != KB_NO_REPEAT) {
+      in=KB_repeat_code;
+      if(in != KB_NO_REPEAT) {
         KB_repeat_count++;
         if(KB_repeat_count >= KB_repeat_match) {
           KB_repeat_count=0;
           KB_repeat_match=KB_repeat_period;
-          KB_store(KB_repeat_code);
+          KB_store(in);
         }
       }
+      // do housekeeping
+      in=KB_curr_value;
+      j=KB_scan_idx;
+#ifdef PORT_KEYS
+      // we broght lines hi, so check for port action.  If we have it, then discard character.
+      if(KB_PORT_ROW_LOW_IN==0xff && KB_PORT_COL_IN==0xff && in != KB_cache[j]) {
+#else        
+      if(in != KB_cache[KB_scan_idx]) {
+#endif
+        KB_decode(in,KB_cache[j],j<<3);
+        KB_cache[j]=in;
+      }
+      j=(j+1)&0x0f;
+      KB_scan_idx = j;
       // we just read, prep now.
       // set pin low:
-      tmp=(1<<KB_scan_idx);
+      tmp=(1<<j);
       j=(tmp & 0xff);
       in=(tmp >> 8);
       KB_DDR_ROW_LOW=j;
@@ -169,25 +188,30 @@ void KB_scan(void) {
       KB_DDR_ROW_HIGH=0;
       KB_PORT_ROW_LOW_OUT=0xff;
       KB_PORT_ROW_HIGH_OUT=0xff;
-      KB_state=KB_ST_QUIESCE;
-      break;
-    case KB_ST_QUIESCE:
-      in=KB_curr_value;
-      if(KB_PORT_COL_IN==0xff && in != KB_cache[KB_scan_idx]) {
+    //  KB_state=KB_ST_QUIESCE;
+    //  break;
+    //case KB_ST_QUIESCE:
+    //  in=KB_curr_value;
+    //  j=KB_scan_idx;
+      // we broght lines hi, so check for port action.  If we have it, then discard character.
+    //  if(KB_PORT_COL_IN==0xff && in != KB_cache[j]) {
 #else
-      if(in != KB_cache[KB_scan_idx]) {
+    //  in=KB_curr_value;
+    //  j=KB_scan_idx;
+    //  if(in != KB_cache[KB_scan_idx]) {
 #endif
-        KB_decode(in,KB_cache[KB_scan_idx],KB_scan_idx<<3);
-        KB_cache[KB_scan_idx]=in;
-      }
-      KB_scan_idx = ((KB_scan_idx + 1) & 0x0f);
+    //    KB_decode(in,KB_cache[j],j<<3);
+    //    KB_cache[j]=in;
+    //  }
+      //KB_scan_idx = ((j + 1) & 0x0f);
       KB_state=KB_ST_READ;
 #ifdef PORT_KEYS
-      if(KB_scan_idx==0) {
+      j=KB_scan_idx;
+      if(j==0) {
         // set rows to input.
-        KB_DDR_ROW_LOW=0;
+        //KB_DDR_ROW_LOW=0;
         // turn on pullups.
-        KB_PORT_ROW_LOW_OUT=0xff;
+        //KB_PORT_ROW_LOW_OUT=0xff;
         KB_state=KB_ST_READ_PORTS;
       }
       break;
