@@ -39,14 +39,16 @@
 #define SCAN_C64_KEY_CTRL       0x05
 #define SCAN_C64_KEY_DEL        0x3f
 
-#ifdef atmega162
+#if defined __AVR_ATmega162__
 #define SW_4080         PIN1
 #define SW_CAPSENSE     PIN0
 #define SW_RESTORE      PIN2
-#else
+#elif defined __AVR_ATmega16__
 #define SW_4080         PIN4
 #define SW_CAPSENSE     PIN5
 #define SW_RESTORE      PIN6
+#else
+#  error Unknown CPU!
 #endif
 
 

@@ -2,7 +2,7 @@
 #define _POLL64_H_
 
 #define POLL_IRQ_DIVIDER (240)
-#define POLL_LED_IRQ_DIVIDER (14745600/1024/2/POLL_IRQ_DIVIDER/3)   // 3/s
+#define POLL_LED_IRQ_DIVIDER (F_CPU/1024/2/POLL_IRQ_DIVIDER/3)   // 3/s
 
 #define POLL_ADDR_LAYOUT         (void*)0
 #define POLL_ADDR_LED_STATE      (void*)1
@@ -226,20 +226,20 @@
 #define XPT_PORT_STROBE_OUT PORTD
 #define XPT_DDR_STROBE DDRD
 
-#ifdef atmega162
+#if defined __AVR_ATmega162__
 #define XPT_PIN_STROBE (1<<PIN6)
-#else
-#define XPT_PIN_STROBE (1<<PIN7)
-#endif
 
-#ifdef atmega162
 #define SW_4080         PIN1
 #define SW_CAPSENSE     PIN0
 #define SW_RESTORE      PIN2
-#else
+#elif defined __AVR_ATmega16__
+#define XPT_PIN_STROBE (1<<PIN7)
+
 #define SW_4080         PIN4
 #define SW_CAPSENSE     PIN5
 #define SW_RESTORE      PIN6
+#else
+#  error Unknown CPU!
 #endif
 
 
