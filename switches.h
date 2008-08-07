@@ -10,14 +10,16 @@
 #define SW_TYPE_OUTPUT   0
 #define SW_TYPE_INPUT    1
 
-#ifdef atmega162
+#if defined __AVR_ATmega162__
 #define PORT_SW_OUT      PORTE
 #define PORT_SW_IN       PINE
 #define PORT_SW_DDR      DDRE
-#else
+#elif defined __AVR_ATmega16__
 #define PORT_SW_OUT      PORTD
 #define PORT_SW_IN       PIND
 #define PORT_SW_DDR      DDRD
+#else
+#  error Unknown CPU!
 #endif
 
 #define SW_UP             0x80

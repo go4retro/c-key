@@ -48,7 +48,7 @@
 #define PS2_PIN_DATA		  (1<<PIN2)
 #define PS2_PORT_DDR_DATA	DDRD
 
-#ifdef atmega8
+#if defined __AVR_ATmega8__
 #define SIG_OUTPUT_COMPARE SIG_OUTPUT_COMPARE2
 #define OCR OCR2
 #define TCNT  TCNT2
@@ -57,7 +57,7 @@
 #define TCCR_DATA (1<<CS21) | (1<<WGM21)
 #define TIFR_DATA (1<<OCF2)
 #define TIMSK_DATA (1<<OCIE2)
-#else
+#elif defined __AVR_ATmega16__ || defined __AVR_ATmega162__
 #define SIG_OUTPUT_COMPARE SIG_OUTPUT_COMPARE0
 #define OCR OCR0
 #define TCNT  TCNT0
@@ -66,6 +66,8 @@
 #define TCCR_DATA (1<<CS01) | (1<<WGM01)
 #define TIFR_DATA (1<<OCF0)
 #define TIMSK_DATA (1<<OCIE0)
+#else
+#  error Unknown chip!
 #endif
 
 

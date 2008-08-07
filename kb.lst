@@ -1,597 +1,603 @@
    1               		.file	"kb.c"
-   2               		.arch atmega162
-   3               	__SREG__ = 0x3f
-   4               	__SP_H__ = 0x3e
-   5               	__SP_L__ = 0x3d
-   6               	__tmp_reg__ = 0
-   7               	__zero_reg__ = 1
-   8               		.global __do_copy_data
-   9               		.global __do_clear_bss
-  17               	.Ltext0:
-  18               	.global	KB_set_repeat_delay
-  20               	KB_set_repeat_delay:
-  21               	.LFB3:
-  22               	.LM1:
-  23               	/* prologue: frame size=0 */
-  24               	/* prologue end (size=0) */
-  25               	.LVL0:
-  26               	.LM2:
-  27 0000 880F      		lsl r24
-  28 0002 991F      		rol r25
-  29               	.LVL1:
-  30 0004 9093 0000 		sts (KB_repeat_delay)+1,r25
-  31 0008 8093 0000 		sts KB_repeat_delay,r24
-  32               	.LM3:
-  33 000c 8091 0000 		lds r24,KB_repeat_delay
-  34 0010 9091 0000 		lds r25,(KB_repeat_delay)+1
-  35 0014 9093 0000 		sts (KB_repeat_match)+1,r25
-  36 0018 8093 0000 		sts KB_repeat_match,r24
-  37               	.LM4:
-  38 001c 1092 0000 		sts (KB_repeat_count)+1,__zero_reg__
-  39 0020 1092 0000 		sts KB_repeat_count,__zero_reg__
-  40               	/* epilogue: frame size=0 */
-  41 0024 0895      		ret
-  42               	/* epilogue end (size=1) */
-  43               	/* function KB_set_repeat_delay size 19 (18) */
-  44               	.LFE3:
-  46               	.global	KB_set_repeat_period
-  48               	KB_set_repeat_period:
-  49               	.LFB4:
-  50               	.LM5:
-  51               	/* prologue: frame size=0 */
-  52               	/* prologue end (size=0) */
-  53               	.LVL2:
-  54               	.LM6:
-  55 0026 880F      		lsl r24
-  56 0028 991F      		rol r25
-  57               	.LVL3:
-  58 002a 9093 0000 		sts (KB_repeat_period)+1,r25
-  59 002e 8093 0000 		sts KB_repeat_period,r24
-  60               	/* epilogue: frame size=0 */
-  61 0032 0895      		ret
-  62               	/* epilogue end (size=1) */
-  63               	/* function KB_set_repeat_period size 7 (6) */
-  64               	.LFE4:
-  66               	.global	KB_set_repeat_code
-  68               	KB_set_repeat_code:
-  69               	.LFB5:
-  70               	.LM7:
-  71               	/* prologue: frame size=0 */
-  72               	/* prologue end (size=0) */
-  73               	.LVL4:
-  74 0034 982F      		mov r25,r24
-  75               	.LM8:
-  76 0036 8091 0000 		lds r24,KB_repeat_code
-  77               	.LVL5:
-  78 003a 9817      		cp r25,r24
-  79 003c 01F0      		breq .L8
-  80               	.LM9:
-  81 003e 1092 0000 		sts (KB_repeat_count)+1,__zero_reg__
-  82 0042 1092 0000 		sts KB_repeat_count,__zero_reg__
-  83               	.LM10:
-  84 0046 9093 0000 		sts KB_repeat_code,r25
-  85               	.LM11:
-  86 004a 8091 0000 		lds r24,KB_repeat_delay
-  87 004e 9091 0000 		lds r25,(KB_repeat_delay)+1
-  88 0052 9093 0000 		sts (KB_repeat_match)+1,r25
-  89 0056 8093 0000 		sts KB_repeat_match,r24
-  90               	.L8:
-  91 005a 0895      		ret
-  92               	/* epilogue: frame size=0 */
-  93               	/* epilogue: noreturn */
-  94               	/* epilogue end (size=0) */
-  95               	/* function KB_set_repeat_code size 20 (20) */
-  96               	.LFE5:
-  98               	.global	KB_get_repeat_code
- 100               	KB_get_repeat_code:
- 101               	.LFB6:
- 102               	.LM12:
- 103               	/* prologue: frame size=0 */
- 104               	/* prologue end (size=0) */
- 105               	.LM13:
- 106 005c 8091 0000 		lds r24,KB_repeat_code
- 107               	.LM14:
- 108 0060 9927      		clr r25
- 109               	/* epilogue: frame size=0 */
- 110 0062 0895      		ret
- 111               	/* epilogue end (size=1) */
- 112               	/* function KB_get_repeat_code size 4 (3) */
- 113               	.LFE6:
- 115               	.global	KB_store
- 117               	KB_store:
- 118               	.LFB7:
- 119               	.LM15:
- 120               	/* prologue: frame size=0 */
- 121               	/* prologue end (size=0) */
- 122               	.LVL6:
- 123               	.LM16:
- 124 0064 9091 0000 		lds r25,KB_RxHead
- 125               	.LVL7:
- 126 0068 9F5F      		subi r25,lo8(-(1))
- 127 006a 9F70      		andi r25,lo8(15)
- 128               	.LM17:
- 129 006c 9093 0000 		sts KB_RxHead,r25
- 130               	.LM18:
- 131 0070 2091 0000 		lds r18,KB_RxTail
- 132               	.LM19:
- 133 0074 E0E0      		ldi r30,lo8(KB_RxBuf)
- 134 0076 F0E0      		ldi r31,hi8(KB_RxBuf)
- 135 0078 E90F      		add r30,r25
- 136 007a F11D      		adc r31,__zero_reg__
- 137 007c 8083      		st Z,r24
- 138               	/* epilogue: frame size=0 */
- 139 007e 0895      		ret
- 140               	/* epilogue end (size=1) */
- 141               	/* function KB_store size 14 (13) */
- 142               	.LFE7:
- 144               	.global	KB_decode
- 146               	KB_decode:
- 147               	.LFB8:
- 148               	.LM20:
- 149               	/* prologue: frame size=0 */
- 150               	/* prologue end (size=0) */
- 151               	.LVL8:
- 152 0080 382F      		mov r19,r24
- 153               	.LM21:
- 154 0082 282F      		mov r18,r24
- 155               	.LVL9:
- 156 0084 2627      		eor r18,r22
- 157               	.LM22:
- 158 0086 6223      		and r22,r18
- 159               	.LVL10:
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.global __do_copy_data
+   8               		.global __do_clear_bss
+  16               	.Ltext0:
+  17               	.global	KB_set_repeat_delay
+  19               	KB_set_repeat_delay:
+  20               	.LFB3:
+  21               	.LM1:
+  22               	/* prologue: frame size=0 */
+  23               	/* prologue end (size=0) */
+  24               	.LVL0:
+  25               	.LM2:
+  26 0000 880F      		lsl r24
+  27 0002 991F      		rol r25
+  28               	.LVL1:
+  29 0004 9093 0000 		sts (KB_repeat_delay)+1,r25
+  30 0008 8093 0000 		sts KB_repeat_delay,r24
+  31               	.LM3:
+  32 000c 8091 0000 		lds r24,KB_repeat_delay
+  33 0010 9091 0000 		lds r25,(KB_repeat_delay)+1
+  34 0014 9093 0000 		sts (KB_repeat_match)+1,r25
+  35 0018 8093 0000 		sts KB_repeat_match,r24
+  36               	.LM4:
+  37 001c 1092 0000 		sts (KB_repeat_count)+1,__zero_reg__
+  38 0020 1092 0000 		sts KB_repeat_count,__zero_reg__
+  39               	/* epilogue: frame size=0 */
+  40 0024 0895      		ret
+  41               	/* epilogue end (size=1) */
+  42               	/* function KB_set_repeat_delay size 19 (18) */
+  43               	.LFE3:
+  45               	.global	KB_set_repeat_period
+  47               	KB_set_repeat_period:
+  48               	.LFB4:
+  49               	.LM5:
+  50               	/* prologue: frame size=0 */
+  51               	/* prologue end (size=0) */
+  52               	.LVL2:
+  53               	.LM6:
+  54 0026 880F      		lsl r24
+  55 0028 991F      		rol r25
+  56               	.LVL3:
+  57 002a 9093 0000 		sts (KB_repeat_period)+1,r25
+  58 002e 8093 0000 		sts KB_repeat_period,r24
+  59               	/* epilogue: frame size=0 */
+  60 0032 0895      		ret
+  61               	/* epilogue end (size=1) */
+  62               	/* function KB_set_repeat_period size 7 (6) */
+  63               	.LFE4:
+  65               	.global	KB_set_repeat_code
+  67               	KB_set_repeat_code:
+  68               	.LFB5:
+  69               	.LM7:
+  70               	/* prologue: frame size=0 */
+  71               	/* prologue end (size=0) */
+  72               	.LVL4:
+  73 0034 982F      		mov r25,r24
+  74               	.LM8:
+  75 0036 8091 0000 		lds r24,KB_repeat_code
+  76               	.LVL5:
+  77 003a 9817      		cp r25,r24
+  78 003c 01F0      		breq .L8
+  79               	.LM9:
+  80 003e 1092 0000 		sts (KB_repeat_count)+1,__zero_reg__
+  81 0042 1092 0000 		sts KB_repeat_count,__zero_reg__
+  82               	.LM10:
+  83 0046 9093 0000 		sts KB_repeat_code,r25
+  84               	.LM11:
+  85 004a 8091 0000 		lds r24,KB_repeat_delay
+  86 004e 9091 0000 		lds r25,(KB_repeat_delay)+1
+  87 0052 9093 0000 		sts (KB_repeat_match)+1,r25
+  88 0056 8093 0000 		sts KB_repeat_match,r24
+  89               	.L8:
+  90 005a 0895      		ret
+  91               	/* epilogue: frame size=0 */
+  92               	/* epilogue: noreturn */
+  93               	/* epilogue end (size=0) */
+  94               	/* function KB_set_repeat_code size 20 (20) */
+  95               	.LFE5:
+  97               	.global	KB_get_repeat_code
+  99               	KB_get_repeat_code:
+ 100               	.LFB6:
+ 101               	.LM12:
+ 102               	/* prologue: frame size=0 */
+ 103               	/* prologue end (size=0) */
+ 104               	.LM13:
+ 105 005c 8091 0000 		lds r24,KB_repeat_code
+ 106               	.LM14:
+ 107 0060 90E0      		ldi r25,lo8(0)
+ 108               	/* epilogue: frame size=0 */
+ 109 0062 0895      		ret
+ 110               	/* epilogue end (size=1) */
+ 111               	/* function KB_get_repeat_code size 4 (3) */
+ 112               	.LFE6:
+ 114               	.global	KB_store
+ 116               	KB_store:
+ 117               	.LFB7:
+ 118               	.LM15:
+ 119               	/* prologue: frame size=0 */
+ 120               	/* prologue end (size=0) */
+ 121               	.LVL6:
+ 122               	.LM16:
+ 123 0064 9091 0000 		lds r25,KB_RxHead
+ 124               	.LVL7:
+ 125 0068 9F5F      		subi r25,lo8(-(1))
+ 126 006a 9F70      		andi r25,lo8(15)
+ 127               	.LM17:
+ 128 006c 9093 0000 		sts KB_RxHead,r25
+ 129               	.LM18:
+ 130 0070 2091 0000 		lds r18,KB_RxTail
+ 131               	.LM19:
+ 132 0074 E0E0      		ldi r30,lo8(KB_RxBuf)
+ 133 0076 F0E0      		ldi r31,hi8(KB_RxBuf)
+ 134 0078 E90F      		add r30,r25
+ 135 007a F11D      		adc r31,__zero_reg__
+ 136 007c 8083      		st Z,r24
+ 137               	/* epilogue: frame size=0 */
+ 138 007e 0895      		ret
+ 139               	/* epilogue end (size=1) */
+ 140               	/* function KB_store size 14 (13) */
+ 141               	.LFE7:
+ 143               	.global	KB_decode
+ 145               	KB_decode:
+ 146               	.LFB8:
+ 147               	.LM20:
+ 148               	/* prologue: frame size=0 */
+ 149               	/* prologue end (size=0) */
+ 150               	.LVL8:
+ 151 0080 582F      		mov r21,r24
+ 152               	.LM21:
+ 153 0082 362F      		mov r19,r22
+ 154               	.LVL9:
+ 155 0084 3827      		eor r19,r24
+ 156               	.LM22:
+ 157 0086 932F      		mov r25,r19
+ 158               	.LVL10:
+ 159 0088 9623      		and r25,r22
  160               	.LM23:
- 161 0088 01F0      		breq .L14
+ 161 008a 01F0      		breq .L14
  162               	.LM24:
- 163 008a 90E0      		ldi r25,lo8(0)
+ 163 008c 20E0      		ldi r18,lo8(0)
  164               	.LVL11:
- 165               	.LVL12:
- 166               	.L16:
- 167               	.LM25:
- 168 008c 60FF      		sbrs r22,0
- 169 008e 00C0      		rjmp .L17
- 170               	.LBB6:
- 171               	.LBB7:
- 172               	.LM26:
- 173 0090 E091 0000 		lds r30,KB_RxHead
- 174 0094 EF5F      		subi r30,lo8(-(1))
- 175 0096 EF70      		andi r30,lo8(15)
+ 165               	.L16:
+ 166               	.LM25:
+ 167 008e 90FF      		sbrs r25,0
+ 168 0090 00C0      		rjmp .L17
+ 169               	.LBB6:
+ 170               	.LBB7:
+ 171               	.LM26:
+ 172 0092 E091 0000 		lds r30,KB_RxHead
+ 173               	.LVL12:
+ 174 0096 EF5F      		subi r30,lo8(-(1))
+ 175 0098 EF70      		andi r30,lo8(15)
  176               	.LM27:
- 177 0098 E093 0000 		sts KB_RxHead,r30
+ 177 009a E093 0000 		sts KB_RxHead,r30
  178               	.LM28:
- 179 009c 8091 0000 		lds r24,KB_RxTail
+ 179 009e 8091 0000 		lds r24,KB_RxTail
  180               	.LVL13:
  181               	.LM29:
- 182 00a0 FF27      		clr r31
- 183 00a2 E050      		subi r30,lo8(-(KB_RxBuf))
- 184 00a4 F040      		sbci r31,hi8(-(KB_RxBuf))
- 185 00a6 842F      		mov r24,r20
- 186 00a8 890F      		add r24,r25
- 187 00aa 8068      		ori r24,lo8(-128)
- 188 00ac 8083      		st Z,r24
- 189               	.LVL14:
- 190               	.L17:
- 191               	.LBE7:
- 192               	.LBE6:
- 193               	.LM30:
- 194 00ae 9F5F      		subi r25,lo8(-(1))
- 195 00b0 9830      		cpi r25,lo8(8)
- 196 00b2 01F0      		breq .L14
- 197               	.LM31:
- 198 00b4 6695      		lsr r22
- 199 00b6 00C0      		rjmp .L16
- 200               	.LVL15:
- 201               	.L14:
- 202               	.LM32:
- 203 00b8 932F      		mov r25,r19
- 204               	.LVL16:
- 205 00ba 9223      		and r25,r18
- 206               	.LM33:
- 207 00bc 01F0      		breq .L26
- 208               	.LVL17:
- 209 00be 20E0      		ldi r18,lo8(0)
- 210               	.LVL18:
+ 182 00a2 F0E0      		ldi r31,lo8(0)
+ 183 00a4 E050      		subi r30,lo8(-(KB_RxBuf))
+ 184 00a6 F040      		sbci r31,hi8(-(KB_RxBuf))
+ 185               	.LVL14:
+ 186 00a8 822F      		mov r24,r18
+ 187 00aa 840F      		add r24,r20
+ 188 00ac 8068      		ori r24,lo8(-128)
+ 189 00ae 8083      		st Z,r24
+ 190               	.LVL15:
+ 191               	.L17:
+ 192               	.LBE7:
+ 193               	.LBE6:
+ 194               	.LM30:
+ 195 00b0 2F5F      		subi r18,lo8(-(1))
+ 196 00b2 2830      		cpi r18,lo8(8)
+ 197 00b4 01F0      		breq .L14
+ 198               	.LM31:
+ 199 00b6 9695      		lsr r25
+ 200 00b8 00C0      		rjmp .L16
+ 201               	.LVL16:
+ 202               	.L14:
+ 203               	.LM32:
+ 204 00ba 632F      		mov r22,r19
+ 205               	.LVL17:
+ 206 00bc 6523      		and r22,r21
+ 207               	.LM33:
+ 208 00be 01F0      		breq .L26
+ 209               	.LVL18:
+ 210 00c0 90E0      		ldi r25,lo8(0)
  211               	.LVL19:
  212               	.L22:
  213               	.LM34:
- 214 00c0 90FF      		sbrs r25,0
- 215 00c2 00C0      		rjmp .L23
+ 214 00c2 60FF      		sbrs r22,0
+ 215 00c4 00C0      		rjmp .L23
  216               	.LBB8:
  217               	.LBB9:
  218               	.LM35:
- 219 00c4 E091 0000 		lds r30,KB_RxHead
+ 219 00c6 E091 0000 		lds r30,KB_RxHead
  220               	.LVL20:
- 221 00c8 EF5F      		subi r30,lo8(-(1))
- 222 00ca EF70      		andi r30,lo8(15)
+ 221 00ca EF5F      		subi r30,lo8(-(1))
+ 222 00cc EF70      		andi r30,lo8(15)
  223               	.LM36:
- 224 00cc E093 0000 		sts KB_RxHead,r30
+ 224 00ce E093 0000 		sts KB_RxHead,r30
  225               	.LM37:
- 226 00d0 8091 0000 		lds r24,KB_RxTail
+ 226 00d2 8091 0000 		lds r24,KB_RxTail
  227               	.LM38:
- 228 00d4 FF27      		clr r31
- 229 00d6 E050      		subi r30,lo8(-(KB_RxBuf))
- 230 00d8 F040      		sbci r31,hi8(-(KB_RxBuf))
- 231 00da 842F      		mov r24,r20
- 232 00dc 820F      		add r24,r18
- 233 00de 8083      		st Z,r24
- 234               	.LVL21:
- 235               	.L23:
- 236               	.LBE9:
- 237               	.LBE8:
- 238               	.LM39:
- 239 00e0 2F5F      		subi r18,lo8(-(1))
- 240 00e2 2830      		cpi r18,lo8(8)
- 241 00e4 01F0      		breq .L26
- 242               	.LM40:
- 243 00e6 9695      		lsr r25
- 244 00e8 00C0      		rjmp .L22
- 245               	.LVL22:
- 246               	.L26:
- 247 00ea 0895      		ret
- 248               	/* epilogue: frame size=0 */
- 249               	/* epilogue: noreturn */
- 250               	/* epilogue end (size=0) */
- 251               	/* function KB_decode size 56 (56) */
- 252               	.LFE8:
- 254               	.global	KB_data_available
- 256               	KB_data_available:
- 257               	.LFB10:
- 258               	.LM41:
- 259               	/* prologue: frame size=0 */
- 260               	/* prologue end (size=0) */
- 261               	.LM42:
- 262 00ec 9091 0000 		lds r25,KB_RxHead
- 263 00f0 8091 0000 		lds r24,KB_RxTail
- 264 00f4 20E0      		ldi r18,lo8(0)
- 265 00f6 30E0      		ldi r19,hi8(0)
- 266 00f8 9817      		cp r25,r24
- 267 00fa 01F0      		breq .L28
- 268               	.LM43:
- 269 00fc 21E0      		ldi r18,lo8(1)
- 270 00fe 30E0      		ldi r19,hi8(1)
- 271               	.L28:
- 272               	.LM44:
- 273 0100 C901      		movw r24,r18
- 274               	/* epilogue: frame size=0 */
- 275 0102 0895      		ret
- 276               	/* epilogue end (size=1) */
- 277               	/* function KB_data_available size 12 (11) */
- 278               	.LFE10:
- 280               	.global	KB_recv
- 282               	KB_recv:
- 283               	.LFB11:
- 284               	.LM45:
- 285               	/* prologue: frame size=0 */
- 286               	/* prologue end (size=0) */
- 287               	.L32:
- 288               	.LM46:
- 289 0104 9091 0000 		lds r25,KB_RxHead
- 290 0108 8091 0000 		lds r24,KB_RxTail
- 291 010c 9817      		cp r25,r24
- 292 010e 01F0      		breq .L32
- 293               	.LM47:
- 294 0110 E091 0000 		lds r30,KB_RxTail
- 295               	.LVL23:
- 296 0114 EF5F      		subi r30,lo8(-(1))
- 297 0116 EF70      		andi r30,lo8(15)
- 298               	.LM48:
- 299 0118 E093 0000 		sts KB_RxTail,r30
- 300 011c FF27      		clr r31
- 301 011e E050      		subi r30,lo8(-(KB_RxBuf))
- 302 0120 F040      		sbci r31,hi8(-(KB_RxBuf))
- 303 0122 8081      		ld r24,Z
- 304               	.LM49:
- 305 0124 9927      		clr r25
- 306               	/* epilogue: frame size=0 */
- 307 0126 0895      		ret
- 308               	/* epilogue end (size=1) */
- 309               	/* function KB_recv size 18 (17) */
- 310               	.LFE11:
- 312               	.global	KB_scan
- 314               	KB_scan:
- 315               	.LFB9:
- 316               	.LM50:
- 317               	/* prologue: frame size=0 */
- 318 0128 FF92      		push r15
- 319 012a 0F93      		push r16
- 320 012c 1F93      		push r17
- 321 012e CF93      		push r28
- 322 0130 DF93      		push r29
- 323               	/* prologue end (size=5) */
- 324               	.LM51:
- 325 0132 8091 0000 		lds r24,KB_state
- 326 0136 8130      		cpi r24,lo8(1)
- 327 0138 01F4      		brne .+2
- 328 013a 00C0      		rjmp .L39
- 329               	.LM52:
- 330 013c 8330      		cpi r24,lo8(3)
- 331 013e 01F4      		brne .+2
- 332 0140 00C0      		rjmp .L40
- 333               	.LM53:
- 334 0142 4091 0000 		lds r20,KB_repeat_code
- 335               	.LVL24:
- 336               	.LM54:
- 337 0146 4F3F      		cpi r20,lo8(-1)
- 338 0148 01F0      		breq .L41
- 339               	.LM55:
- 340 014a 8091 0000 		lds r24,KB_repeat_count
- 341 014e 9091 0000 		lds r25,(KB_repeat_count)+1
- 342 0152 0196      		adiw r24,1
- 343 0154 9093 0000 		sts (KB_repeat_count)+1,r25
- 344 0158 8093 0000 		sts KB_repeat_count,r24
- 345               	.LM56:
- 346 015c 2091 0000 		lds r18,KB_repeat_count
- 347 0160 3091 0000 		lds r19,(KB_repeat_count)+1
- 348 0164 8091 0000 		lds r24,KB_repeat_match
- 349 0168 9091 0000 		lds r25,(KB_repeat_match)+1
- 350 016c 2817      		cp r18,r24
- 351 016e 3907      		cpc r19,r25
- 352 0170 00F0      		brlo .L41
- 353               	.LM57:
- 354 0172 1092 0000 		sts (KB_repeat_count)+1,__zero_reg__
- 355 0176 1092 0000 		sts KB_repeat_count,__zero_reg__
- 356               	.LM58:
- 357 017a 8091 0000 		lds r24,KB_repeat_period
- 358 017e 9091 0000 		lds r25,(KB_repeat_period)+1
- 359 0182 9093 0000 		sts (KB_repeat_match)+1,r25
- 360 0186 8093 0000 		sts KB_repeat_match,r24
- 361               	.LBB12:
- 362               	.LBB13:
- 363               	.LM59:
- 364 018a E091 0000 		lds r30,KB_RxHead
- 365               	.LVL25:
- 366 018e EF5F      		subi r30,lo8(-(1))
- 367 0190 EF70      		andi r30,lo8(15)
- 368               	.LM60:
- 369 0192 E093 0000 		sts KB_RxHead,r30
- 370               	.LM61:
- 371 0196 8091 0000 		lds r24,KB_RxTail
- 372               	.LM62:
- 373 019a FF27      		clr r31
- 374 019c E050      		subi r30,lo8(-(KB_RxBuf))
- 375 019e F040      		sbci r31,hi8(-(KB_RxBuf))
- 376 01a0 4083      		st Z,r20
- 377               	.L41:
- 378               	.LBE13:
- 379               	.LBE12:
- 380               	.LM63:
- 381 01a2 0091 0000 		lds r16,KB_curr_value
- 382 01a6 1091 0000 		lds r17,(KB_curr_value)+1
- 383               	.LM64:
- 384 01aa F090 0000 		lds r15,KB_scan_idx
- 385               	.LVL26:
- 386               	.LM65:
- 387 01ae 83B3      		in r24,51-0x20
- 388 01b0 8F3F      		cpi r24,lo8(-1)
- 389 01b2 01F4      		brne .L44
- 390 01b4 89B3      		in r24,57-0x20
- 391 01b6 8F3F      		cpi r24,lo8(-1)
- 392 01b8 01F4      		brne .L44
- 393 01ba CF2D      		mov r28,r15
- 394 01bc DD27      		clr r29
- 395 01be C050      		subi r28,lo8(-(KB_cache))
- 396 01c0 D040      		sbci r29,hi8(-(KB_cache))
- 397 01c2 6881      		ld r22,Y
- 398 01c4 6017      		cp r22,r16
- 399 01c6 01F0      		breq .L44
- 400               	.LM66:
- 401 01c8 4F2D      		mov r20,r15
- 402               	.LVL27:
- 403 01ca 440F      		lsl r20
- 404 01cc 440F      		lsl r20
- 405 01ce 440F      		lsl r20
- 406 01d0 802F      		mov r24,r16
- 407               	.LVL28:
- 408 01d2 0E94 0000 		call KB_decode
- 409               	.LVL29:
- 410               	.LM67:
- 411 01d6 0883      		st Y,r16
- 412               	.LVL30:
- 413               	.L44:
- 414               	.LM68:
- 415 01d8 2F2D      		mov r18,r15
- 416               	.LVL31:
- 417 01da 2F5F      		subi r18,lo8(-(1))
- 418 01dc 2F70      		andi r18,lo8(15)
- 419               	.LM69:
- 420 01de 2093 0000 		sts KB_scan_idx,r18
- 421               	.LM70:
- 422 01e2 81E0      		ldi r24,lo8(1)
- 423 01e4 90E0      		ldi r25,hi8(1)
- 424               	.LVL32:
- 425 01e6 00C0      		rjmp 2f
- 426 01e8 880F      	1:	lsl r24
- 427 01ea 991F      		rol r25
- 428 01ec 2A95      	2:	dec r18
- 429 01ee 02F4      		brpl 1b
- 430               	.LM71:
- 431 01f0 292F      		mov r18,r25
- 432 01f2 3327      		clr r19
- 433               	.LVL33:
- 434               	.LM72:
- 435 01f4 84BB      		out 52-0x20,r24
- 436               	.LM73:
- 437 01f6 27BB      		out 55-0x20,r18
- 438               	.LM74:
- 439 01f8 8095      		com r24
- 440               	.LVL34:
- 441 01fa 85BB      		out 53-0x20,r24
- 442               	.LM75:
- 443 01fc 2095      		com r18
- 444 01fe 28BB      		out 56-0x20,r18
- 445               	.LM76:
- 446 0200 81E0      		ldi r24,lo8(1)
- 447 0202 00C0      		rjmp .L55
- 448               	.LVL35:
- 449               	.L39:
- 450               	.LM77:
- 451 0204 89B3      		in r24,57-0x20
- 452 0206 8095      		com r24
- 453 0208 9927      		clr r25
- 454 020a 9093 0000 		sts (KB_curr_value)+1,r25
- 455 020e 8093 0000 		sts KB_curr_value,r24
- 456               	.LM78:
- 457 0212 14BA      		out 52-0x20,__zero_reg__
- 458               	.LM79:
- 459 0214 17BA      		out 55-0x20,__zero_reg__
- 460               	.LM80:
- 461 0216 8FEF      		ldi r24,lo8(-1)
- 462 0218 85BB      		out 53-0x20,r24
- 463               	.LM81:
- 464 021a 88BB      		out 56-0x20,r24
- 465               	.LM82:
- 466 021c 82E0      		ldi r24,lo8(2)
- 467 021e 8093 0000 		sts KB_state,r24
- 468               	.LM83:
- 469 0222 8091 0000 		lds r24,KB_scan_idx
- 470               	.LVL36:
- 471               	.LM84:
- 472 0226 8823      		tst r24
- 473 0228 01F4      		brne .L54
- 474               	.LM85:
- 475 022a 83E0      		ldi r24,lo8(3)
- 476               	.LVL37:
- 477 022c 00C0      		rjmp .L55
- 478               	.L40:
- 479               	.LM86:
- 480 022e 13B3      		in r17,51-0x20
- 481               	.LVL38:
- 482 0230 1095      		com r17
- 483               	.LM87:
- 484 0232 6091 0000 		lds r22,PORT_cache+1
- 485 0236 1617      		cp r17,r22
- 486 0238 01F0      		breq .L50
- 487               	.LM88:
- 488 023a 48E7      		ldi r20,lo8(120)
- 489 023c 812F      		mov r24,r17
- 490 023e 0E94 0000 		call KB_decode
- 491               	.LM89:
- 492 0242 1093 0000 		sts PORT_cache+1,r17
- 493               	.L50:
- 494               	.LM90:
- 495 0246 19B3      		in r17,57-0x20
- 496               	.LVL39:
- 497 0248 1095      		com r17
- 498               	.LM91:
- 499 024a 6091 0000 		lds r22,PORT_cache
- 500 024e 1617      		cp r17,r22
- 501 0250 01F0      		breq .L52
- 502               	.LM92:
- 503 0252 40E7      		ldi r20,lo8(112)
- 504 0254 812F      		mov r24,r17
- 505 0256 0E94 0000 		call KB_decode
- 506               	.LM93:
- 507 025a 1093 0000 		sts PORT_cache,r17
- 508               	.L52:
- 509               	.LM94:
- 510 025e 82E0      		ldi r24,lo8(2)
- 511               	.LVL40:
- 512               	.L55:
- 513 0260 8093 0000 		sts KB_state,r24
- 514               	.LVL41:
- 515               	.L54:
- 516               	/* epilogue: frame size=0 */
- 517 0264 DF91      		pop r29
- 518 0266 CF91      		pop r28
- 519 0268 1F91      		pop r17
- 520 026a 0F91      		pop r16
- 521 026c FF90      		pop r15
- 522 026e 0895      		ret
- 523               	/* epilogue end (size=6) */
- 524               	/* function KB_scan size 165 (154) */
- 525               	.LFE9:
- 527               	.global	KB_init
- 529               	KB_init:
- 530               	.LFB2:
- 531               	.LM95:
- 532               	/* prologue: frame size=0 */
- 533               	/* prologue end (size=0) */
- 534               	.LM96:
- 535 0270 82E0      		ldi r24,lo8(2)
- 536 0272 8093 0000 		sts KB_state,r24
- 537               	.LM97:
- 538 0276 2FEF      		ldi r18,lo8(-1)
- 539 0278 2093 0000 		sts KB_repeat_code,r18
- 540               	.LBB18:
- 541               	.LBB19:
- 542               	.LM98:
- 543 027c 84EF      		ldi r24,lo8(500)
- 544 027e 91E0      		ldi r25,hi8(500)
- 545 0280 9093 0000 		sts (KB_repeat_delay)+1,r25
- 546 0284 8093 0000 		sts KB_repeat_delay,r24
- 547               	.LM99:
- 548 0288 8091 0000 		lds r24,KB_repeat_delay
- 549 028c 9091 0000 		lds r25,(KB_repeat_delay)+1
- 550 0290 9093 0000 		sts (KB_repeat_match)+1,r25
- 551 0294 8093 0000 		sts KB_repeat_match,r24
- 552               	.LM100:
- 553 0298 1092 0000 		sts (KB_repeat_count)+1,__zero_reg__
- 554 029c 1092 0000 		sts KB_repeat_count,__zero_reg__
- 555               	.LBE19:
- 556               	.LBE18:
- 557               	.LBB20:
- 558               	.LBB21:
- 559               	.LM101:
- 560 02a0 80E4      		ldi r24,lo8(64)
- 561 02a2 90E0      		ldi r25,hi8(64)
- 562 02a4 9093 0000 		sts (KB_repeat_period)+1,r25
- 563 02a8 8093 0000 		sts KB_repeat_period,r24
- 564               	.LBE21:
- 565               	.LBE20:
- 566               	.LM102:
- 567 02ac 25BB      		out 53-0x20,r18
- 568               	.LM103:
- 569 02ae 28BB      		out 56-0x20,r18
- 570               	.LM104:
- 571 02b0 2BBB      		out 59-0x20,r18
- 572               	/* epilogue: frame size=0 */
- 573 02b2 0895      		ret
- 574               	/* epilogue end (size=1) */
- 575               	/* function KB_init size 34 (33) */
- 576               	.LFE2:
- 578               		.lcomm KB_RxBuf,16
- 579               		.lcomm KB_RxHead,1
- 580               		.lcomm KB_RxTail,1
- 581               		.lcomm KB_cache,16
- 582               		.lcomm KB_state,1
- 583               		.lcomm KB_scan_idx,1
- 584               		.lcomm PORT_cache,2
- 585               		.lcomm KB_repeat_code,1
- 586               		.lcomm KB_repeat_count,2
- 587               		.lcomm KB_repeat_match,2
- 588               		.lcomm KB_repeat_delay,2
- 589               		.lcomm KB_repeat_period,2
- 590               		.lcomm KB_curr_value,2
- 687               	.Letext0:
+ 228 00d6 F0E0      		ldi r31,lo8(0)
+ 229               	.LVL21:
+ 230 00d8 E050      		subi r30,lo8(-(KB_RxBuf))
+ 231 00da F040      		sbci r31,hi8(-(KB_RxBuf))
+ 232               	.LVL22:
+ 233 00dc 892F      		mov r24,r25
+ 234 00de 840F      		add r24,r20
+ 235 00e0 8083      		st Z,r24
+ 236               	.LVL23:
+ 237               	.L23:
+ 238               	.LBE9:
+ 239               	.LBE8:
+ 240               	.LM39:
+ 241 00e2 9F5F      		subi r25,lo8(-(1))
+ 242 00e4 9830      		cpi r25,lo8(8)
+ 243 00e6 01F0      		breq .L26
+ 244               	.LM40:
+ 245 00e8 6695      		lsr r22
+ 246 00ea 00C0      		rjmp .L22
+ 247               	.LVL24:
+ 248               	.L26:
+ 249 00ec 0895      		ret
+ 250               	/* epilogue: frame size=0 */
+ 251               	/* epilogue: noreturn */
+ 252               	/* epilogue end (size=0) */
+ 253               	/* function KB_decode size 57 (57) */
+ 254               	.LFE8:
+ 256               	.global	KB_data_available
+ 258               	KB_data_available:
+ 259               	.LFB10:
+ 260               	.LM41:
+ 261               	/* prologue: frame size=0 */
+ 262               	/* prologue end (size=0) */
+ 263               	.LM42:
+ 264 00ee 9091 0000 		lds r25,KB_RxHead
+ 265 00f2 8091 0000 		lds r24,KB_RxTail
+ 266 00f6 20E0      		ldi r18,lo8(0)
+ 267 00f8 30E0      		ldi r19,hi8(0)
+ 268 00fa 9817      		cp r25,r24
+ 269 00fc 01F0      		breq .L28
+ 270               	.LM43:
+ 271 00fe 21E0      		ldi r18,lo8(1)
+ 272 0100 30E0      		ldi r19,hi8(1)
+ 273               	.L28:
+ 274               	.LM44:
+ 275 0102 C901      		movw r24,r18
+ 276               	/* epilogue: frame size=0 */
+ 277 0104 0895      		ret
+ 278               	/* epilogue end (size=1) */
+ 279               	/* function KB_data_available size 12 (11) */
+ 280               	.LFE10:
+ 282               	.global	KB_recv
+ 284               	KB_recv:
+ 285               	.LFB11:
+ 286               	.LM45:
+ 287               	/* prologue: frame size=0 */
+ 288               	/* prologue end (size=0) */
+ 289               	.L32:
+ 290               	.LM46:
+ 291 0106 9091 0000 		lds r25,KB_RxHead
+ 292 010a 8091 0000 		lds r24,KB_RxTail
+ 293 010e 9817      		cp r25,r24
+ 294 0110 01F0      		breq .L32
+ 295               	.LM47:
+ 296 0112 E091 0000 		lds r30,KB_RxTail
+ 297               	.LVL25:
+ 298 0116 EF5F      		subi r30,lo8(-(1))
+ 299 0118 EF70      		andi r30,lo8(15)
+ 300               	.LM48:
+ 301 011a E093 0000 		sts KB_RxTail,r30
+ 302 011e F0E0      		ldi r31,lo8(0)
+ 303               	.LVL26:
+ 304 0120 E050      		subi r30,lo8(-(KB_RxBuf))
+ 305 0122 F040      		sbci r31,hi8(-(KB_RxBuf))
+ 306               	.LVL27:
+ 307 0124 8081      		ld r24,Z
+ 308               	.LM49:
+ 309 0126 90E0      		ldi r25,lo8(0)
+ 310               	/* epilogue: frame size=0 */
+ 311 0128 0895      		ret
+ 312               	/* epilogue end (size=1) */
+ 313               	/* function KB_recv size 18 (17) */
+ 314               	.LFE11:
+ 316               	.global	KB_scan
+ 318               	KB_scan:
+ 319               	.LFB9:
+ 320               	.LM50:
+ 321               	/* prologue: frame size=0 */
+ 322 012a FF92      		push r15
+ 323 012c 0F93      		push r16
+ 324 012e 1F93      		push r17
+ 325 0130 CF93      		push r28
+ 326 0132 DF93      		push r29
+ 327               	/* prologue end (size=5) */
+ 328               	.LM51:
+ 329 0134 8091 0000 		lds r24,KB_state
+ 330 0138 8130      		cpi r24,lo8(1)
+ 331 013a 01F4      		brne .+2
+ 332 013c 00C0      		rjmp .L39
+ 333               	.LM52:
+ 334 013e 8330      		cpi r24,lo8(3)
+ 335 0140 01F4      		brne .+2
+ 336 0142 00C0      		rjmp .L40
+ 337               	.LM53:
+ 338 0144 4091 0000 		lds r20,KB_repeat_code
+ 339               	.LVL28:
+ 340               	.LM54:
+ 341 0148 4F3F      		cpi r20,lo8(-1)
+ 342 014a 01F0      		breq .L41
+ 343               	.LM55:
+ 344 014c 8091 0000 		lds r24,KB_repeat_count
+ 345 0150 9091 0000 		lds r25,(KB_repeat_count)+1
+ 346 0154 0196      		adiw r24,1
+ 347 0156 9093 0000 		sts (KB_repeat_count)+1,r25
+ 348 015a 8093 0000 		sts KB_repeat_count,r24
+ 349               	.LM56:
+ 350 015e 2091 0000 		lds r18,KB_repeat_count
+ 351 0162 3091 0000 		lds r19,(KB_repeat_count)+1
+ 352 0166 8091 0000 		lds r24,KB_repeat_match
+ 353 016a 9091 0000 		lds r25,(KB_repeat_match)+1
+ 354 016e 2817      		cp r18,r24
+ 355 0170 3907      		cpc r19,r25
+ 356 0172 00F0      		brlo .L41
+ 357               	.LM57:
+ 358 0174 1092 0000 		sts (KB_repeat_count)+1,__zero_reg__
+ 359 0178 1092 0000 		sts KB_repeat_count,__zero_reg__
+ 360               	.LM58:
+ 361 017c 8091 0000 		lds r24,KB_repeat_period
+ 362 0180 9091 0000 		lds r25,(KB_repeat_period)+1
+ 363 0184 9093 0000 		sts (KB_repeat_match)+1,r25
+ 364 0188 8093 0000 		sts KB_repeat_match,r24
+ 365               	.LBB12:
+ 366               	.LBB13:
+ 367               	.LM59:
+ 368 018c E091 0000 		lds r30,KB_RxHead
+ 369               	.LVL29:
+ 370 0190 EF5F      		subi r30,lo8(-(1))
+ 371 0192 EF70      		andi r30,lo8(15)
+ 372               	.LM60:
+ 373 0194 E093 0000 		sts KB_RxHead,r30
+ 374               	.LM61:
+ 375 0198 8091 0000 		lds r24,KB_RxTail
+ 376               	.LM62:
+ 377 019c F0E0      		ldi r31,lo8(0)
+ 378               	.LVL30:
+ 379 019e E050      		subi r30,lo8(-(KB_RxBuf))
+ 380 01a0 F040      		sbci r31,hi8(-(KB_RxBuf))
+ 381               	.LVL31:
+ 382 01a2 4083      		st Z,r20
+ 383               	.L41:
+ 384               	.LBE13:
+ 385               	.LBE12:
+ 386               	.LM63:
+ 387 01a4 0091 0000 		lds r16,KB_curr_value
+ 388 01a8 1091 0000 		lds r17,(KB_curr_value)+1
+ 389               	.LM64:
+ 390 01ac F090 0000 		lds r15,KB_scan_idx
+ 391               	.LVL32:
+ 392               	.LM65:
+ 393 01b0 83B3      		in r24,51-0x20
+ 394 01b2 8F3F      		cpi r24,lo8(-1)
+ 395 01b4 01F4      		brne .L44
+ 396 01b6 89B3      		in r24,57-0x20
+ 397 01b8 8F3F      		cpi r24,lo8(-1)
+ 398 01ba 01F4      		brne .L44
+ 399 01bc CF2D      		mov r28,r15
+ 400 01be D0E0      		ldi r29,lo8(0)
+ 401 01c0 C050      		subi r28,lo8(-(KB_cache))
+ 402 01c2 D040      		sbci r29,hi8(-(KB_cache))
+ 403 01c4 6881      		ld r22,Y
+ 404 01c6 6017      		cp r22,r16
+ 405 01c8 01F0      		breq .L44
+ 406               	.LM66:
+ 407 01ca 4F2D      		mov r20,r15
+ 408               	.LVL33:
+ 409 01cc 440F      		lsl r20
+ 410 01ce 440F      		lsl r20
+ 411 01d0 440F      		lsl r20
+ 412 01d2 802F      		mov r24,r16
+ 413               	.LVL34:
+ 414 01d4 0E94 0000 		call KB_decode
+ 415               	.LVL35:
+ 416               	.LM67:
+ 417 01d8 0883      		st Y,r16
+ 418               	.LVL36:
+ 419               	.L44:
+ 420               	.LM68:
+ 421 01da 2F2D      		mov r18,r15
+ 422 01dc 2F5F      		subi r18,lo8(-(1))
+ 423               	.LVL37:
+ 424 01de 2F70      		andi r18,lo8(15)
+ 425               	.LM69:
+ 426 01e0 2093 0000 		sts KB_scan_idx,r18
+ 427               	.LM70:
+ 428 01e4 81E0      		ldi r24,lo8(1)
+ 429 01e6 90E0      		ldi r25,hi8(1)
+ 430               	.LVL38:
+ 431 01e8 00C0      		rjmp 2f
+ 432 01ea 880F      	1:	lsl r24
+ 433 01ec 991F      		rol r25
+ 434 01ee 2A95      	2:	dec r18
+ 435 01f0 02F4      		brpl 1b
+ 436               	.LM71:
+ 437 01f2 292F      		mov r18,r25
+ 438 01f4 3327      		clr r19
+ 439               	.LVL39:
+ 440               	.LM72:
+ 441 01f6 84BB      		out 52-0x20,r24
+ 442               	.LM73:
+ 443 01f8 27BB      		out 55-0x20,r18
+ 444               	.LM74:
+ 445 01fa 8095      		com r24
+ 446               	.LVL40:
+ 447 01fc 85BB      		out 53-0x20,r24
+ 448               	.LM75:
+ 449 01fe 2095      		com r18
+ 450 0200 28BB      		out 56-0x20,r18
+ 451               	.LM76:
+ 452 0202 81E0      		ldi r24,lo8(1)
+ 453 0204 00C0      		rjmp .L55
+ 454               	.LVL41:
+ 455               	.L39:
+ 456               	.LM77:
+ 457 0206 89B3      		in r24,57-0x20
+ 458 0208 8095      		com r24
+ 459 020a 90E0      		ldi r25,lo8(0)
+ 460 020c 9093 0000 		sts (KB_curr_value)+1,r25
+ 461 0210 8093 0000 		sts KB_curr_value,r24
+ 462               	.LM78:
+ 463 0214 14BA      		out 52-0x20,__zero_reg__
+ 464               	.LM79:
+ 465 0216 17BA      		out 55-0x20,__zero_reg__
+ 466               	.LM80:
+ 467 0218 8FEF      		ldi r24,lo8(-1)
+ 468 021a 85BB      		out 53-0x20,r24
+ 469               	.LM81:
+ 470 021c 88BB      		out 56-0x20,r24
+ 471               	.LM82:
+ 472 021e 82E0      		ldi r24,lo8(2)
+ 473 0220 8093 0000 		sts KB_state,r24
+ 474               	.LM83:
+ 475 0224 8091 0000 		lds r24,KB_scan_idx
+ 476               	.LVL42:
+ 477               	.LM84:
+ 478 0228 8823      		tst r24
+ 479 022a 01F4      		brne .L54
+ 480               	.LM85:
+ 481 022c 83E0      		ldi r24,lo8(3)
+ 482               	.LVL43:
+ 483 022e 00C0      		rjmp .L55
+ 484               	.L40:
+ 485               	.LM86:
+ 486 0230 13B3      		in r17,51-0x20
+ 487               	.LVL44:
+ 488 0232 1095      		com r17
+ 489               	.LM87:
+ 490 0234 6091 0000 		lds r22,PORT_cache+1
+ 491 0238 1617      		cp r17,r22
+ 492 023a 01F0      		breq .L50
+ 493               	.LM88:
+ 494 023c 48E7      		ldi r20,lo8(120)
+ 495 023e 812F      		mov r24,r17
+ 496 0240 0E94 0000 		call KB_decode
+ 497               	.LM89:
+ 498 0244 1093 0000 		sts PORT_cache+1,r17
+ 499               	.L50:
+ 500               	.LM90:
+ 501 0248 19B3      		in r17,57-0x20
+ 502               	.LVL45:
+ 503 024a 1095      		com r17
+ 504               	.LM91:
+ 505 024c 6091 0000 		lds r22,PORT_cache
+ 506 0250 1617      		cp r17,r22
+ 507 0252 01F0      		breq .L52
+ 508               	.LM92:
+ 509 0254 40E7      		ldi r20,lo8(112)
+ 510 0256 812F      		mov r24,r17
+ 511 0258 0E94 0000 		call KB_decode
+ 512               	.LM93:
+ 513 025c 1093 0000 		sts PORT_cache,r17
+ 514               	.L52:
+ 515               	.LM94:
+ 516 0260 82E0      		ldi r24,lo8(2)
+ 517               	.LVL46:
+ 518               	.L55:
+ 519 0262 8093 0000 		sts KB_state,r24
+ 520               	.LVL47:
+ 521               	.L54:
+ 522               	/* epilogue: frame size=0 */
+ 523 0266 DF91      		pop r29
+ 524 0268 CF91      		pop r28
+ 525 026a 1F91      		pop r17
+ 526 026c 0F91      		pop r16
+ 527 026e FF90      		pop r15
+ 528 0270 0895      		ret
+ 529               	/* epilogue end (size=6) */
+ 530               	/* function KB_scan size 165 (154) */
+ 531               	.LFE9:
+ 533               	.global	KB_init
+ 535               	KB_init:
+ 536               	.LFB2:
+ 537               	.LM95:
+ 538               	/* prologue: frame size=0 */
+ 539               	/* prologue end (size=0) */
+ 540               	.LM96:
+ 541 0272 82E0      		ldi r24,lo8(2)
+ 542 0274 8093 0000 		sts KB_state,r24
+ 543               	.LM97:
+ 544 0278 2FEF      		ldi r18,lo8(-1)
+ 545 027a 2093 0000 		sts KB_repeat_code,r18
+ 546               	.LBB18:
+ 547               	.LBB19:
+ 548               	.LM98:
+ 549 027e 84EF      		ldi r24,lo8(500)
+ 550 0280 91E0      		ldi r25,hi8(500)
+ 551 0282 9093 0000 		sts (KB_repeat_delay)+1,r25
+ 552 0286 8093 0000 		sts KB_repeat_delay,r24
+ 553               	.LM99:
+ 554 028a 8091 0000 		lds r24,KB_repeat_delay
+ 555 028e 9091 0000 		lds r25,(KB_repeat_delay)+1
+ 556 0292 9093 0000 		sts (KB_repeat_match)+1,r25
+ 557 0296 8093 0000 		sts KB_repeat_match,r24
+ 558               	.LM100:
+ 559 029a 1092 0000 		sts (KB_repeat_count)+1,__zero_reg__
+ 560 029e 1092 0000 		sts KB_repeat_count,__zero_reg__
+ 561               	.LBE19:
+ 562               	.LBE18:
+ 563               	.LBB20:
+ 564               	.LBB21:
+ 565               	.LM101:
+ 566 02a2 80E4      		ldi r24,lo8(64)
+ 567 02a4 90E0      		ldi r25,hi8(64)
+ 568 02a6 9093 0000 		sts (KB_repeat_period)+1,r25
+ 569 02aa 8093 0000 		sts KB_repeat_period,r24
+ 570               	.LBE21:
+ 571               	.LBE20:
+ 572               	.LM102:
+ 573 02ae 25BB      		out 53-0x20,r18
+ 574               	.LM103:
+ 575 02b0 28BB      		out 56-0x20,r18
+ 576               	.LM104:
+ 577 02b2 2BBB      		out 59-0x20,r18
+ 578               	/* epilogue: frame size=0 */
+ 579 02b4 0895      		ret
+ 580               	/* epilogue end (size=1) */
+ 581               	/* function KB_init size 34 (33) */
+ 582               	.LFE2:
+ 584               		.lcomm KB_RxBuf,16
+ 585               		.lcomm KB_RxHead,1
+ 586               		.lcomm KB_RxTail,1
+ 587               		.lcomm KB_cache,16
+ 588               		.lcomm KB_state,1
+ 589               		.lcomm KB_scan_idx,1
+ 590               		.lcomm PORT_cache,2
+ 591               		.lcomm KB_repeat_code,1
+ 592               		.lcomm KB_repeat_count,2
+ 593               		.lcomm KB_repeat_match,2
+ 594               		.lcomm KB_repeat_delay,2
+ 595               		.lcomm KB_repeat_period,2
+ 596               		.lcomm KB_curr_value,2
+ 693               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 kb.c
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:3      *ABS*:0000003f __SREG__
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:4      *ABS*:0000003e __SP_H__
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:5      *ABS*:0000003d __SP_L__
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:6      *ABS*:00000000 __tmp_reg__
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:7      *ABS*:00000001 __zero_reg__
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:20     .text:00000000 KB_set_repeat_delay
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:587    .bss:0000002b KB_repeat_delay
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:586    .bss:00000029 KB_repeat_match
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:585    .bss:00000027 KB_repeat_count
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:48     .text:00000026 KB_set_repeat_period
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:588    .bss:0000002d KB_repeat_period
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:68     .text:00000034 KB_set_repeat_code
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:584    .bss:00000026 KB_repeat_code
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:100    .text:0000005c KB_get_repeat_code
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:117    .text:00000064 KB_store
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:578    .bss:00000010 KB_RxHead
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:579    .bss:00000011 KB_RxTail
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:2      *ABS*:0000003f __SREG__
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:3      *ABS*:0000003e __SP_H__
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:4      *ABS*:0000003d __SP_L__
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:5      *ABS*:00000000 __tmp_reg__
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:6      *ABS*:00000001 __zero_reg__
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:19     .text:00000000 KB_set_repeat_delay
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:593    .bss:0000002b KB_repeat_delay
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:592    .bss:00000029 KB_repeat_match
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:591    .bss:00000027 KB_repeat_count
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:47     .text:00000026 KB_set_repeat_period
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:594    .bss:0000002d KB_repeat_period
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:67     .text:00000034 KB_set_repeat_code
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:590    .bss:00000026 KB_repeat_code
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:99     .text:0000005c KB_get_repeat_code
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:116    .text:00000064 KB_store
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:584    .bss:00000010 KB_RxHead
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:585    .bss:00000011 KB_RxTail
                              .bss:00000000 KB_RxBuf
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:146    .text:00000080 KB_decode
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:256    .text:000000ec KB_data_available
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:282    .text:00000104 KB_recv
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:314    .text:00000128 KB_scan
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:581    .bss:00000022 KB_state
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:589    .bss:0000002f KB_curr_value
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:582    .bss:00000023 KB_scan_idx
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:580    .bss:00000012 KB_cache
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:583    .bss:00000024 PORT_cache
-C:\DOCUME~1\brain\LOCALS~1\Temp/ccqt4CP0.s:529    .text:00000270 KB_init
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:145    .text:00000080 KB_decode
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:258    .text:000000ee KB_data_available
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:284    .text:00000106 KB_recv
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:318    .text:0000012a KB_scan
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:587    .bss:00000022 KB_state
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:595    .bss:0000002f KB_curr_value
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:588    .bss:00000023 KB_scan_idx
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:586    .bss:00000012 KB_cache
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:589    .bss:00000024 PORT_cache
+C:\DOCUME~1\brain\LOCALS~1\Temp/ccQj4c2i.s:535    .text:00000272 KB_init
 
 UNDEFINED SYMBOLS
 __do_copy_data
