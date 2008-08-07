@@ -17,17 +17,18 @@
     along with C=Key; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+#include <inttypes.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <inttypes.h>
 #include <avr/pgmspace.h>
 #include <avr/eeprom.h>
 #include "kb.h"
-#include "switches.h"
-#include "ps2.h"
-#include "util.h"
 #include "led.h"
+#include "ps2.h"
 #include "scanner.h"
+#include "switches.h"
+#include "uart.h"
+#include "util.h"
 #include "scanner64.h"
 
 // TODO I need to clean up this code and make it more like poll64.c
@@ -389,7 +390,7 @@ void scan(void) {
       data = KB_recv();
       if(debug) {
         debug('k');
-        printHex(data);
+        uart_puthex(data);
       }
       state=(data&KB_KEY_UP?FALSE:TRUE);
       if((data&0x7f) ==SCAN_C64_KEY_LSHIFT)
@@ -449,7 +450,7 @@ void scan(void) {
       data=SW_recv();
       if(debug) {
         debug('s');
-        printHex(data);
+        uart_puthex(data);
       }
       if(!config) {
         switch(data) {

@@ -148,7 +148,7 @@ FORMAT = ihex
 TARGET = c=key
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = switches.c usart.c kb.c main.c ps2.c util.c scanner64.c led.c ps2_device.c ps2_host.c poll64.c
+SRC = switches.c uart.c kb.c main.c ps2.c util.c scanner64.c led.c ps2_device.c ps2_host.c poll64.c
 
 # Sample mechanism to add files to SRC line
 #ifeq ($(CONFIG_VARIABLE),4)
@@ -197,7 +197,7 @@ CSTANDARD = -std=gnu99
 
 
 # Place -D or -U options here
-CDEFS = -DF_CPU=$(CONFIG_MCU_FREQ)UL
+CDEFS = -DF_CPU=$(CONFIG_MCU_FREQ)UL -D REV3
 
 # Calculate bootloader version
 BOOT_VERSION = 0x$(MAJOR)$(MINOR)$(PATCHLEVEL)$(FIX)
@@ -476,7 +476,7 @@ program: $(OBJDIR)/$(TARGET).hex $(OBJDIR)/$(TARGET).eep
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
 	
 fuses: $(OBJDIR)/$(TARGET).hex $(OBJDIR)/$(TARGET).eep
-	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM) $(AVRDUDE_WRITE_FUSES)
+	$(AVRDUDE) $(AVRDUDE_FLAGS)  $(AVRDUDE_WRITE_FUSES) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
   
 
 

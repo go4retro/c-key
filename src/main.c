@@ -17,13 +17,14 @@
     along with C=Key; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#include <avr/interrupt.h>
 #include <inttypes.h>
-#include "usart.h"
+#include <avr/interrupt.h>
+#include "config.h"
+#include "poll.h"
 #include "ps2.h"
 #include "scanner.h"
+#include "uart.h"
 #include "util.h"
-#include "poll.h"
 
 #ifdef REV3
 #define PIN_MODE (1<<PIN4)
@@ -42,7 +43,7 @@ SIGNAL(SIG_OUTPUT_COMPARE2) {
 }
 
 int main( void ) {
-  USART0_Init( B115200 );
+  uart_init(B115200);
 
   // check for direction
   mode=(PIND&PIN_MODE?PS2_MODE_HOST:PS2_MODE_DEVICE);
