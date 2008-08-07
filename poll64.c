@@ -474,7 +474,6 @@ void poll_init(void) {
   reset_matrix();
 
   OCR2=POLL_IRQ_DIVIDER; 
-  //TCNT2=0;
   // Set OC2 clk  to SYSCLK/1024 and Compare Timer Mode
   TCCR2 = (1<<CS22) | (1<<CS21) | (1<<CS20) | (1<<WGM21);
   // set up OC2 IRQ
