@@ -41,13 +41,13 @@
 #define KB_PORT_ROW_HIGH_IN   PINB
 #define KB_DDR_ROW_HIGH       DDRB
 
-#define KB_ST_PREP        1
-#define KB_ST_READ        2
+#define KB_ST_PREP            1
+#define KB_ST_READ            2
 #ifdef PORT_KEYS
-#define KB_ST_READ_PORTS  3
+#define KB_ST_READ_PORTS      3
 #endif
 
-#define KB_KEY_UP 0x80
+#define KB_KEY_UP         0x80
 
 #define KB_NO_REPEAT      0xff
 

@@ -20,7 +20,6 @@
 #include <avr/io.h>
 #include <inttypes.h>
 #include "config.h"
-#include "util.h"
 #include "kb.h"
 
 static unsigned char KB_RxBuf[KB_RX_BUFFER_SIZE];
@@ -88,7 +87,7 @@ uint8_t KB_get_repeat_code() {
   return KB_repeat_code;
 }
 
-void KB_store(uint8_t data) {
+static void KB_store(uint8_t data) {
   uint8_t tmphead;
   
 	tmphead = ( KB_RxHead + 1 ) & KB_RX_BUFFER_MASK;
@@ -101,7 +100,7 @@ void KB_store(uint8_t data) {
 	KB_RxBuf[tmphead] = data; /* Store received data in buffer */
 }
 
-void KB_decode(uint8_t in, uint8_t old, uint8_t base) {
+static void KB_decode(uint8_t in, uint8_t old, uint8_t base) {
     uint8_t j,mask,result;
     // we have a key change.
     /*

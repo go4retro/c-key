@@ -21,7 +21,6 @@
 #include "config.h"
 #include "ps2.h"
 #include "uart.h"
-#include "util.h"
 #include "ps2_host.h"
 
 void PS2_host_init(void) {

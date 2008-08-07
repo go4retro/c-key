@@ -21,7 +21,6 @@
 #include <inttypes.h>
 #include "config.h"
 #include "led.h"
-#include "util.h"
 
 static uint8_t led_mask;
 static uint8_t led_status;

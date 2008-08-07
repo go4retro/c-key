@@ -24,50 +24,30 @@
 #include "ps2.h"
 #include "scanner.h"
 #include "uart.h"
-#include "util.h"
-
-#ifdef REV3
-#define PIN_MODE (1<<PIN4)
-#else
-#define PIN_MODE (1<<PIN5)
-#endif
-
-static volatile uint8_t mode;
 
 SIGNAL(SIG_OUTPUT_COMPARE2) {
-  if(mode==PS2_MODE_DEVICE) {
-    scan_irq();
-  } else {
+  if(MODE_DETECT) {
     poll_irq();
+  } else {
+    scan_irq();
   }
 }
 
 int main( void ) {
   uart_init(B115200);
 
-  // check for direction
-  mode=(PIND&PIN_MODE?PS2_MODE_HOST:PS2_MODE_DEVICE);
-  switch(mode) {
-    case PS2_MODE_DEVICE:
-        debug('D');
-        break;
-    case PS2_MODE_HOST:
-        debug('H');
-        break;
-    default:
-        debug('E');
-        break;
-  }
-  
-  PS2_init(mode);
   poll_init();  // do it here to reset cross-point switch everytime.
-  if(mode==PS2_MODE_DEVICE) {
+  if(MODE_DETECT) {
+    PS2_init(PS2_MODE_HOST);
+    debug('H');
+    //poll_init();
+    sei();
+    poll();
+  } else {
+    PS2_init(PS2_MODE_DEVICE);
+    debug('D');
     scan_init();
     sei();
     scan();
-  } else {
-    poll_init();
-    sei();
-    poll();
   }
 }

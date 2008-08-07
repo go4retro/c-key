@@ -21,7 +21,6 @@
 #include "config.h"
 #include "ps2.h"
 #include "uart.h"
-#include "util.h"
 #include "ps2_device.h"
 
 static volatile uint8_t PS2_device_holdoff_count;
