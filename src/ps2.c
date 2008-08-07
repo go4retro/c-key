@@ -22,7 +22,6 @@
 
 #include <inttypes.h>
 #include <avr/io.h>
-#include <avr/signal.h>
 #include <avr/interrupt.h>
 #include "usart.h"
 #include "util.h"
@@ -54,25 +53,7 @@ void PS2_clear_buffers(void) {
   PS2_RxTail=0;
 }
 
-void PS2_init(uint8_t mode) {
-  PS2_clear_buffers();
-  PS2_Mode=mode;
-  PS2_LEDs=0;
-  PS2_CodeSet=2;
-  PS2_debug=FALSE;
-  
-	PS2_set_CLK();
-	PS2_set_DATA();
-  
-  PS2_State=PS2_ST_IDLE;
-  if(PS2_Mode==PS2_MODE_DEVICE) {
-    PS2_device_init();
-  } else {
-    PS2_host_init();
-  }
-}
-
-inline uint8_t PS2_set_CLK() {
+uint8_t PS2_set_CLK() {
 	// set pin HI
 	PS2_PORT_CLK_OUT |= ( PS2_PIN_CLK);
 	// set to input (1 above brings pull up resistor online.)
@@ -80,36 +61,36 @@ inline uint8_t PS2_set_CLK() {
   return PS2_read_CLK();
 }
 
-inline void PS2_clear_CLK() {
+void PS2_clear_CLK() {
 	// set to putput
 	PS2_PORT_DDR_CLK |= (PS2_PIN_CLK);
 	// bring pin LO
 	PS2_PORT_CLK_OUT &= (uint8_t)~( PS2_PIN_CLK);
 }
 
-inline uint8_t PS2_read_CLK() {
+uint8_t PS2_read_CLK() {
 	return (PS2_PORT_CLK_IN & (PS2_PIN_CLK));
 }
 
-inline void PS2_set_DATA() {
+void PS2_set_DATA() {
 	// set pin HI
 	PS2_PORT_DATA_OUT |= ( PS2_PIN_DATA);
 	// set to input (1 above brings pull up resistor online.)
 	PS2_PORT_DDR_DATA &= (uint8_t)~(PS2_PIN_DATA);
 }
 
-inline void PS2_clear_DATA() {
+void PS2_clear_DATA() {
 	// set to putput
 	PS2_PORT_DDR_DATA |= (PS2_PIN_DATA);
 	// bring pin LO
 	PS2_PORT_DATA_OUT &= (uint8_t)~( PS2_PIN_DATA);
 }
 
-inline uint8_t PS2_read_DATA() {
+uint8_t PS2_read_DATA() {
 	return (PS2_PORT_DATA_IN & (PS2_PIN_DATA));
 }
 
-inline void PS2_enable_IRQ_CLK_Rise() {
+void PS2_enable_IRQ_CLK_Rise() {
 	//GICR &= ~(1 << INT1);
 	GIFR |= (1<<INTF1);
 	// rising edge
@@ -118,7 +99,7 @@ inline void PS2_enable_IRQ_CLK_Rise() {
 	GICR |= (1 << INT1);
 }
 
-inline void PS2_enable_IRQ_CLK_Fall() {
+void PS2_enable_IRQ_CLK_Fall() {
 	//GICR &= ~(1 << INT1);
 	GIFR |= (1<<INTF1);
 	// rising edge
@@ -128,7 +109,7 @@ inline void PS2_enable_IRQ_CLK_Fall() {
 	GICR |= (1 << INT1);
 }
 
-inline void PS2_disable_IRQ_CLK() {
+void PS2_disable_IRQ_CLK() {
 	GICR &= (uint8_t)~(1 << INT1);
 }
 
@@ -146,7 +127,7 @@ void PS2_delay(uint16_t ms) {
   TCCR=0;
 }
 
-inline void PS2_enable_IRQ_timer0(uint8_t us) {
+void PS2_enable_IRQ_timer0(uint8_t us) {
 	//TCCR0 &=~(1<<CS01);
 	//TIMSK &= ~(1<<OCIE0);
 	TIFR |= TIFR_DATA;
@@ -163,21 +144,39 @@ inline void PS2_enable_IRQ_timer0(uint8_t us) {
   TCCR =TCCR_DATA;
 }
 
-inline void PS2_disable_IRQ_timer0() {
+void PS2_disable_IRQ_timer0() {
 	// turn off timer
   TCCR =0;
 	TIMSK &=(uint8_t)~TIMSK_DATA;
 }
 
-inline uint8_t PS2_get_state(void) {
+void PS2_init(uint8_t mode) {
+  PS2_clear_buffers();
+  PS2_Mode=mode;
+  PS2_LEDs=0;
+  PS2_CodeSet=2;
+  PS2_debug=FALSE;
+  
+  PS2_set_CLK();
+  PS2_set_DATA();
+  
+  PS2_State=PS2_ST_IDLE;
+  if(PS2_Mode==PS2_MODE_DEVICE) {
+    PS2_device_init();
+  } else {
+    PS2_host_init();
+  }
+}
+
+uint8_t PS2_get_state(void) {
   return PS2_State;
 }
 
-inline void PS2_set_state(uint8_t state) {
+void PS2_set_state(uint8_t state) {
   PS2_State=state;
 }
 
-inline uint8_t PS2_get_count(void) {
+uint8_t PS2_get_count(void) {
   return PS2_Bit_Count;
 }
 

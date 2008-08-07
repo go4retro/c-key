@@ -63,7 +63,7 @@ void PS2_device_init(void) {
   //}
 }
 
-inline void PS2_device_trigger_send(void) {
+void PS2_device_trigger_send(void) {
   // start clocking.
   // wait a half cycle
   //debug2('s');

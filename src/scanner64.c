@@ -18,7 +18,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include <avr/io.h>
-#include <avr/signal.h>
 #include <avr/interrupt.h>
 #include <inttypes.h>
 #include <avr/pgmspace.h>
@@ -313,7 +312,7 @@ void do_joy(uint8_t *joy, uint8_t data, uint8_t map[8],uint8_t table[9][2]) {
   }
 }
 
-inline void parse_key(uint8_t data) {
+void parse_key(uint8_t data) {
   uint8_t key;
   uint8_t state=(data & KB_KEY_UP?FALSE:TRUE);
   uint8_t sh=(meta&SCAN_FLAG_SHIFT?1:0);

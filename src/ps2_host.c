@@ -36,7 +36,7 @@ void PS2_host_trigger_send(void) {
   PS2_enable_IRQ_timer0(100);
 }
 
-inline void PS2_host_check_for_data(void) {
+void PS2_host_check_for_data(void) {
     if(PS2_data_to_send() != 0) {
       //debug2('d');
       PS2_host_trigger_send();
@@ -48,7 +48,7 @@ inline void PS2_host_check_for_data(void) {
     }
 }
 
-inline void PS2_host_CLK() {
+void PS2_host_CLK() {
   switch(PS2_get_state()) {
     case PS2_ST_WAIT_RESPONSE:
     case PS2_ST_IDLE:
