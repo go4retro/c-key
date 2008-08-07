@@ -22,6 +22,7 @@
 #
 # This file is included in the main Makefile and also parsed
 # into autoconf.h.
+# This system based on sd2iec Makefile by Ingo Korb
 
 # MCU to compile for
 CONFIG_MCU=atmega162
@@ -32,7 +33,7 @@ CONFIG_MCU=atmega162
 # (known troublemakers: binutils 2.17, 2.18 seems fine)
 CONFIG_LINKER_RELAX=n
 
-# MCU frequency in Hz - the fastloader code is hardcoded for 8MHz
+# MCU frequency in Hz
 CONFIG_MCU_FREQ=14745600
 
 # Add a bootloader signature
@@ -46,20 +47,16 @@ CONFIG_BOOT_DEVID=0x49454321
 CONFIG_UART_DEBUG=n
 
 # Baud rate of the UART, not used if CONFIG_UART_DEBUG is disabled
-CONFIG_UART_BAUDRATE=19200
+CONFIG_UART_BAUDRATE=115200
 
 # log2 of the UART buffer size, i.e. 6 for 64, 7 for 128, 8 for 256 etc.
 CONFIG_UART_BUF_SHIFT=6
 
 # Select which hardware to compile for
 # Valid values:
-#   1 - custom configuration in config.h
-#   2 - Shadowolf MMC2IEC PCBs version 1.x
-#   3 - original MMC2IEC
-#   4 - uIEC
-#   5 - Shadowolf sd2iec PCBs version 1.x
-#   6 - NKC-modified MMC2IEC
-CONFIG_HARDWARE_VARIANT=1
+#   1 - v2 Board
+#   2 - v3 Board
+CONFIG_HARDWARE_VARIANT=2
 CONFIG_HARDWARE_NAME=C=Key-example
 
 # Track the stack size
