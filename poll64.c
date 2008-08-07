@@ -22,12 +22,13 @@
 #include <inttypes.h>
 #include <avr/pgmspace.h>
 #include <avr/eeprom.h>
-#include "ps2.h"
-#include "util.h"
-#include "switches.h"
-#include "poll.h"
-#include "poll64.h"
 #include "led.h"
+#include "poll.h"
+#include "ps2.h"
+#include "switches.h"
+#include "uart.h"
+#include "util.h"
+#include "poll64.h"
 
 static prog_uint8_t normal[0x84] =  { POLL_CBM_KEY_UNMAPPED,POLL_CBM_KEY_SPECIAL+41,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+0,POLL_CBM_KEY_SPECIAL+1,POLL_CBM_KEY_SPECIAL+2,POLL_CBM_KEY_SPECIAL+3,POLL_CBM_KEY_SPECIAL+44
                                   ,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+42,POLL_CBM_KEY_SPECIAL+4,POLL_CBM_KEY_SPECIAL+5,POLL_CBM_KEY_SPECIAL+6,POLL_CBM_KEY_SPECIAL+40,POLL_C64_KEY_BACKARROW,POLL_CBM_KEY_NONE
@@ -284,7 +285,7 @@ static void delay_jiffy(void) {
 void set_switch(uint8_t sw, uint8_t state) {
   if(debug) {
     debug(state?'d':'u');
-    printHex(sw);
+    uart_puthex(sw);
   }
   switch(sw) {
     case POLL_C64_PKEY_RESTORE:

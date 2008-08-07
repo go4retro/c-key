@@ -19,15 +19,7 @@
 */
 #include <inttypes.h>
 #include <avr/eeprom.h>
-#include "usart.h"
 #include "util.h"
-
-static volatile unsigned char hex[]="0123456789ABCDEF";
-
-void printHex(unsigned char b) {
-	debug(hex[b >> 4]);
-	debug(hex[b & 15]);
-}
 
 void update_eeprom(void* address,uint8_t data) {
   uint8_t tmp;

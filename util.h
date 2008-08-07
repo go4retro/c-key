@@ -19,14 +19,13 @@
 */
 #ifndef UTIL_H
 #define UTIL_H 1
-#include "usart.h"
 
 #ifndef TRUE
 #define TRUE	1
 #define FALSE	0
 #endif
 
-#define debug(x) USART0_Transmit(x)
+#define debug(x) uart_putc(x)
 
 // a= DDR, b= PORT, C = PIN#
 #define PIN_SET_HIZ(a,b,c) { a&=(uint8_t)~(1<<c) ; b|=(1<<c); } 

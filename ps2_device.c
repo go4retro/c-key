@@ -18,8 +18,9 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include <inttypes.h>
-#include "util.h"
 #include "ps2.h"
+#include "uart.h"
+#include "util.h"
 #include "ps2_device.h"
 
 static volatile uint8_t PS2_device_holdoff_count;
@@ -115,7 +116,7 @@ void PS2_device_CLK(void) {
       break;
     default:
       debug('&');
-      printHex(PS2_get_state());
+      uart_puthex(PS2_get_state());
       break;
   }
 }
@@ -282,7 +283,7 @@ void PS2_device_Timer(void) {
       break;
     default:
       debug('#');
-      printHex(PS2_get_state());
+      uart_puthex(PS2_get_state());
       PS2_disable_IRQ_timer0();
       break;
   } 

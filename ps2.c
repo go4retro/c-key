@@ -23,11 +23,11 @@
 #include <inttypes.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include "usart.h"
-#include "util.h"
-#include "ps2.h"
 #include "ps2_device.h"
 #include "ps2_host.h"
+#include "uart.h"
+#include "util.h"
+#include "ps2.h"
 
 static unsigned char PS2_RxBuf[PS2_RX_BUFFER_SIZE];
 static volatile uint8_t PS2_RxHead;
@@ -203,7 +203,7 @@ void PS2_send( uint8_t data ) {
     ;
   }
   
-  //printHex(data);
+  //uart_puthex(data);
   // Store data in buffer
 	PS2_TxBuf[tmphead] = data;
   // Store new index
@@ -239,7 +239,7 @@ void PS2_write_byte(void) {
 
   if(PS2_debug) {
     debug('i');
-    printHex(PS2_Byte);
+    uart_puthex(PS2_Byte);
   }
   PS2_RxBuf[tmp] = PS2_Byte; /* Store received data in buffer */
 }
@@ -250,7 +250,7 @@ void PS2_read_byte(void) {
   PS2_Byte = PS2_TxBuf[( PS2_TxTail + 1 ) & PS2_TX_BUFFER_MASK];  /* Start transmition */
   if(PS2_debug) {
     debug('o');
-    printHex(PS2_Byte);
+    uart_puthex(PS2_Byte);
   }
 }
 
