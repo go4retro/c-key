@@ -19,7 +19,7 @@
 */
 #include <inttypes.h>
 #include <avr/eeprom.h>
-#include "util.h"
+#include "eeprom.h"
 
 void update_eeprom(void* address,uint8_t data) {
   uint8_t tmp;

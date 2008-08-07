@@ -32,8 +32,5 @@
 #define PIN_SET_LOW(a,b,c) { a|=(1<<c) ; b&=(uint8_t)~(1<<c); } 
 #define PIN_SET_HI(a,b,c) { a|=(1<<c) ; b|=(1<<c); } 
 
-void printHex(unsigned char b);
-void update_eeprom(void* address,uint8_t data);
-
 #endif
 

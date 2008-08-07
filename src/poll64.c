@@ -22,6 +22,8 @@
 #include <inttypes.h>
 #include <avr/pgmspace.h>
 #include <avr/eeprom.h>
+#include "config.h"
+#include "eeprom.h"
 #include "led.h"
 #include "poll.h"
 #include "ps2.h"

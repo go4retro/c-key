@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <inttypes.h>
+#include "config.h"
 #include "util.h"
 #include "switches.h"
 

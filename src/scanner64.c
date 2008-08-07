@@ -22,7 +22,9 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 #include <avr/eeprom.h>
+#include "config.h"
 #include "kb.h"
+#include "eeprom.h"
 #include "led.h"
 #include "ps2.h"
 #include "scanner.h"

@@ -22,6 +22,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
+#include "config.h"
 #include "uart.h"
 
 static int ioputc(char c, FILE *stream);

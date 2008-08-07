@@ -23,6 +23,7 @@
 #include <inttypes.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include "config.h"
 #include "ps2_device.h"
 #include "ps2_host.h"
 #include "uart.h"

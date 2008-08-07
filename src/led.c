@@ -19,6 +19,7 @@
 */
 #include <avr/io.h>
 #include <inttypes.h>
+#include "config.h"
 #include "led.h"
 #include "util.h"
 
