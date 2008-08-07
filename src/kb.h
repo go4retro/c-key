@@ -20,51 +20,28 @@
 #ifndef KB_H
 #define KB_H 1
 
-#define PORT_KEYS 1
-
-#ifdef REV3
-#define KB_PORT_ROW_LOW_OUT   PORTC
-#define KB_PORT_ROW_LOW_IN    PINC
-#define KB_DDR_ROW_LOW        DDRC
-#define KB_PORT_COL_OUT       PORTA
-#define KB_PORT_COL_IN        PINA
-#define KB_DDR_COL            DDRA
-#else
-#define KB_PORT_ROW_LOW_OUT   PORTA
-#define KB_PORT_ROW_LOW_IN    PINA
-#define KB_DDR_ROW_LOW        DDRA
-#define KB_PORT_COL_OUT       PORTC
-#define KB_PORT_COL_IN        PINC
-#define KB_DDR_COL            DDRC
-#endif
-#define KB_PORT_ROW_HIGH_OUT  PORTB
-#define KB_PORT_ROW_HIGH_IN   PINB
-#define KB_DDR_ROW_HIGH       DDRB
-
 #define KB_ST_PREP            1
 #define KB_ST_READ            2
-#ifdef PORT_KEYS
 #define KB_ST_READ_PORTS      3
+
+#define KB_KEY_UP             0x80
+
+#define KB_NO_REPEAT          0xff
+
+#define KB_RX_BUFFER_SIZE     16     /* 2,4,8,16,32,64,128 or 256 bytes */
+#define KB_RX_BUFFER_MASK     (KB_RX_BUFFER_SIZE - 1)
+#if (KB_RX_BUFFER_SIZE & KB_RX_BUFFER_MASK)
+#  error KB RX buffer size is not a power of 2
 #endif
 
-#define KB_KEY_UP         0x80
-
-#define KB_NO_REPEAT      0xff
-
-#define KB_RX_BUFFER_SIZE 16     /* 2,4,8,16,32,64,128 or 256 bytes */
-#define KB_RX_BUFFER_MASK ( KB_RX_BUFFER_SIZE - 1 )
-#if ( KB_RX_BUFFER_SIZE & KB_RX_BUFFER_MASK )
-	#error KB RX buffer size is not a power of 2
-#endif
-
-void KB_init(void);
-void KB_set_repeat_delay(unsigned int ms);
-void KB_set_repeat_period(unsigned int period);
-void KB_set_repeat_code(uint8_t code);
-unsigned char KB_get_repeat_code(void);
-uint8_t KB_data_available( void );
-unsigned char KB_recv( void );
-void KB_scan(void);
+void kb_init(void);
+void kb_set_repeat_delay(uint16_t ms);
+void kb_set_repeat_period(uint16_t period);
+void kb_set_repeat_code(uint8_t code);
+uint8_t kb_get_repeat_code(void);
+uint8_t kb_data_available( void );
+uint8_t kb_recv( void );
+void kb_scan(void);
 
 #endif
 

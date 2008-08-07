@@ -149,13 +149,9 @@ static uint8_t led_state;
 
 void scan_init(void) {
   // init keyboard matrix scanning engine
-  KB_init();
+  kb_init();
   SW_init(SW_TYPE_INPUT,(1<<SW_RESTORE) | (1<<SW_CAPSENSE) | (1<<SW_4080));
   LED_init(LED_PIN_7);
-  //meta=SCAN_FLAG_NONE;
-  //joy0=POLL_JOY_NONE;
-  //joy1=POLL_JOY_NONE;
-
   
   // initially, load defaults from EEPROM
   while(!eeprom_is_ready());
@@ -170,7 +166,7 @@ void scan_init(void) {
 }
 
 void scan_irq(void) {
-  KB_scan();
+  kb_scan();
   SW_scan();
   led_divider++;
   if(led_divider==SCAN_LED_IRQ_DIVIDER) {
@@ -294,7 +290,7 @@ void do_joy(uint8_t *joy, uint8_t data, uint8_t map[8],uint8_t table[9][2]) {
       i=get_joy_direction(joy);
     }
     if(i<9) {
-      KB_set_repeat_code(KB_NO_REPEAT);
+      kb_set_repeat_code(KB_NO_REPEAT);
       send_key_code(pgm_read_byte(&table[i][0]),pgm_read_byte(&table[i][1]),FALSE);
     }
     (*joy)&=(uint8_t)~new;
@@ -309,7 +305,7 @@ void do_joy(uint8_t *joy, uint8_t data, uint8_t map[8],uint8_t table[9][2]) {
     }
     if(i<9) {
       send_key_code(pgm_read_byte(&table[i][0]),pgm_read_byte(&table[i][1]),TRUE);
-      KB_set_repeat_code(data);
+      kb_set_repeat_code(data);
     }
   }
 }
@@ -335,7 +331,7 @@ void parse_key(uint8_t data) {
     }
     // if we pressed a key, make it the new repeat key.
     if(state)
-      KB_set_repeat_code(code);
+      kb_set_repeat_code(code);
   } else if(code > 0x57 && code < 0x5d) {
     // joy0, when JP4 is set to scan.
     do_joy(&joy0,data,joy_table[0],joy_mapping[0]);
@@ -362,8 +358,8 @@ void scan(void) {
         case PS2_CMD_SET_RATE:
           PS2_send(PS2_CMD_ACK);
           data=PS2_recv();
-          KB_set_repeat_delay(PS2_get_typematic_delay(data));
-          KB_set_repeat_period(PS2_get_typematic_period(data));
+          kb_set_repeat_delay(PS2_get_typematic_delay(data));
+          kb_set_repeat_period(PS2_get_typematic_period(data));
           break;
         case PS2_CMD_LEDS:
           PS2_send(PS2_CMD_ACK);
@@ -387,8 +383,8 @@ void scan(void) {
           break;
       }
     }
-    if(KB_data_available()) {
-      data = KB_recv();
+    if(kb_data_available()) {
+      data = kb_recv();
       if(debug) {
         debug('k');
         uart_puthex(data);
@@ -409,7 +405,7 @@ void scan(void) {
           parse_key(KB_KEY_UP | SCAN_C64_KEY_CMDR);
           parse_key(KB_KEY_UP | SCAN_C64_KEY_CTRL);
           parse_key(KB_KEY_UP | SCAN_C64_KEY_DEL);
-          KB_set_repeat_code(KB_NO_REPEAT);
+          kb_set_repeat_code(KB_NO_REPEAT);
           LED_blink(LED_PIN_7,10,LED_FLAG_NONE);
         } else {
           LED_blink(LED_PIN_7,10,(led_state&PS2_LED_CAPS_LOCK?LED_FLAG_NONE:LED_FLAG_END_ON));
@@ -440,8 +436,8 @@ void scan(void) {
       } else {
         parse_key(data);
         // if KEY_UP AND data is the key repeating, stop.
-        if((data & KB_KEY_UP) && (data & 0x7f) == KB_get_repeat_code()) {
-          KB_set_repeat_code(KB_NO_REPEAT);
+        if((data & KB_KEY_UP) && (data & 0x7f) == kb_get_repeat_code()) {
+          kb_set_repeat_code(KB_NO_REPEAT);
         }
       }
     }
