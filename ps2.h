@@ -272,3 +272,4 @@ unsigned int PS2_get_typematic_period(uint8_t rate);
 void PS2_set_debug(uint8_t b);
 
 #endif
+

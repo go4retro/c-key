@@ -18,7 +18,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include <avr/io.h>
-#include <avr/signal.h>
 #include <avr/interrupt.h>
 #include <inttypes.h>
 #include <avr/pgmspace.h>
@@ -270,7 +269,7 @@ void poll_irq(void) {
   }
 }
 
-inline void delay_jiffy(void) {
+static void delay_jiffy(void) {
   uint8_t i=TCNT2-1;
   // 1/60 second delay for funky shifting settling.
   //TCNT2=0;
@@ -307,7 +306,7 @@ void set_switch(uint8_t sw, uint8_t state) {
   }
 }
 
-inline void reset_shift_override(uint8_t sw, uint8_t state) {
+static void reset_shift_override(uint8_t sw, uint8_t state) {
   // if it is not a repeat, not a meta key, then reset.
   if(shift_override 
      && ((sw != POLL_C64_KEY_LSHIFT  // if it is a shift, keep override
@@ -394,20 +393,20 @@ void reset_matrix(void) {
   set_switch(POLL_C128_PKEY_4080,sw_state&(1<<SW_4080));
 }
 
-inline void set_LED(uint8_t led) {
+static void set_LED(uint8_t led) {
   //debug2('L');
   led_state|=led;
   PS2_send(PS2_CMD_LEDS);
   PS2_send(led_state);
 }
 
-inline void clear_LED(uint8_t led) {
+static void clear_LED(uint8_t led) {
   led_state&=(uint8_t)~led;
   PS2_send(PS2_CMD_LEDS);
   PS2_send(led_state);
 }
 
-inline void toggle_num_lock(void) {
+static void toggle_num_lock(void) {
   if(led_state&PS2_LED_NUM_LOCK)
     clear_LED(PS2_LED_NUM_LOCK);
   else
@@ -443,7 +442,7 @@ void toggle_caps_lock_key(uint8_t state) {
   }
 }
 
-inline void init_keyboard(void) {
+static void init_keyboard(void) {
   meta=0;
   config=FALSE;
   shift_override=FALSE;
@@ -483,7 +482,7 @@ void poll_init(void) {
   
 }
 
-inline void map_positional_c64(uint8_t sh, uint8_t code, uint8_t state) {
+static void map_positional_c64(uint8_t sh, uint8_t code, uint8_t state) {
   // TODO I really would like to get rid of these functions.
   switch(code) {
     case 0x80| PS2_KEY_PAUSE:
@@ -538,7 +537,7 @@ inline void map_positional_c64(uint8_t sh, uint8_t code, uint8_t state) {
   }
 }
 
-inline void map_positional_c128(uint8_t sh, uint8_t code, uint8_t state) {
+static void map_positional_c128(uint8_t sh, uint8_t code, uint8_t state) {
   // TODO I really would like to get rid of these functions.
   switch(code) {
     case 0x80| PS2_KEY_PAUSE:
@@ -600,7 +599,7 @@ inline void map_positional_c128(uint8_t sh, uint8_t code, uint8_t state) {
   }
 }
 
-inline void map_symbolic_c64(uint8_t sh, uint8_t code, uint8_t state) {
+static void map_symbolic_c64(uint8_t sh, uint8_t code, uint8_t state) {
   // TODO I really would like to get rid of these functions.
   switch(code) {
     case 0x80| PS2_KEY_PAUSE:
@@ -650,7 +649,7 @@ inline void map_symbolic_c64(uint8_t sh, uint8_t code, uint8_t state) {
    }
 }
 
-inline void map_symbolic_c128(uint8_t sh, uint8_t code, uint8_t state) {
+static void map_symbolic_c128(uint8_t sh, uint8_t code, uint8_t state) {
   // TODO I really would like to get rid of these functions.
   switch(code) {
     case 0x80| PS2_KEY_PAUSE:
@@ -712,11 +711,11 @@ inline void map_symbolic_c128(uint8_t sh, uint8_t code, uint8_t state) {
   }
 }
 
-inline void remap_personal(uint8_t map, uint8_t* shift, uint8_t* code) {
+static void remap_personal(uint8_t map, uint8_t* shift, uint8_t* code) {
   // this is where we'd put the user's overrides...
 }
 
-inline void remap_keypad(uint8_t* sh,uint8_t* code) {
+static void remap_keypad(uint8_t* sh,uint8_t* code) {
   if(!(led_state & PS2_LED_NUM_LOCK)) {
     // mappings for cursor and paging keys.
     switch(*code) {
@@ -738,7 +737,7 @@ inline void remap_keypad(uint8_t* sh,uint8_t* code) {
   }
 }
 
-inline void map_key(uint8_t sh, uint8_t code,uint8_t state) {
+static void map_key(uint8_t sh, uint8_t code,uint8_t state) {
   uint8_t map=POLL_CBM_KEY_UNMAPPED;
   
   if(!state && code==PS2_KEY_NUM_LOCK) {
@@ -778,7 +777,7 @@ inline void map_key(uint8_t sh, uint8_t code,uint8_t state) {
   }
 }
 
-inline void set_options(uint8_t code, uint8_t state) {
+static void set_options(uint8_t code, uint8_t state) {
   if(state) {
     switch(code) {
       case PS2_KEY_1:
