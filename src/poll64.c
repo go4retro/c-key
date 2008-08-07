@@ -22,6 +22,7 @@
 #include <inttypes.h>
 #include <avr/pgmspace.h>
 #include <avr/eeprom.h>
+#include <util/delay.h>
 #include "config.h"
 #include "eeprom.h"
 #include "led.h"
@@ -29,7 +30,6 @@
 #include "ps2.h"
 #include "switches.h"
 #include "uart.h"
-#include "util.h"
 #include "poll64.h"
 
 static prog_uint8_t normal[0x84] =  { POLL_CBM_KEY_UNMAPPED,POLL_CBM_KEY_SPECIAL+41,POLL_CBM_KEY_NONE,POLL_CBM_KEY_SPECIAL+0,POLL_CBM_KEY_SPECIAL+1,POLL_CBM_KEY_SPECIAL+2,POLL_CBM_KEY_SPECIAL+3,POLL_CBM_KEY_SPECIAL+44
@@ -457,7 +457,7 @@ static void init_keyboard(void) {
 
 void poll_init(void) {
   LED_init(LED_PIN_7);
-  PIN_SET_HIZ(DDRD,PORTD,PIN5);
+  RESET_INIT();
   XPT_PORT_STROBE_OUT&=(uint8_t)~XPT_PIN_STROBE;
   XPT_DDR_STROBE|=XPT_PIN_STROBE;
   XPT_DDR_DATA=0xff;
@@ -834,10 +834,9 @@ void poll_parse_key(uint8_t code, uint8_t state) {
     // bring RESET line low
     //debug2('^');
     // repeat this a few times so the pulse will be long enough to trigger the NMOS ICs.
-    PIN_SET_LOW(DDRD,PORTD,PIN5);
-    PIN_SET_LOW(DDRD,PORTD,PIN5);
-    PIN_SET_LOW(DDRD,PORTD,PIN5);
-    PIN_SET_HIZ(DDRD,PORTD,PIN5);
+    RESET_ON();
+    _delay_us(2);
+    RESET_OFF();
     //goto *0x0000;
   } else if((meta&POLL_FLAG_CTRL_ALT)==POLL_FLAG_CTRL_ALT && code==PS2_KEY_BS) {
     // CTRL/ALT/Backspace.

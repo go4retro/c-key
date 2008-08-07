@@ -30,7 +30,6 @@
 #include "scanner.h"
 #include "switches.h"
 #include "uart.h"
-#include "util.h"
 #include "scanner64.h"
 
 // TODO I need to clean up this code and make it more like poll64.c

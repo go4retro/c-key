@@ -27,7 +27,6 @@
 #include "ps2_device.h"
 #include "ps2_host.h"
 #include "uart.h"
-#include "util.h"
 #include "ps2.h"
 
 static unsigned char PS2_RxBuf[PS2_RX_BUFFER_SIZE];
@@ -373,11 +372,11 @@ void PS2_handle_cmds(uint8_t data) {
     }
 }
 
-unsigned int PS2_get_typematic_delay(uint8_t rate) {
+uint16_t PS2_get_typematic_delay(uint8_t rate) {
   return (((rate & 0x30) >> 5) + 1) * 250;
 }
 
-unsigned int PS2_get_typematic_period(uint8_t rate) {
+uint16_t PS2_get_typematic_period(uint8_t rate) {
   return ((8 + (rate & 0x07)) * (1 << ((rate & 0x18) >> 3)) << 2);
 }
 
