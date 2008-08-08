@@ -44,29 +44,29 @@ static volatile uint8_t uart0_txtail;
 #ifndef UART0_BAUDRATE
 void uart0_init( uint16_t baudrate ) {
   /* Set the baud rate */
-  UBRRH = (uint8_t) baudrate >> 8;         
-  UBRRL = (uint8_t) baudrate & 0xff;
+  UBRR0H = (uint8_t) baudrate >> 8;         
+  UBRR0L = (uint8_t) baudrate & 0xff;
 #else
 void uart0_init(void) {
   /* Set the baud rate */
-  UBRRH = (uint8_t) CALC_BPS(UART0_BAUDRATE) >> 8;         
-  UBRRL = (uint8_t) CALC_BPS(UART0_BAUDRATE) & 0xff;
+  UBRR0H = (uint8_t) CALC_BPS(UART0_BAUDRATE) >> 8;         
+  UBRR0L = (uint8_t) CALC_BPS(UART0_BAUDRATE) & 0xff;
 #endif
 	
 #ifdef UART_DOUBLE_SPEED
   /* double the speed of the serial port. */
-	UCSRA = (1<<U2X);
+	UCSR0A = (1<<U2X0);
 #endif
 	
 	/* Enable UART receiver and transmitter */
 #if UART0_RX_BUFFER_SIZE > 0 || UART0_TX_BUFFER_SIZE > 0
-	UCSRB = (0 
+	UCSR0B = (0 
 #  if UART0_RX_BUFFER_SIZE > 0
-	    | (1 << RXCIE)
-	    | (1 << RXEN)
+	    | (1 << RXCIE0)
+	    | (1 << RXEN0)
 #  endif
 #  if UART0_TX_BUFFER_SIZE > 0
-	    | (1 << TXEN)
+	    | (1 << TXEN0)
 #  endif	    
 	   ); 
 #endif
@@ -93,7 +93,7 @@ ISR(USART0_RXC_vect) {
 	uint8_t tmphead;
 	
 	/* Read the received data */
-	data = UDR;        
+	data = UDR0;        
 	
 	/* Calculate buffer index */
 	tmphead = ( uart0_rxhead + 1 ) & UART0_RX_BUFFER_MASK;
@@ -116,9 +116,9 @@ ISR(USART0_UDRE_vect) {
 		tmptail = ( uart0_txtail + 1 ) & UART0_TX_BUFFER_MASK;
 		uart0_txtail = tmptail;      /* Store new index */
 	
-		UDR = uart0_txbuf[tmptail];  /* Start transmition */
+		UDR0 = uart0_txbuf[tmptail];  /* Start transmition */
 	} else {
-		UCSRB &= ~(1<<UDRIE);         /* Disable UDRE interrupt */
+		UCSR0B &= ~(1<<UDRIE0);         /* Disable UDR0E interrupt */
 	}
 }
 #endif
@@ -135,8 +135,8 @@ uint8_t uart0_getc(void) {
 	
 	return uart0_rxbuf[tmptail];           /* Return data */
 #else
-  loop_until_bit_is_set(UCSRA,RXC);
-	return UDR;
+  loop_until_bit_is_set(UCSR0A,RXC0);
+	return UDR0;
 #endif
 }
 
@@ -144,16 +144,16 @@ void uart0_putc(uint8_t data) {
 #if UART0_TX_BUFFER_MASK > 0
 	uint8_t tmphead;
 	/* Calculate buffer index */
-	tmphead = ( uart0_txhead + 1 ) & UART0_TX_BUFFER_MASK; /* Wait for free space in buffer */
+	tmphead = (uart0_txhead + 1) & UART0_TX_BUFFER_MASK; /* Wait for free space in buffer */
 	while ( tmphead == uart0_txtail ) ;
 
 	uart0_txbuf[tmphead] = data;           /* Store data in buffer */
 	uart0_txhead = tmphead;                /* Store new index */
 
-	UCSRB |= (1<<UDRIE);                    /* Enable UDRE interrupt */
+	UCSR0B |= (1<<UDRIE0);                    /* Enable UDR0E interrupt */
 #else
-	// TODO should check for overflow here
-	UDR = data;
+  loop_until_bit_is_set(UCSR0A,UDRE0);
+	UDR0 = data;
 #endif
 }
 
@@ -161,7 +161,7 @@ uint8_t uart0_data_available(void) {
 #if UART0_RX_BUFFER_MASK > 0
 	return ( uart0_rxhead != uart0_rxtail ); /* Return 0 (FALSE) if the receive buffer is empty */
 #else
-	return ((UCSRA & RXC) != 0);
+	return ((UCSR0A & (1 << RXC0)) != 0);
 #endif
 }
 
