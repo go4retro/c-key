@@ -20,23 +20,15 @@
 #ifndef USART_H
 #define USART_H 1
 
-#ifdef UBRR0H
-
-#define UBRRH UBRR0H
-#define UBRRL UBRR0L
-#define UCSRA UCSR0A
-#define UCSRB UCSR0B
-#define UCSRC UCSR0C
-#define U2X U2X0
-#define TXEN TXEN0
-#define RXEN RXEN0
-#define RXCIE RXCIE0
-#define URSEL URSEL0
-#define UCSZ0 UCSZ01
-#define UCSZ1 UCSZ11
-#define UDR UDR0
-#define UDRIE UDRIE0
-
+#if defined __AVR_ATmega16__
+// for CPUs with 1 USART
+#define UCSR0A  UCSRA
+#define UDRE0   UDRE
+#define RXC0    RXC
+#define UBRR0H  UBRRH
+#define UBRR0L  UBRRL
+#define UCSR0B  UCSRB
+#define UCSR0C  UCSRC
 #endif
 
 #define UART0_RX_BUFFER_SIZE 128     /* 2,4,8,16,32,64,128 or 256 bytes */
