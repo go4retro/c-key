@@ -25,7 +25,7 @@
 #include "scanner.h"
 #include "uart.h"
 
-SIGNAL(SIG_OUTPUT_COMPARE2) {
+ISR(TIMER2_COMP_vect) {
   if(MODE_DETECT) {
     poll_irq();
   } else {
@@ -39,13 +39,13 @@ int main( void ) {
   poll_init();  // do it here to reset cross-point switch everytime.
   if(MODE_DETECT) {
     PS2_init(PS2_MODE_HOST);
-    debug('H');
+    uart_putc('H');
     //poll_init();
     sei();
     poll();
   } else {
     PS2_init(PS2_MODE_DEVICE);
-    debug('D');
+    uart_putc('D');
     scan_init();
     sei();
     scan();
