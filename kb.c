@@ -17,6 +17,8 @@
     along with C=Key; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+
+// TODO Allow users to mask off certain lines of the rows and columns as not used.
 #include <avr/io.h>
 #include <inttypes.h>
 #include "config.h"
@@ -36,7 +38,6 @@ static uint8_t          kb_port_save[2];
 
 static volatile uint8_t  kb_repeat_code;
 static volatile uint16_t kb_repeat_count;
-static volatile uint16_t kb_repeat_match;
 static volatile uint16_t kb_repeat_delay;
 static volatile uint16_t kb_repeat_period;
 static volatile uint8_t  kb_curr_value;
@@ -54,8 +55,6 @@ static void kb_store(uint8_t data) {
   kb_rxbuf[tmphead] = data; /* Store received data in buffer */
 }
 
-// TODO change old to ptr, so we can update it in here.
-// TO check new code and remove ifdef
 static void kb_decode(uint8_t new, uint8_t *old, uint8_t base) {
   uint8_t i, mask, result;
   // we have a key change.
@@ -78,7 +77,7 @@ static void kb_decode(uint8_t new, uint8_t *old, uint8_t base) {
     result = result >> 1;
     i++;
   }
-  result=new & mask;
+  result=(new & mask);
   i = 0;
   while(result) {
     // we have keys pressed.
@@ -102,10 +101,9 @@ void kb_scan(void) {
     case KB_ST_READ:
       in = kb_repeat_code;
       if(in != KB_NO_REPEAT) {
-        kb_repeat_count++;
-        if(kb_repeat_count >= kb_repeat_match) {
-          kb_repeat_count = 0;
-          kb_repeat_match = kb_repeat_period;
+        kb_repeat_count--;
+        if(!kb_repeat_count) {
+          kb_repeat_count = kb_repeat_period;
           kb_store(in);
         }
       }
@@ -180,8 +178,7 @@ void kb_init() {
 void kb_set_repeat_delay(uint16_t ms) {
   // 1800 ticks/sec, .5 ms per tick.
   kb_repeat_delay = (ms << 1);
-  kb_repeat_match = kb_repeat_delay;
-  kb_repeat_count = 0;
+  kb_repeat_count = kb_repeat_delay;
 }
 
 void kb_set_repeat_period(uint16_t period) {
@@ -190,9 +187,8 @@ void kb_set_repeat_period(uint16_t period) {
 
 void kb_set_repeat_code(uint8_t code) {
   if(code != kb_repeat_code) {
-    kb_repeat_count = 0;
+    kb_repeat_count = kb_repeat_delay;
     kb_repeat_code = code;
-    kb_repeat_match = kb_repeat_delay;
   }
 }
 
