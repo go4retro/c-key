@@ -6,6 +6,8 @@ MINOR = 7
 PATCHLEVEL = 2
 FIX = 1
 
+# Forces bootloader version to 0, comment out for release
+#PRERELEASE =
 
 #----------------------------------------------------------------------------
 # WinAVR Makefile Template written by Eric B. Weddington, Jörg Wunsch, et al.
@@ -71,67 +73,65 @@ endif
 include $(CONFIG)
 
 # Set MCU name and length of binary for bootloader
+# WARNING: Fuse settings not tested!
 MCU := $(CONFIG_MCU)
-ifeq ($(CONFIG_BOOTLOADER),y)
-  ifeq ($(MCU),atmega16)
-    BOOTLDRSIZE = 0x0400
-    BINARY_LENGTH = 0x3c00
-    EFUSE = 0xff
-    HFUSE = 0xd2
-    LFUSE = 0xfc
-  else ifeq ($(MCU),atmega162)
-    BOOTLDRSIZE = 0x0400
-    BINARY_LENGTH = 0x3c00
-    EFUSE = 0xff
-    HFUSE = 0xd2
-    LFUSE = 0xfc
-  else ifeq ($(MCU),atmega32)
-    BOOTLDRSIZE = 0x0800
-    BINARY_LENGTH = 0x7800
-    EFUSE = 0xff
-    HFUSE = 0xd2
-    LFUSE = 0xfc
-  else ifeq ($(MCU),atmega128)
-    BOOTLDRSIZE = 0x1000
-    BINARY_LENGTH = 0x1f000
-    EFUSE = 0xff
-    HFUSE = 0xd2
-    LFUSE = 0xfc
-  else ifeq ($(MCU),atmega1281)
-    BOOTLDRSIZE = 0x1000
-    BINARY_LENGTH = 0x1f000
-    BOOTLDRSIZE = 0x0800
-    EFUSE = 0xff
-    HFUSE = 0xd2
-    LFUSE = 0xfc
-  else ifeq ($(MCU),atmega2561)
-    BOOTLDRSIZE = 0x1000
-    BINARY_LENGTH = 0x3f000
-    EFUSE = 0xff
-    HFUSE = 0xd2
-    LFUSE = 0xfc
-  else ifeq ($(MCU),atmega644)
-    BOOTLDRSIZE = 0x1000
-    BINARY_LENGTH = 0xf000
-    EFUSE = 0xff
-    HFUSE = 0xd2
-    LFUSE = 0xfc
-  else ifeq ($(MCU),atmega644p)
-    BOOTLDRSIZE = 0x1000
-    BINARY_LENGTH = 0xf000
-    EFUSE = 0xff
-    HFUSE = 0xd2
-    LFUSE = 0xfc
-  else
+ifeq ($(MCU),atmega16)
+	BINARY_LENGTH = 0x3c00
+	EFUSE = 0xff
+	HFUSE = 0xd2
+	LFUSE = 0xfc
+else ifeq ($(MCU),atmega8)
+	BINARY_LENGTH = 0x1c00
+  HFUSE = 0xd1
+  LFUSE = 0xe4
+else ifeq ($(MCU),atmega88)
+  BINARY_LENGTH = 0x1c00
+  EFUSE = 0xe2
+  HFUSE = 0xd7
+  LFUSE = 0xe2
+else ifeq ($(MCU),atmega162)
+	BINARY_LENGTH = 0x3c00
+	EFUSE = 0xff
+	HFUSE = 0xd2
+	LFUSE = 0xfc
+else ifeq ($(MCU),atmega32)
+	BINARY_LENGTH = 0x7800
+	EFUSE = 0xff
+	HFUSE = 0xd2
+	LFUSE = 0xfc
+else ifeq ($(MCU),atmega128)
+  BINARY_LENGTH = 0x1f000
+  EFUSE = 0xff
+  HFUSE = 0xd2
+  LFUSE = 0xfc
+else ifeq ($(MCU),atmega1281)
+  BINARY_LENGTH = 0x1f000
+  EFUSE = 0xff
+  HFUSE = 0xd2
+  LFUSE = 0xfc
+else ifeq ($(MCU),atmega2561)
+  BINARY_LENGTH = 0x3f000
+  EFUSE = 0xfd
+  HFUSE = 0x93
+  LFUSE = 0xef
+else ifeq ($(MCU),atmega644)
+  BINARY_LENGTH = 0xf000
+  EFUSE = 0xfd
+  HFUSE = 0x91
+  LFUSE = 0xef
+else ifeq ($(MCU),atmega644p)
+  BINARY_LENGTH = 0xf000
+  EFUSE = 0xfd
+  HFUSE = 0x91
+  LFUSE = 0xef
+else
 .PHONY: nochip
 nochip:
 	@echo '=============================================================='
 	@echo 'No known target chip specified.'
 	@echo
-	@echo 'Please disable CONFIG_BOOTLOADER or add the size of the'
-	@echo 'binary to the Makefile.'
+	@echo 'Please edit the Makefile.'
 	@exit 1
-  endif
 endif
 
 # Directory for all source files
@@ -167,7 +167,7 @@ SRC = switches.c uart.c kb.c main.c ps2.c eeprom.c scanner64.c led.c ps2_device.
 ASRC =
 
 
-# Optimization level, can be [0, 1, 2, 3, s]. 
+# Optimization level, can be [0, 1, 2, 3, s].
 #     0 = turn off optimization. s = optimize for size.
 #     (Note: 3 is not always the best optimization level. See avr-libc FAQ.)
 # Use s -mcall-prologues when you really need size...
@@ -197,10 +197,14 @@ CSTANDARD = -std=gnu99
 
 
 # Place -D or -U options here
-CDEFS = -DF_CPU=$(CONFIG_MCU_FREQ)UL -D REV3
+CDEFS = -DF_CPU=$(CONFIG_MCU_FREQ)UL
 
 # Calculate bootloader version
-BOOT_VERSION = 0x$(MAJOR)$(MINOR)$(PATCHLEVEL)$(FIX)
+ifdef PRERELEASE
+BOOT_VERSION := 0
+else
+BOOT_VERSION := 0x$(MAJOR)$(MINOR)$(PATCHLEVEL)$(FIX)
+endif
 
 # Create a version number define
 ifdef PATCHLEVEL
@@ -208,9 +212,15 @@ ifdef FIX
 PROGRAMVERSION := $(MAJOR).$(MINOR).$(PATCHLEVEL).$(FIX)
 else
 PROGRAMVERSION := $(MAJOR).$(MINOR).$(PATCHLEVEL)
+BOOT_VERSION := $(BOOT_VERSION)0
 endif
 else
 PROGRAMVERSION := $(MAJOR).$(MINOR)
+BOOT_VERSION := $(BOOT_VERSION)00
+endif
+
+ifdef PRERELEASE
+PROGRAMVERSION := $(PROGRAMVERSION)$(PRERELEASE)
 endif
 
 LONGVERSION := -$(CONFIG_MCU:atmega%=m%)$(CONFIGSUFFIX)
@@ -220,6 +230,19 @@ CDEFS += -DVERSION=\"$(PROGRAMVERSION)\" -DLONGVERSION=\"$(LONGVERSION)\"
 # Place -I options here
 CINCS =
 
+
+# Define programs and commands.
+# CC must be defined here to generate the correct CFLAGS
+SHELL = sh
+CC = avr-gcc
+OBJCOPY = avr-objcopy
+OBJDUMP = avr-objdump
+SIZE = avr-size
+NM = avr-nm
+AVRDUDE = avrdude
+REMOVE = rm -f
+COPY = cp
+WINSHELL = cmd
 
 
 #---------------- Compiler Options ----------------
@@ -238,18 +261,38 @@ CFLAGS += -fpack-struct
 CFLAGS += -fshort-enums
 CFLAGS += -Wall
 CFLAGS += -Wstrict-prototypes
+# Add this if you want all warnings output as errors.
+#CFLAGS += -Werror
 #CFLAGS += -mshort-calls
 #CFLAGS += -fno-unit-at-a-time
 #CFLAGS += -Wundef
 #CFLAGS += -Wunreachable-code
 #CFLAGS += -Wsign-compare
-CFLAGS += -Werror
 CFLAGS += -Wa,-adhlns=$(OBJDIR)/$(*F).lst
+CFLAGS += -I$(OBJDIR)
 CFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
 CFLAGS += $(CSTANDARD)
+CFLAGS += -ffunction-sections
+CFLAGS += -fdata-sections
 #CFLAGS += -mtiny-stack
 #CFLAGS += -mno-interrupts
-CFLAGS += -I$(OBJDIR)
+#CFLAGS += -mcall-prologues
+
+# these are needed for GCC 4.3.2, which is more aggressive at inlining
+# gcc-4.2 knows one of those, but it tends to increase code size
+ifeq ($(shell $(CC) --version|gawk -f gcctest.awk),YES)
+CFLAGS += --param inline-call-cost=3
+CFLAGS += -fno-inline-small-functions
+CFLAGS += -fno-move-loop-invariants
+CFLAGS += -fno-split-wide-types
+
+# turn these on to keep the functions in the same order as in the source
+# this is only useful if you're looking at disassembly
+#CFLAGS += -fno-reorder-blocks
+#CFLAGS += -fno-reorder-blocks-and-partition
+#CFLAGS += -fno-reorder-functions
+#CFLAGS += -fno-toplevel-reorder
+endif
 
 ifeq ($(CONFIG_STACK_TRACKING),y)
   CFLAGS += -finstrument-functions
@@ -276,7 +319,7 @@ PRINTF_LIB_MIN = -Wl,-u,vfprintf -lprintf_min
 PRINTF_LIB_FLOAT = -Wl,-u,vfprintf -lprintf_flt
 
 # If this is left blank, then it will use the Standard printf version.
-PRINTF_LIB = 
+PRINTF_LIB =
 #PRINTF_LIB = $(PRINTF_LIB_MIN)
 #PRINTF_LIB = $(PRINTF_LIB_FLOAT)
 
@@ -288,7 +331,7 @@ SCANF_LIB_MIN = -Wl,-u,vfscanf -lscanf_min
 SCANF_LIB_FLOAT = -Wl,-u,vfscanf -lscanf_flt
 
 # If this is left blank, then it will use the Standard scanf version.
-SCANF_LIB = 
+SCANF_LIB =
 #SCANF_LIB = $(SCANF_LIB_MIN)
 #SCANF_LIB = $(SCANF_LIB_FLOAT)
 
@@ -326,31 +369,55 @@ LDFLAGS = -Wl,-Map=$(OBJDIR)/$(TARGET).map,--cref
 LDFLAGS += $(EXTMEMOPTS)
 LDFLAGS += $(patsubst %,-L%,$(EXTRALIBDIRS))
 LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
+LDFLAGS += -Wl,--gc-sections
 #LDFLAGS	+= -Wl,--section-start=.text=$(BOOTLOADERSTARTADR)
 #LDFLAGS += -T linker_script.x
 ifeq ($(CONFIG_LINKER_RELAX),y)
-  LDFLAGS += -Wl,-O9,-relax
+	LDFLAGS += -Wl,-O1,--relax
 endif
 
 
 
 #---------------- Programming Options (avrdude) ----------------
 
-# Programming hardware: alf avr910 avrisp bascom bsd 
+# Programming hardware: alf avr910 avrisp bascom bsd
 # dt006 pavr picoweb pony-stk200 sp12 stk200 stk500 stk500v2
 #
 # Type: avrdude -c ?
 # to get a full listing.
+# By default, use what is in .avrduderc
 #
-AVRDUDE_PROGRAMMER = stk200
+#AVRDUDE_PROGRAMMER = stk200
 
 # com1 = serial port. Use lpt1 to connect to parallel port.
-AVRDUDE_PORT = lpt1    # programmer connected to serial device
+#AVRDUDE_PORT = lpt1    # programmer connected to serial device
 
 AVRDUDE_WRITE_FLASH = -U flash:w:$(OBJDIR)/$(TARGET).hex
-#AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(OBJDIR)/$(TARGET).eep
+# AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(TARGET).eep
 
-AVRDUDE_WRITE_FUSES = -U efuse:w:$(EFUSE):m -U hfuse:w:$(HFUSE):m -U lfuse:w:$(LFUSE):m
+# Allow fuse overrides from the config file
+ifdef CONFIG_EFUSE
+  EFUSE := CONFIG_EFUSE
+endif
+ifdef CONFIG_HFUSE
+  HFUSE := CONFIG_HFUSE
+endif
+ifdef CONFIG_LFUSE
+  LFUSE := CONFIG_LFUSE
+endif
+
+# Calculate command line arguments for fuses
+AVRDUDE_WRITE_FUSES :=
+ifdef LFUSE
+  AVRDUDE_WRITE_FUSES += -U lfuse:w:$(LFUSE):m
+endif
+ifdef HFUSE
+  AVRDUDE_WRITE_FUSES += -U hfuse:w:$(HFUSE):m
+endif
+ifdef EFUSE
+  AVRDUDE_WRITE_FUSES += -U efuse:w:$(EFUSE):m
+endif
+
 
 # Uncomment the following if you want avrdude's erase cycle counter.
 # Note that this counter needs to be initialized first using -Yn,
@@ -362,11 +429,17 @@ AVRDUDE_WRITE_FUSES = -U efuse:w:$(EFUSE):m -U hfuse:w:$(HFUSE):m -U lfuse:w:$(L
 #AVRDUDE_NO_VERIFY = -V
 
 # Increase verbosity level.  Please use this when submitting bug
-# reports about avrdude. See <http://savannah.nongnu.org/projects/avrdude> 
+# reports about avrdude. See <http://savannah.nongnu.org/projects/avrdude>
 # to submit bug reports.
 #AVRDUDE_VERBOSE = -v -v
 
-AVRDUDE_FLAGS = -p $(MCU) -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER)
+ifdef AVRDUDE_PROGRAMMER
+  AVRDUDE_FLAGS = -c $(AVRDUDE_PROGRAMMER)
+endif
+ifdef AVRDUDE_PORT
+  AVRDUDE_FLAGS += -P $(AVRDUDE_PORT)
+endif
+AVRDUDE_FLAGS += -p $(MCU)
 AVRDUDE_FLAGS += $(AVRDUDE_NO_VERIFY)
 AVRDUDE_FLAGS += $(AVRDUDE_VERBOSE)
 AVRDUDE_FLAGS += $(AVRDUDE_ERASE_COUNTER)
@@ -396,28 +469,13 @@ JTAG_DEV = /dev/com1
 DEBUG_PORT = 4242
 
 # Debugging host used to communicate between GDB / avarice / simulavr, normally
-#     just set to localhost unless doing some sort of crazy debugging when 
+#     just set to localhost unless doing some sort of crazy debugging when
 #     avarice is running on a different computer.
 DEBUG_HOST = localhost
 
 
 
 #============================================================================
-
-
-# Define programs and commands.
-SHELL = sh
-CC = avr-gcc
-OBJCOPY = avr-objcopy
-OBJDUMP = avr-objdump
-SIZE = avr-size
-AR = avr-ar rcs
-NM = avr-nm
-AVRDUDE = avrdude
-REMOVE = rm -f
-REMOVEDIR = rm -rf
-COPY = cp
-WINSHELL = cmd
 
 
 # De-dupe the list of C source files
@@ -431,7 +489,7 @@ LST := $(patsubst %,$(OBJDIR)/%,$(CSRC:.c=.lst) $(ASRC:.S=.lst))
 
 
 # Compiler flags to generate dependency files.
-GENDEPFLAGS = -MD -MP -MF .dep/$(@F).d
+GENDEPFLAGS = -MMD -MP -MF .dep/$(@F).d
 
 
 # Combine all necessary flags and optional flags.
@@ -463,7 +521,7 @@ doxygen:
 	-rm -rf doxyinput
 	mkdir doxyinput
 	cp $(SRCDIR)/*.h $(SRCDIR)/*.c doxyinput
-	src2doxy.pl doxyinput/*.h doxyinput/*.c
+	./src2doxy.pl doxyinput/*.h doxyinput/*.c
 	doxygen doxygen.conf
 
 # Display size of file.
@@ -471,19 +529,18 @@ HEXSIZE = $(SIZE) --mcu=$(MCU) --target=$(FORMAT) $(OBJDIR)/$(TARGET).hex
 ELFSIZE = $(SIZE) -A $(OBJDIR)/$(TARGET).elf
 AVRMEM = avr-mem.sh $(TARGET).elf $(MCU)
 
-# Program the device.  
+# Program the device.
 program: $(OBJDIR)/$(TARGET).hex $(OBJDIR)/$(TARGET).eep
-	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
-	
-fuses: $(OBJDIR)/$(TARGET).hex $(OBJDIR)/$(TARGET).eep
-	$(AVRDUDE) $(AVRDUDE_FLAGS)  $(AVRDUDE_WRITE_FUSES) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
-  
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH)  $(AVRDUDE_WRITE_EEPROM)
 
+# Set fuses of the device
+fuses: $(CONFIG)
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FUSES)
 
 # Generate avr-gdb config/init file which does the following:
-#     define the reset signal, load the target file, connect to target, and set 
+#     define the reset signal, load the target file, connect to target, and set
 #     a breakpoint at main().
-gdb-config: 
+gdb-config:
 	@$(REMOVE) $(GDBINIT_FILE)
 	@echo define reset >> $(GDBINIT_FILE)
 	@echo SIGNAL SIGHUP >> $(GDBINIT_FILE)
@@ -541,8 +598,8 @@ $(OBJDIR)/%.bin: $(OBJDIR)/%.elf
 	$(Q)$(OBJCOPY) -O binary -R .eeprom $< $@
 	$(E) "  CRCGEN $@"
 	-$(Q)crcgen-new $@ $(BINARY_LENGTH) $(CONFIG_BOOT_DEVID) $(BOOT_VERSION)
-	$(E) "  COPY   $(CONFIG_HARDWARE_NAME)-bootloader-$(PROGRAMVERSION).bin"
-	$(Q)$(COPY) $@ $(OBJDIR)/$(CONFIG_HARDWARE_NAME)-bootloader-$(PROGRAMVERSION).bin
+	$(E) "  COPY   $(CONFIG_HARDWARE_NAME)-firmware-$(PROGRAMVERSION).bin"
+	$(Q)$(COPY) $@ $(OBJDIR)/$(CONFIG_HARDWARE_NAME)-firmware-$(PROGRAMVERSION).bin
 else
 $(OBJDIR)/%.bin: $(OBJDIR)/%.elf
 	$(E) "  BIN    $@"
@@ -582,7 +639,7 @@ $(OBJDIR)/%.elf: $(OBJ) | $(OBJDIR)
 # Compile: create object files from C source files.
 $(OBJDIR)/%.o : $(SRCDIR)/%.c | $(OBJDIR) $(OBJDIR)/autoconf.h
 	$(E) "  CC     $<"
-	$(Q)$(CC) -c $(ALL_CFLAGS) $< -o $@ 
+	$(Q)$(CC) -c $(ALL_CFLAGS) $< -o $@
 
 
 # Compile: create assembler files from C source files.
@@ -633,8 +690,6 @@ clean_list :
 # Include the dependency files.
 -include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 
-# Manual dependency for the assembler module
-$(OBJDIR)/fastloader-ll.o: $(SRCDIR)/config.h $(OBJDIR)/autoconf.h
 
 # Listing of phony targets.
 .PHONY : all begin finish end sizebefore sizeafter gccversion \

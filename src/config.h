@@ -67,8 +67,8 @@
 #endif
 
 #ifndef TRUE
-#define TRUE              1
 #define FALSE             0
+#define TRUE              (!FALSE)
 #endif
 
 #define KB_SCAN_PORTS     // scan the KB ports for joystick activity
