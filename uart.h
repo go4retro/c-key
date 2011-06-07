@@ -29,6 +29,14 @@
 #define UBRR0L  UBRRL
 #define UCSR0B  UCSRB
 #define UCSR0C  UCSRC
+#define UDR0    UDR
+#define UDRIE0  UDRIE
+#define RXCIE0  RXCIE
+#define RXEN0   RXEN
+#define TXEN0   TXEN
+#define USART0_RXC_vect USART_RXC_vect
+#define USART0_TXC_vect USART_TXC_vect
+#define USART0_UDRE_vect USART_UDRE_vect
 #endif
 
 #define UART0_RX_BUFFER_SIZE 128     /* 2,4,8,16,32,64,128 or 256 bytes */

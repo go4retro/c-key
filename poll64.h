@@ -33,7 +33,7 @@
 #define POLL_ST_GET_PAUSE_6   9
 #define POLL_ST_GET_PAUSE_7   10
 
-#ifdef REV3
+#if CONFIG_HARDWARE_VARIANT == 2
 #define POLL_C64_KEY_RUNSTOP     0x7A
 #define POLL_C64_KEY_LSHIFT      0x72
 #define POLL_C64_KEY_X           0x7E
