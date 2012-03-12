@@ -1,6 +1,6 @@
 /*
-    C=Key - Commodore <-> PS/2 Interface
-    Copyright Jim Brain and RETRO Innovations, 2004-2012
+    PS2Encoder - PS2 Keyboard to serial/parallel converter
+    Copyright Jim Brain and RETRO Innovations, 2008-2011
 
     This code is a modification of uart functions in sd2iec:
     Copyright (C) 2007,2008  Ingo Korb <ingo@akana.de>
@@ -83,7 +83,7 @@ ISR(USARTA_RXC_vect) {
 uint8_t uart0_data_available(void) {
 #if defined UART0_RX_BUFFER_SHIFT && UART0_RX_BUFFER_SHIFT > 0
   /* Return 0 (FALSE) if the receive buffer is empty */
-  return ( rx0_head != rx0_tail ); 
+  return ( rx0_head != rx0_tail );
 #else
   return ((UCSRAA & (1 << RXCA)) != 0);
 #endif
@@ -120,7 +120,7 @@ uint8_t uart0_getc(void) {
 uint8_t uart_getc(void) __attribute__ ((weak, alias("uart0_getc")));
 
 void uart0_flush(void) {
-#  if defined UART0_TX_BUFFER_SHIFT && UART0_TX_BUFFER_SHIFT > 0  
+#  if defined UART0_TX_BUFFER_SHIFT && UART0_TX_BUFFER_SHIFT > 0
   while (tx0_head != tx0_tail) ;
 #  endif
 }
@@ -153,7 +153,7 @@ void uart_config(uint16_t rate, uartlen_t length, uartpar_t parity, uartstop_t s
 
 void uart0_puthex(uint8_t hex) {
   uint8_t tmp = hex >> 4;
-  
+
   uart_putc(tmp>9?tmp - 10 + 'a':tmp + '0');
   tmp = hex & 0x0f;
   uart_putc(tmp>9?tmp - 10 + 'a':tmp + '0');
@@ -203,7 +203,7 @@ void uart_trace(void *ptr, uint16_t start, uint16_t len) __attribute__ ((weak, a
 
 
 static int ioputc(char c, FILE *stream) {
-  if (c == '\n') 
+  if (c == '\n')
     uart0_putc('\r');
   uart0_putc(c);
   return 0;
@@ -294,16 +294,18 @@ void uart_init(void) {
   /* double the speed of the serial port. */
   UCSRAA = (1<<U2X0);
 #    endif
-	
-	/* Enable UART receiver and transmitter */
-  UCSRAB = (0 
+
+  /* Enable UART receiver and transmitter */
+  UCSRAB = (0
 #    if defined UART0_RX_BUFFER_SHIFT && UART0_RX_BUFFER_SHIFT > 0
-	          | _BV(RXCIEA)
+            | _BV(RXCIEA)
 #    endif
-	          | _BV(RXENA)
-	          | _BV(TXENA)
-	         );
-	
+            | _BV(RXENA)
+            | _BV(TXENA)
+           );
+
+
+
   /* Flush buffers */
 #    if defined UART0_TX_BUFFER_SHIFT && UART0_TX_BUFFER_SHIFT > 0
   tx0_tail = 0;
@@ -323,15 +325,15 @@ void uart_init(void) {
   UBRRBH = CALC_BPS(UART1_BAUDRATE) >> 8;
   UBRRBL = CALC_BPS(UART1_BAUDRATE) & 0xff;
 
-	/* Enable UART receiver and transmitter */
-  UCSRBB = (0 
+  /* Enable UART receiver and transmitter */
+  UCSRBB = (0
 #    if defined UART1_RX_BUFFER_SHIFT && UART1_RX_BUFFER_SHIFT > 0
-	        | _BV(RXCIEB)
+          | _BV(RXCIEB)
 #    endif
-	        | _BV(RXENB)
-	        | _BV(TXENB)
-	       ); 
-	
+          | _BV(RXENB)
+          | _BV(TXENB)
+         );
+
   /* Flush buffers */
 #    if defined UART1_TX_BUFFER_SHIFT && UART1_TX_BUFFER_SHIFT > 0
   tx1_tail = 0;
