@@ -1,21 +1,22 @@
 /*
-    Copyright Jim Brain and Brain Innovations, 2004
-  
-    This file is part of C=Key.
+    C=Key - Commodore <-> PS/2 Keyboard Adapter
+    Copyright Jim Brain and RETRO Innovations, 2004-2011
 
-    C=Key is free software; you can redistribute it and/or modify
+    This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
     (at your option) any later version.
 
-    C=Key is distributed in the hope that it will be useful,
+    This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with C=Key; if not, write to the Free Software
+    along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    poll64.c: PS/2 Keyboard to CBM computer scanning routine
 */
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -399,14 +400,14 @@ void reset_matrix(void) {
 static void set_LED(uint8_t led) {
   //debug2('L');
   led_state|=led;
-  PS2_send(PS2_CMD_LEDS);
-  PS2_send(led_state);
+  ps2_putc(PS2_CMD_LEDS);
+  ps2_putc(led_state);
 }
 
 static void clear_LED(uint8_t led) {
   led_state&=(uint8_t)~led;
-  PS2_send(PS2_CMD_LEDS);
-  PS2_send(led_state);
+  ps2_putc(PS2_CMD_LEDS);
+  ps2_putc(led_state);
 }
 
 static void toggle_num_lock(void) {
@@ -451,8 +452,8 @@ static void init_keyboard(void) {
   shift_override=FALSE;
 
   // need to set KB LEDs to match internal state
-  PS2_send(PS2_CMD_LEDS);
-  PS2_send(led_state);
+  ps2_putc(PS2_CMD_LEDS);
+  ps2_putc(led_state);
 }
 
 void poll_init(void) {
@@ -800,7 +801,7 @@ static void set_options(uint8_t code, uint8_t state) {
         break;
       case PS2_KEY_EQUALS:
         debug=!debug;
-        PS2_set_debug(debug);
+        //PS2_set_debug(debug);
         break;
       case PS2_KEY_NUM_LOCK:
         toggle_num_lock();
@@ -878,13 +879,13 @@ void poll(void) {
   LED_blink(LED_PIN_7,layout+1,LED_FLAG_END_ON);
   
   for(;;) {
-    if(PS2_data_available() != 0) {
+    if(ps2_data_available() != 0) {
       // kb sent data...
-      key=PS2_recv();
-      if(key==PS2_CMD_BAT) {
+      key=ps2_getc();
+      if(key == PS2_CMD_BAT) {
         reset_matrix();
         init_keyboard();
-        state=PS2_ST_IDLE;
+        state = POLL_ST_IDLE;
       }
       switch(state) {
         case POLL_ST_IDLE:

@@ -1,21 +1,22 @@
 /*
-    Copyright Jim Brain and Brain Innovations, 2004
-  
-    This file is part of C=Key.
+    C=Key - Commodore <-> PS/2 Keyboard Adapter
+    Copyright Jim Brain and RETRO Innovations, 2004-2011
 
-    C=Key is free software; you can redistribute it and/or modify
+    This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
     (at your option) any later version.
 
-    C=Key is distributed in the hope that it will be useful,
+    This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with C=Key; if not, write to the Free Software
+    along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    scanner64.c: CBM keyboard to PS/2 machine scanning routine
 */
 #include <inttypes.h>
 #include <avr/io.h>
@@ -178,20 +179,20 @@ void scan_irq(void) {
 void check_override(void) {
   if(shift_override) {
     if((shift_override_state & SCAN_MAP_EXT) == SCAN_MAP_EXT)
-      PS2_send(PS2_KEY_EXT);
-    PS2_send(PS2_KEY_UP);
-    PS2_send(shift_override_key);
+      ps2_putc(PS2_KEY_EXT);
+    ps2_putc(PS2_KEY_UP);
+    ps2_putc(shift_override_key);
     
     if((shift_override_state & SCAN_MAP_SHIFT) == 0) {
       // we need to apply shifts now.
       if(meta&SCAN_FLAG_LSHIFT)
-        PS2_send(PS2_KEY_LSHIFT);
+        ps2_putc(PS2_KEY_LSHIFT);
       if(meta&SCAN_FLAG_RSHIFT)
-        PS2_send(PS2_KEY_RSHIFT);
+        ps2_putc(PS2_KEY_RSHIFT);
     } else {
       // let off shift key
-      PS2_send(PS2_KEY_UP);
-      PS2_send(PS2_KEY_LSHIFT);
+      ps2_putc(PS2_KEY_UP);
+      ps2_putc(PS2_KEY_LSHIFT);
     }
     shift_override=FALSE;
   }
@@ -212,31 +213,31 @@ void send_key_code(uint8_t sh,uint8_t key,uint8_t state) {
         if(state && (meta & SCAN_FLAG_SHIFT) && (sh & SCAN_MAP_SHIFT) == 0) {
           // we are in shift mode and this key needs shift off.
           if(meta&SCAN_FLAG_LSHIFT) {
-            PS2_send(PS2_KEY_UP);
-            PS2_send(PS2_KEY_LSHIFT);
+            ps2_putc(PS2_KEY_UP);
+            ps2_putc(PS2_KEY_LSHIFT);
           }
           if(meta&SCAN_FLAG_RSHIFT) {
-            PS2_send(PS2_KEY_UP);
-            PS2_send(PS2_KEY_RSHIFT);
+            ps2_putc(PS2_KEY_UP);
+            ps2_putc(PS2_KEY_RSHIFT);
           }
           shift_override=TRUE;
           shift_override_key=key;
           shift_override_state=sh;
         } else if(state && !(meta & SCAN_FLAG_SHIFT)&& (sh & SCAN_MAP_SHIFT) == SCAN_MAP_SHIFT) {
           // we are not in shift mode and we need a shift.
-          PS2_send(PS2_KEY_LSHIFT);
+          ps2_putc(PS2_KEY_LSHIFT);
           shift_override=TRUE;
           shift_override_key=key;
           shift_override_state=sh;
         }
       }
       if((sh & SCAN_MAP_EXT) == SCAN_MAP_EXT)
-        PS2_send(PS2_KEY_EXT);
+        ps2_putc(PS2_KEY_EXT);
       switch(state) {
         case FALSE:
-          PS2_send(PS2_KEY_UP);
+          ps2_putc(PS2_KEY_UP);
         case TRUE:
-          PS2_send(key);
+          ps2_putc(key);
           break;
       }
     }
@@ -322,9 +323,9 @@ void parse_key(uint8_t data) {
       // cancel override, if in effect.
       check_override();
       if(!state) {
-        PS2_send(PS2_KEY_UP);
+        ps2_putc(PS2_KEY_UP);
       }
-      PS2_send(key);
+      ps2_putc(key);
     } else if(key != SCAN_CBM_KEY_NONE) {
       key&=0x3f;
       send_key_code(pgm_read_byte(&layouts[layout][key][sh][0]),pgm_read_byte(&layouts[layout][key][sh][1]),state);
@@ -352,20 +353,20 @@ void scan(void) {
   LED_blink(LED_PIN_7,layout+1,LED_FLAG_END_ON);
   
   for(;;) {
-    while(PS2_data_available()) {
-      data=PS2_recv();
+    while(ps2_data_available()) {
+      data=ps2_getc();
       switch(data) {
         case PS2_CMD_SET_RATE:
-          PS2_send(PS2_CMD_ACK);
-          data=PS2_recv();
-          kb_set_repeat_delay(PS2_get_typematic_delay(data));
-          kb_set_repeat_period(PS2_get_typematic_period(data));
+          ps2_putc(PS2_CMD_ACK);
+          data=ps2_getc();
+          kb_set_repeat_delay(ps2_get_typematic_delay(data));
+          kb_set_repeat_period(ps2_get_typematic_period(data));
           break;
         case PS2_CMD_LEDS:
-          PS2_send(PS2_CMD_ACK);
-          data=PS2_recv()&0x07;
+          ps2_putc(PS2_CMD_ACK);
+          data=ps2_getc()&0x07;
           led_state=data;
-          PS2_send(PS2_CMD_ACK);
+          ps2_putc(PS2_CMD_ACK);
           if(!config) {
             if(data&PS2_LED_CAPS_LOCK) {
               // caps lock LED is on.
@@ -379,7 +380,7 @@ void scan(void) {
           }
           break;
         default:
-          PS2_handle_cmds(data);
+          ps2_handle_cmds(data);
           break;
       }
     }
@@ -429,7 +430,7 @@ void scan(void) {
           case SCAN_C64_KEY_EQUALS: 
             // debug
             debug=!debug;
-            PS2_set_debug(debug);
+            //PS2_set_debug(debug);
             LED_blink(LED_PIN_7,1,LED_FLAG_NONE);
             break;
         }
@@ -453,38 +454,38 @@ void scan(void) {
         switch(data) {
           case SW_CAPSENSE:
             // need to send make for capslock
-            PS2_send(PS2_KEY_CAPS_LOCK);
+            ps2_putc(PS2_KEY_CAPS_LOCK);
             break;
           case SW_CAPSENSE | KB_KEY_UP:
             // need to send break code for capslock
-            PS2_send(PS2_KEY_UP);
-            PS2_send(PS2_KEY_CAPS_LOCK);
+            ps2_putc(PS2_KEY_UP);
+            ps2_putc(PS2_KEY_CAPS_LOCK);
             break;
           case SW_RESTORE:
             switch(layout) {
               case SCAN_LAYOUT_POSITIONAL_C64:
-                PS2_send(PS2_KEY_EXT);
-                PS2_send(PS2_KEY_PAGE_UP);
+                ps2_putc(PS2_KEY_EXT);
+                ps2_putc(PS2_KEY_PAGE_UP);
                 break;
               default:
                 // send Pause/Break...
-                PS2_send(PS2_KEY_EXT_2);
-                PS2_send(PS2_KEY_PCTRL);
-                PS2_send(PS2_KEY_PAUSE);
-                PS2_send(PS2_KEY_EXT_2);
-                PS2_send(PS2_KEY_UP);
-                PS2_send(PS2_KEY_PCTRL);
-                PS2_send(PS2_KEY_UP);
-                PS2_send(PS2_KEY_PAUSE);
+                ps2_putc(PS2_KEY_EXT_2);
+                ps2_putc(PS2_KEY_PCTRL);
+                ps2_putc(PS2_KEY_PAUSE);
+                ps2_putc(PS2_KEY_EXT_2);
+                ps2_putc(PS2_KEY_UP);
+                ps2_putc(PS2_KEY_PCTRL);
+                ps2_putc(PS2_KEY_UP);
+                ps2_putc(PS2_KEY_PAUSE);
                 break;
             }
             break;
           case (SW_RESTORE | KB_KEY_UP):
             switch(layout) {
               case SCAN_LAYOUT_POSITIONAL_C64:
-                PS2_send(PS2_KEY_EXT);
-                PS2_send(PS2_KEY_UP);
-                PS2_send(PS2_KEY_PAGE_UP);
+                ps2_putc(PS2_KEY_EXT);
+                ps2_putc(PS2_KEY_UP);
+                ps2_putc(PS2_KEY_PAGE_UP);
                 break;
             }
             break;
