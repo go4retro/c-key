@@ -1,6 +1,6 @@
 /*
-    PS2Encoder - PS2 Keyboard to serial/parallel converter
-    Copyright Jim Brain and RETRO Innovations, 2008-2011
+    C=Key - Commodore <-> PS/2 Interface
+    Copyright Jim Brain and RETRO Innovations, 2004-2011
 
     This code is a modification of uart functions in sd2iec:
     Copyright (C) 2007,2008  Ingo Korb <ingo@akana.de>
