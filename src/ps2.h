@@ -1,104 +1,29 @@
 /*
-    Copyright Jim Brain and Brain Innovations, 2004
-  
-    This file is part of C=Key.
+    C=Key - Commodore <-> PS/2 Interface
+    Copyright Jim Brain and RETRO Innovations, 2004-2012
 
-    C=Key is free software; you can redistribute it and/or modify
+    This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
     (at your option) any later version.
 
-    C=Key is distributed in the hope that it will be useful,
+    This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with C=Key; if not, write to the Free Software
+    along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    ps2.h: public functions and KEY definitions
+
 */
+
 #ifndef PS2_H
-#define PS2_H 1
+#define PS2_H
 
-#define PS2_RX_BUFFER_SIZE 128     /* 2,4,8,16,32,64,128 or 256 bytes */
-#define PS2_TX_BUFFER_SIZE 128     /* 2,4,8,16,32,64,128 or 256 bytes */
-#define PS2_RX_BUFFER_MASK ( PS2_RX_BUFFER_SIZE - 1 )
-#define PS2_TX_BUFFER_MASK ( PS2_TX_BUFFER_SIZE - 1 )
-#if ( PS2_RX_BUFFER_SIZE & PS2_RX_BUFFER_MASK )
-	#error PS2 RX buffer size is not a power of 2
-#endif
-#if ( PS2_TX_BUFFER_SIZE & PS2_TX_BUFFER_MASK )
-	#error PS2 TX buffer size is not a power of 2
-#endif
-
-/*
- * After a device sends a byte to host, it has to holdoff for a while
- * before doing anything else.  One KB I tested this is 2.14mS.
- */
- 
-#define PS2_HALF_CYCLE 40 // ~42 uS when all is said and done.
-#define PS2_SEND_HOLDOFF_COUNT  ((uint8_t)(2140/PS2_HALF_CYCLE)) 
-
-#define PS2_PORT_CLK_OUT	PORTD
-#define PS2_PORT_CLK_IN		PIND
-#define PS2_PIN_CLK 		  (1<<PIN3)
-#define PS2_PORT_DDR_CLK	DDRD
-#define PS2_PORT_DATA_OUT	PORTD
-#define PS2_PORT_DATA_IN	PIND
-#define PS2_PIN_DATA		  (1<<PIN2)
-#define PS2_PORT_DDR_DATA	DDRD
-
-#if defined __AVR_ATmega8__
-#define SIG_OUTPUT_COMPARE SIG_OUTPUT_COMPARE2
-#define OCR OCR2
-#define TCNT  TCNT2
-#define TCCR  TCCR2
-#define TCCR_DATA_DELAY (1<<CS22) | (1<<CS21) | (1<<CS20) | (1<<WGM21)
-#define TCCR_DATA (1<<CS21) | (1<<WGM21)
-#define TIFR_DATA (1<<OCF2)
-#define TIMSK_DATA (1<<OCIE2)
-#elif defined __AVR_ATmega16__ || defined __AVR_ATmega162__
-#define SIG_OUTPUT_COMPARE SIG_OUTPUT_COMPARE0
-#define OCR OCR0
-#define TCNT  TCNT0
-#define TCCR  TCCR0
-#define TCCR_DATA_DELAY (1<<CS02) | (1<<CS00) | (1<<WGM01)
-#define TCCR_DATA (1<<CS01) | (1<<WGM01)
-#define TIFR_DATA (1<<OCF0)
-#define TIMSK_DATA (1<<OCIE0)
-#else
-#  error Unknown chip!
-#endif
-
-
-
-#define PS2_ST_IDLE           0
-#define PS2_ST_PREP_START     1
-#define PS2_ST_SEND_START     2
-#define PS2_ST_PREP_BIT       3
-#define PS2_ST_SEND_BIT       4
-#define PS2_ST_PREP_PARITY    5
-#define PS2_ST_SEND_PARITY    6
-#define PS2_ST_PREP_STOP      7
-#define PS2_ST_SEND_STOP      8
-
-#define PS2_ST_HOLDOFF        9
-#define PS2_ST_WAIT_START     10
-#define PS2_ST_GET_START      11
-#define PS2_ST_WAIT_BIT       12
-#define PS2_ST_GET_BIT        13
-#define PS2_ST_WAIT_PARITY    14
-#define PS2_ST_GET_PARITY     15
-#define PS2_ST_WAIT_STOP      16
-#define PS2_ST_GET_STOP       17
-#define PS2_ST_GET_ACK        18
-#define PS2_ST_WAIT_ACK       19
-#define PS2_ST_WAIT_ACK2      20
-#define PS2_ST_HOST_INHIBIT   21
-#define PS2_ST_WAIT_RESPONSE  22
-
-#define PS2_MODE_DEVICE       1
-#define PS2_MODE_HOST         2
+typedef enum { PS2_MODE_DEVICE = 1, PS2_MODE_HOST = 2 } ps2mode_t;
 
 #define PS2_KEY_UP            0xf0
 #define PS2_KEY_EXT           0xe0
@@ -182,7 +107,7 @@
 #define PS2_KEY_NUM_LOCK      0x77
 #define PS2_KEY_NUM_3         0x7a
 #define PS2_KEY_NUM_9         0x7d
-#define PS2_KEY_NO_SCROLL     0x7e
+#define PS2_KEY_SCROLL_LOCK   0x7e
 #define PS2_KEY_F7            0x83
 
 // extended keys
@@ -226,52 +151,32 @@
 #define PS2_CMD_BAT_FAILURE   0xfc
 #define PS2_CMD_OVERFLOW      0xff
 
-#define PS2_LED_SCROLL_LOCK   1
-#define PS2_LED_NUM_LOCK      2
-#define PS2_LED_CAPS_LOCK     4
+#define PS2_LED_SCROLL_LOCK   (1 << 0)
+#define PS2_LED_NUM_LOCK      (1 << 1)
+#define PS2_LED_CAPS_LOCK     (1 << 2)
 
+#define PS2_MS_CMD_RESET      PS2_CMD_RESET
+#define PS2_MS_CMD_RESEND     PS2_CMD_RESEND
+#define PS2_MS_CMD_ACK        PS2_CMD_ACK
+#define PS2_MS_CMD_REPORT     0xf4
+#define PS2_MS_CMD_REPORTOFF  0xf5
+#define PS2_MS_CMD_SET_SAMPLE 0xf3
+#define PS2_MS_CMD_READ_ID    PS2_CMD_READ_ID
+#define PS2_MS_CMD_READ_DATA  0xeb
 
+void ps2_init(ps2mode_t mode);
+uint8_t ps2_getc(void);
+void ps2_putc(uint8_t data);
+uint8_t ps2_data_available(void);
+void ps2_handle_cmds(uint8_t data);
+uint16_t ps2_get_typematic_delay(uint8_t rate);
+uint16_t ps2_get_typematic_period(uint8_t rate);
 
-void PS2_init(uint8_t mode);
-
-void PS2_delay(uint16_t ms);
-inline uint8_t PS2_set_CLK(void);
-inline void PS2_clear_CLK(void);
-inline uint8_t PS2_read_CLK(void);
-
-inline void PS2_set_DATA(void);
-inline void PS2_clear_DATA(void);
-inline uint8_t PS2_read_DATA(void);
-
-inline void PS2_enable_IRQ_CLK_Rise(void);
-inline void PS2_enable_IRQ_CLK_Fall(void);
-inline void PS2_disable_IRQ_CLK(void);
-
-inline void PS2_enable_IRQ_timer0(uint8_t us);
-inline void PS2_disable_IRQ_timer0(void);
-
-uint8_t PS2_get_state(void);
-void PS2_set_state(uint8_t state);
-inline uint8_t PS2_get_count(void);
-
-uint8_t PS2_recv( void );
-void PS2_send( uint8_t data );
-uint8_t PS2_data_available( void );
-void PS2_write_byte(void);
-void PS2_read_byte(void);
-void PS2_commit_read_byte(void);
-uint8_t PS2_data_to_send(void);
-
-void PS2_write_bit(void);
-void PS2_write_parity(void);
-void PS2_read_bit(void);
-void PS2_clear_counters(void);
-
-void PS2_check_CLK(void);
-void PS2_handle_cmds(uint8_t data);
-unsigned int PS2_get_typematic_delay(uint8_t rate);
-unsigned int PS2_get_typematic_period(uint8_t rate);
-void PS2_set_debug(uint8_t b);
+// Add 1 and multiply by 250ms to get time
+#define PS2_GET_DELAY(rate)   ((rate & 0x60) >> 5)
+// Multiply by 4.17 to get CPS (or << 2)
+#define PS2_GET_RATE(rate)    ((8 + (rate & 0x07)) * (1 << ((rate & 0x18) >> 3)))
+#define CALC_RATE(delay,rate) ((rate & 0x1f) + ((delay & 0x03) << 5))
 
 #endif
 
