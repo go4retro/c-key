@@ -328,10 +328,10 @@ void uart_init(void) {
   /* Enable UART receiver and transmitter */
   UCSRBB = (0
 #    if defined UART1_RX_BUFFER_SHIFT && UART1_RX_BUFFER_SHIFT > 0
-          | _BV(RXCIEB)
+            | _BV(RXCIEB)
 #    endif
-          | _BV(RXENB)
-          | _BV(TXENB)
+            | _BV(RXENB)
+            | _BV(TXENB)
          );
 
   /* Flush buffers */
