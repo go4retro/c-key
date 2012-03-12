@@ -44,11 +44,12 @@ CONFIG_BOOT_DEVID=0x49454321
 
 
 # Enable UART debugging - requires 24 bytes plus buffer size in RAM
-CONFIG_UART_DEBUG=n
+CONFIG_UART_DEBUG=y
 
-# Baud rate of the UART, not used if CONFIG_UART_DEBUG is disabled
+# Baud rate of the UART
 CONFIG_UART_BAUDRATE=115200
 
+# this should be removed
 # log2 of the UART buffer size, i.e. 6 for 64, 7 for 128, 8 for 256 etc.
 CONFIG_UART_BUF_SHIFT=6
 

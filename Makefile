@@ -148,7 +148,8 @@ FORMAT = ihex
 TARGET = c=key
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = switches.c uart.c kb.c main.c ps2.c eeprom.c scanner64.c led.c ps2_device.c ps2_host.c poll64.c
+#SRC = switches.c uart.c kb.c main.c ps2.c ps2_kb.c eeprom.c scanner64.c led.c poll64.c
+SRC = switches.c uart.c kb.c main.c ps2.c eeprom.c scanner64.c led.c ps2_kb.c poll64.c
 
 # Sample mechanism to add files to SRC line
 #ifeq ($(CONFIG_VARIABLE),4)
