@@ -35,7 +35,7 @@
 
 // TODO I need to clean up this code and make it more like poll64.c
 
-static prog_uint8_t normal[0x58] =  { SCAN_CBM_KEY_SPECIAL+0,PS2_KEY_Q,SCAN_CBM_KEY_SPECIAL+0x0f,PS2_KEY_SPACE,SCAN_CBM_KEY_SPECIAL+0x10,SCAN_CBM_KEY_SPECIAL+0x0d,SCAN_CBM_KEY_SPECIAL+0x0e,PS2_KEY_1
+static const PROGMEM uint8_t normal[0x58] =  { SCAN_CBM_KEY_SPECIAL+0,PS2_KEY_Q,SCAN_CBM_KEY_SPECIAL+0x0f,PS2_KEY_SPACE,SCAN_CBM_KEY_SPECIAL+0x10,SCAN_CBM_KEY_SPECIAL+0x0d,SCAN_CBM_KEY_SPECIAL+0x0e,PS2_KEY_1
                                       ,PS2_KEY_4,PS2_KEY_E,PS2_KEY_S,PS2_KEY_Z,PS2_KEY_LSHIFT,PS2_KEY_A,PS2_KEY_W,PS2_KEY_3
                                       ,SCAN_CBM_KEY_SPECIAL+1,PS2_KEY_T,PS2_KEY_F,PS2_KEY_C,PS2_KEY_X,PS2_KEY_D,PS2_KEY_R,PS2_KEY_5
                                       ,SCAN_CBM_KEY_SPECIAL+3,PS2_KEY_U,PS2_KEY_H,PS2_KEY_B,PS2_KEY_V,PS2_KEY_G,PS2_KEY_Y,SCAN_CBM_KEY_SPECIAL+2
@@ -48,7 +48,7 @@ static prog_uint8_t normal[0x58] =  { SCAN_CBM_KEY_SPECIAL+0,PS2_KEY_Q,SCAN_CBM_
                                       ,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE,SCAN_CBM_KEY_NONE
                                      };
                                         
-static prog_uint8_t layouts[2][25][2][2] = {
+static const PROGMEM uint8_t layouts[2][25][2][2] = {
                                           // default layouts
                                          {
                                           {{SCAN_MAP_NONE,PS2_KEY_2},{SCAN_MAP_SHIFT,PS2_KEY_APOSTROPHE}},            //0 0 -> 2/Sh+'
@@ -107,11 +107,11 @@ static prog_uint8_t layouts[2][25][2][2] = {
                                          }
                                         };
                                         
-static prog_uint8_t joy_table[2][8]={
+static const PROGMEM uint8_t joy_table[2][8]={
                                     {POLL_JOY_RIGHT,0,0,POLL_JOY_FIRE,0,POLL_JOY_LEFT,POLL_JOY_DOWN,POLL_JOY_UP},
                                     {0,POLL_JOY_DOWN,POLL_JOY_LEFT,POLL_JOY_RIGHT,POLL_JOY_FIRE,0,0,POLL_JOY_UP}
                                    };
-static prog_uint8_t joy_mapping[2][9][2]= {
+static const PROGMEM uint8_t joy_mapping[2][9][2]= {
                                                {
                                                  {SCAN_MAP_NONE,PS2_KEY_E},
                                                  {SCAN_MAP_NONE,PS2_KEY_W},
@@ -275,7 +275,7 @@ uint8_t get_joy_direction(uint8_t *joy) {
   return i;
 }
 
-void do_joy(uint8_t *joy, uint8_t data, uint8_t map[8],uint8_t table[9][2]) {
+void do_joy(uint8_t *joy, uint8_t data, const uint8_t map[8],const uint8_t table[9][2]) {
   uint8_t i;
   uint8_t new;
   
