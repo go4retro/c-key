@@ -42,7 +42,7 @@ int main( void ) {
   if(MODE_DETECT) {
     ps2_init(PS2_MODE_HOST);
     uart_putc('H');
-    //poll_init();
+    //poll_init();  // do it above to reset cross-point switch everytime
     sei();
     poll();
   } else {

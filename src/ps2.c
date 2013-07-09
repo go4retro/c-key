@@ -24,6 +24,7 @@
 #include <inttypes.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/atomic.h>
 #include <util/delay.h>
 #include "config.h"
 #include "ps2.h"
@@ -57,7 +58,6 @@ static void ps2_enable_clk_rise(void) {
   CLK_INTCR |= _BV(CLK_INT);
 }
 
-
 static void ps2_enable_clk_fall(void) {
   // turn off IRQ
   CLK_INTCR &= (uint8_t)~_BV(CLK_INT);
@@ -69,11 +69,9 @@ static void ps2_enable_clk_fall(void) {
   CLK_INTCR |= _BV(CLK_INT);
 }
 
-
 static void ps2_disable_clk(void) {
   CLK_INTCR &= (uint8_t)~_BV(CLK_INT);
 }
-
 
 static void ps2_enable_timer(uint8_t us) {
   // clear flag.
@@ -94,12 +92,10 @@ static void ps2_enable_timer(uint8_t us) {
   PS2_TIMSK |= PS2_TIMSK_DATA;
 }
 
-
 static void ps2_disable_timer(void) {
   // disable output compare IRQ
   PS2_TIMSK &= (uint8_t)~PS2_TIMSK_DATA;
 }
-
 
 static void ps2_write_byte(void) {
   uint8_t tmp;
@@ -113,23 +109,19 @@ static void ps2_write_byte(void) {
   rxbuf[tmp] = ps2_byte; /* Store received data in buffer */
 }
 
-
 static void ps2_read_byte(void) {
   ps2_bit_count = 0;
   ps2_parity = 0;
   ps2_byte = txbuf[( tx_tail + 1 ) & PS2_TX_BUFFER_MASK];  /* Start transmition */
 }
 
-
 static void ps2_commit_read_byte(void) {
   tx_tail = ( tx_tail + 1 ) & PS2_TX_BUFFER_MASK;      /* Store new index */
 }
 
-
 static uint8_t ps2_data_to_send(void) {
   return ( tx_head != tx_tail );
 }
-
 
 static void ps2_write_bit(void) {
   ps2_state=PS2_ST_PREP_BIT;
@@ -149,7 +141,6 @@ static void ps2_write_bit(void) {
   // valid data now.
 }
 
-
 static void ps2_read_bit(void) {
   ps2_byte = ps2_byte >> 1;
   ps2_bit_count++;
@@ -158,7 +149,6 @@ static void ps2_read_bit(void) {
     ps2_parity++;
   }
 }
-
 
 static void ps2_write_parity(void) {
   if((ps2_parity & 1) == 1) {
@@ -174,16 +164,16 @@ static void ps2_clear_counters(void) {
   ps2_parity = 0;
 }
 
-
 void ps2_clear_buffers(void) {
-  tx_head = 0;
-  tx_tail = 0;
-  rx_head = 0;
-  rx_tail = 0;
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+    tx_head = 0;
+    tx_tail = 0;
+    rx_head = 0;
+    rx_tail = 0;
+  }
 }
 
-
-#ifdef PS2_USE_DEVICE
+#ifdef PS2_ENABLE_DEVICE
 static void ps2_device_trigger_send(void) {
   // start clocking.
   // wait a half cycle
@@ -193,8 +183,7 @@ static void ps2_device_trigger_send(void) {
 }
 #endif
 
-
-#ifdef PS2_USE_HOST
+#ifdef PS2_ENABLE_HOST
 static void ps2_host_trigger_send(void) {
   // need to get devices attention...
   ps2_disable_clk();
@@ -204,15 +193,13 @@ static void ps2_host_trigger_send(void) {
 }
 #endif
 
-
 static void ps2_trigger_send(void) {
   // set state
   ps2_state = PS2_ST_PREP_START;
   PS2_CALL(ps2_device_trigger_send(),ps2_host_trigger_send());
 }
 
-
-#ifdef PS2_USE_HOST
+#ifdef PS2_ENABLE_HOST
 static void ps2_host_check_for_data(void) {
   if(ps2_data_to_send() != 0) {
     ps2_trigger_send();
@@ -223,9 +210,7 @@ static void ps2_host_check_for_data(void) {
   }
 }
 
-
-static void ps2_host_timer_irq(void) __attribute__((always_inline));
-static void ps2_host_timer_irq(void) {
+static inline void ps2_host_timer_irq(void) {
   ps2_disable_timer();
   switch (ps2_state) {
     case PS2_ST_GET_BIT:
@@ -257,9 +242,7 @@ static void ps2_host_timer_irq(void) {
   }
 }
 
-
-static void ps2_host_clk_irq(void) __attribute__((always_inline));
-static void ps2_host_clk_irq(void) {
+static inline void ps2_host_clk_irq(void) {
   switch(ps2_state) {
     case PS2_ST_WAIT_RESPONSE:
     case PS2_ST_IDLE:
@@ -344,8 +327,7 @@ static void ps2_host_init(void) {
 }
 #endif
 
-
-#ifdef PS2_USE_DEVICE
+#ifdef PS2_ENABLE_DEVICE
 static void ps2_device_check_data(void) {
   // do we have data to send?
   if(ps2_data_to_send()) {
@@ -368,9 +350,7 @@ static void ps2_device_host_inhibit(void) {
   PS2_SET_DATA();
 }
 
-
-static void ps2_device_timer_irq(void) __attribute__((always_inline));
-static void ps2_device_timer_irq(void) {
+static inline void ps2_device_timer_irq(void) {
   switch (ps2_state) {
     case PS2_ST_PREP_START:
       // disable the CLK IRQ
@@ -539,9 +519,7 @@ static void ps2_device_timer_irq(void) {
   }
 }
 
-
-static void ps2_device_clk_irq(void) __attribute__((always_inline));
-static void ps2_device_clk_irq(void) {
+static inline void ps2_device_clk_irq(void) {
   ps2_disable_clk();
 
   switch(ps2_state) {
@@ -579,16 +557,13 @@ static void ps2_device_init(void) {
 }
 #endif
 
-
 ISR(PS2_TIMER_COMP_vect) {
   PS2_CALL(ps2_device_timer_irq(),ps2_host_timer_irq());
 }
 
-
 ISR(CLK_INT_vect) {
   PS2_CALL(ps2_device_clk_irq(),ps2_host_clk_irq());
 }
-
 
 uint8_t ps2_getc( void ) {
   uint8_t tmptail;
@@ -618,19 +593,17 @@ void ps2_putc( uint8_t data ) {
   tx_head = tmphead;
 
   // turn off IRQs
-  cli();
-  if(ps2_state == PS2_ST_IDLE) {
-    // start transmission;
-    ps2_trigger_send();
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+    if(ps2_state == PS2_ST_IDLE) {
+      // start transmission;
+      ps2_trigger_send();
+    }
   }
-  // turn on IRQs
-  sei();
 }
 
 uint8_t ps2_data_available( void ) {
   return ( rx_head != rx_tail ); /* Return 0 (FALSE) if the receive buffer is empty */
 }
-
 
 void ps2_init(ps2mode_t mode) {
   // set prescaler to System Clock/8
@@ -645,5 +618,3 @@ void ps2_init(ps2mode_t mode) {
   ps2_state = PS2_ST_IDLE;
   PS2_CALL(ps2_device_init(),ps2_host_init());
 }
-
-

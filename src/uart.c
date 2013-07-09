@@ -31,12 +31,12 @@
 
 #ifdef ENABLE_UART0
 #  if defined UART0_TX_BUFFER_SHIFT && UART0_TX_BUFFER_SHIFT > 0
-static uint8_t tx0_buf[1 << UART0_TX_BUFFER_SHIFT];
+static uint8_t          tx0_buf[1 << UART0_TX_BUFFER_SHIFT];
 static volatile uint8_t tx0_tail;
 static volatile uint8_t tx0_head;
 #  endif
 #  if defined UART0_RX_BUFFER_SHIFT && UART0_RX_BUFFER_SHIFT > 0
-static uint8_t rx0_buf[1 << UART0_RX_BUFFER_SHIFT];
+static uint8_t          rx0_buf[1 << UART0_RX_BUFFER_SHIFT];
 static volatile uint8_t rx0_tail;
 static volatile uint8_t rx0_head;
 #  endif
@@ -44,12 +44,12 @@ static volatile uint8_t rx0_head;
 
 #ifdef ENABLE_UART1
 #  if defined UART1_TX_BUFFER_SHIFT && UART1_TX_BUFFER_SHIFT > 0
-static uint8_t tx1_buf[1 << UART1_TX_BUFFER_SHIFT];
+static uint8_t          tx1_buf[1 << UART1_TX_BUFFER_SHIFT];
 static volatile uint8_t tx1_tail;
 static volatile uint8_t tx1_head;
 #  endif
 #  if defined UART1_RX_BUFFER_SHIFT && UART1_RX_BUFFER_SHIFT > 0
-static uint8_t rx1_buf[1 << UART1_RX_BUFFER_SHIFT];
+static uint8_t          rx1_buf[1 << UART1_RX_BUFFER_SHIFT];
 static volatile uint8_t rx1_head;
 static volatile uint8_t rx1_tail;
 #  endif
@@ -126,14 +126,16 @@ void uart0_flush(void) {
 }
 void uart_flush(void) __attribute__ ((weak, alias("uart0_flush")));
 
-void uart0_puts_P(prog_char *text) {
+//void uart0_puts_P(prog_char *text) {
+void uart0_puts_P(const char *text) {
   uint8_t ch;
 
   while ((ch = pgm_read_byte(text++))) {
     uart0_putc(ch);
   }
 }
-void uart_puts_P(prog_char *text) __attribute__ ((weak, alias("uart0_puts_P")));
+//void uart_puts_P(prog_char *text) __attribute__ ((weak, alias("uart0_puts_P")));
+void uart_puts_P(const char *text) __attribute__ ((weak, alias("uart0_puts_P")));
 
 void uart0_putcrlf(void) {
   uart0_putc(13);
@@ -203,6 +205,7 @@ void uart_trace(void *ptr, uint16_t start, uint16_t len) __attribute__ ((weak, a
 
 
 static int ioputc(char c, FILE *stream) {
+  (void) stream;
   if (c == '\n')
     uart0_putc('\r');
   uart0_putc(c);
@@ -228,7 +231,7 @@ ISR(USARTB_UDRE_vect) {
 #  if defined UART1_RX_BUFFER_SHIFT && UART1_RX_BUFFER_SHIFT > 0
 ISR(USARTB_RXC_vect) {
   /* Calculate and store buffer index */
-  rx1_head = ( rx1_head + 1 ) & (sizeof(rx1_buf)-1);
+  rx1_head = ( rx1_head + 1 ) & (sizeof(rx1_buf) - 1);
   if ( rx1_head == rx1_tail ) {
     /* ERROR! Receive buffer overflow */
   }
@@ -238,7 +241,7 @@ ISR(USARTB_RXC_vect) {
 
 void uart1_putc(char data) {
 #  if defined UART1_TX_BUFFER_SHIFT && UART1_TX_BUFFER_SHIFT > 0
-  uint8_t t=(tx1_head+1) & (sizeof(tx1_buf)-1);
+  uint8_t t = (tx1_head + 1) & (sizeof(tx1_buf) - 1);
   UCSRBB &= ~ _BV(UDRIEB);   // turn off RS232 irq
   tx1_buf[tx1_head] = data;
   tx1_head = t;

@@ -25,8 +25,8 @@
 
 #include "autoconf.h"
 
-#define PS2_USE_HOST
-#define PS2_USE_DEVICE
+#define PS2_ENABLE_HOST
+#define PS2_ENABLE_DEVICE
 #define KB_SCAN_PORTS     // scan the KB ports for joystick activity
 
 #ifndef TRUE

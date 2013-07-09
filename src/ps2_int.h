@@ -147,7 +147,7 @@ typedef enum {PS2_ST_IDLE
 #define PS2_READ_DATA()   (PS2_PORT_DATA_IN & (PS2_PIN_DATA))
 
 
-#if defined PS2_USE_HOST && defined PS2_USE_DEVICE
+#if defined PS2_ENABLE_HOST && defined PS2_ENABLE_DEVICE
 #define PS2_CALL(dev,host) \
   switch(ps2_mode) {\
   case PS2_MODE_DEVICE: \
@@ -158,7 +158,7 @@ typedef enum {PS2_ST_IDLE
     break; \
   }
 #else
-#  if defined PS2_USE_DEVICE
+#  if defined PS2_ENABLE_DEVICE
 #    define PS2_CALL(dev,host) dev
 #  else
 #    define PS2_CALL(dev,host) host

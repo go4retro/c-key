@@ -38,7 +38,7 @@ void SW_init(uint8_t type, uint8_t mask) {
   // bring them to inputs;
   PORT_SW_DDR&=(uint8_t)~mask;
   SW_mask=mask;
-  SW_cache=(PORT_SW_IN & SW_mask);
+  SW_cache=(PORT_SW_IN & mask);
 }
 
 void SW_store(uint8_t data) {

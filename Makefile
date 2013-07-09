@@ -90,15 +90,15 @@ else ifeq ($(MCU),atmega88)
   HFUSE = 0xd7
   LFUSE = 0xe2
 else ifeq ($(MCU),atmega162)
-	BINARY_LENGTH = 0x3c00
-	EFUSE = 0xff
-	HFUSE = 0xd2
-	LFUSE = 0xfc
+  BINARY_LENGTH = 0x3c00
+  EFUSE = 0xff
+  HFUSE = 0xd2
+  LFUSE = 0xfc
 else ifeq ($(MCU),atmega32)
-	BINARY_LENGTH = 0x7800
-	EFUSE = 0xff
-	HFUSE = 0xd2
-	LFUSE = 0xfc
+  BINARY_LENGTH = 0x7800
+  EFUSE = 0xff
+  HFUSE = 0xd2
+  LFUSE = 0xfc
 else ifeq ($(MCU),atmega128)
   BINARY_LENGTH = 0x1f000
   EFUSE = 0xff
@@ -282,8 +282,9 @@ CFLAGS += -fdata-sections
 # these are needed for GCC 4.3.2, which is more aggressive at inlining
 # gcc-4.2 knows one of those, but it tends to increase code size
 ifeq ($(shell $(CC) --version|gawk -f gcctest.awk),YES)
-CFLAGS += --param inline-call-cost=3
+#CFLAGS += --param inline-call-cost=3
 CFLAGS += -fno-inline-small-functions
+#CFLAGS += -finline-limit=3 
 CFLAGS += -fno-move-loop-invariants
 CFLAGS += -fno-split-wide-types
 
