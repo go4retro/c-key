@@ -6,7 +6,7 @@ MINOR = 7
 PATCHLEVEL = 2
 FIX = 1
 
-# Forces bootloader version to 0, comment out for release
+# Forces bootloader version to 0, comment out or leave empty for release
 #PRERELEASE =
 
 #----------------------------------------------------------------------------
@@ -41,7 +41,7 @@ FIX = 1
 # make program = Download the hex file to the device, using avrdude.
 #                Please customize the avrdude settings below first!
 #
-# make debug = Start either simulavr or avarice as specified for debugging, 
+# make debug = Start either simulavr or avarice as specified for debugging,
 #              with avr-gdb or avr-insight as the front end for debugging.
 #
 # make filename.s = Just compile filename.c into the assembler code only.
@@ -86,8 +86,13 @@ else ifeq ($(MCU),atmega8)
   LFUSE = 0xe4
 else ifeq ($(MCU),atmega88)
   BINARY_LENGTH = 0x1c00
-  EFUSE = 0xe2
-  HFUSE = 0xd7
+  EFUSE = 0xf9
+  HFUSE = 0xdc
+  LFUSE = 0xe2
+else ifeq ($(MCU),atmega168)
+  BINARY_LENGTH = 0x3c00
+  EFUSE = 0xf9
+  HFUSE = 0xdc
   LFUSE = 0xe2
 else ifeq ($(MCU),atmega162)
   BINARY_LENGTH = 0x3c00
@@ -124,6 +129,11 @@ else ifeq ($(MCU),atmega644p)
   EFUSE = 0xfd
   HFUSE = 0x91
   LFUSE = 0xef
+else ifeq ($(MCU),attiny2313)
+  BINARY_LENGTH = 0x7800
+  EFUSE = 0xff
+  HFUSE = 0x9f
+  LFUSE = 0xff
 else
 .PHONY: nochip
 nochip:
@@ -148,7 +158,6 @@ FORMAT = ihex
 TARGET = c=key
 
 # List C source files here. (C dependencies are automatically generated.)
-#SRC = switches.c uart.c kb.c main.c ps2.c ps2_kb.c eeprom.c scanner64.c led.c poll64.c
 SRC = switches.c uart.c kb.c main.c ps2.c eeprom.c scanner64.c led.c ps2_kb.c poll64.c
 
 # Sample mechanism to add files to SRC line
@@ -263,12 +272,16 @@ CFLAGS += -fshort-enums
 CFLAGS += -Wall
 CFLAGS += -Wstrict-prototypes
 # Add this if you want all warnings output as errors.
-#CFLAGS += -Werror
+CFLAGS += -Werror
+# Use this only on small uCs (program size-wise) and only as a last resort
 #CFLAGS += -mshort-calls
 #CFLAGS += -fno-unit-at-a-time
-#CFLAGS += -Wundef
-#CFLAGS += -Wunreachable-code
-#CFLAGS += -Wsign-compare
+CFLAGS += -Wundef
+CFLAGS += -Wextra
+CFLAGS += -Wunreachable-code
+CFLAGS += -Wshadow
+#CFLAGS += -Winline
+CFLAGS += -Wsign-compare
 CFLAGS += -Wa,-adhlns=$(OBJDIR)/$(*F).lst
 CFLAGS += -I$(OBJDIR)
 CFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
@@ -277,12 +290,14 @@ CFLAGS += -ffunction-sections
 CFLAGS += -fdata-sections
 #CFLAGS += -mtiny-stack
 #CFLAGS += -mno-interrupts
-#CFLAGS += -mcall-prologues
-
-# these are needed for GCC 4.3.2, which is more aggressive at inlining
-# gcc-4.2 knows one of those, but it tends to increase code size
-ifeq ($(shell $(CC) --version|gawk -f gcctest.awk),YES)
-#CFLAGS += --param inline-call-cost=3
+CFLAGS += -mcall-prologues
+CFLAGS += -ffreestanding
+CFLAGS += -fno-tree-scev-cprop
+CFLAGS += -fno-optimize-sibling-calls
+CFLAGS += -fno-tree-switch-conversion
+CFLAGS += -maccumulate-args
+CFLAGS += -mstrict-X
+CFLAGS += -flto
 CFLAGS += -fno-inline-small-functions
 #CFLAGS += -finline-limit=3 
 CFLAGS += -fno-move-loop-invariants
@@ -294,7 +309,7 @@ CFLAGS += -fno-split-wide-types
 #CFLAGS += -fno-reorder-blocks-and-partition
 #CFLAGS += -fno-reorder-functions
 #CFLAGS += -fno-toplevel-reorder
-endif
+#CFLAGS += -fno-tree-loop-optimize
 
 ifeq ($(CONFIG_STACK_TRACKING),y)
   CFLAGS += -finstrument-functions
@@ -372,6 +387,7 @@ LDFLAGS += $(EXTMEMOPTS)
 LDFLAGS += $(patsubst %,-L%,$(EXTRALIBDIRS))
 LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
 LDFLAGS += -Wl,--gc-sections
+LDFLAGS += -flto
 #LDFLAGS	+= -Wl,--section-start=.text=$(BOOTLOADERSTARTADR)
 #LDFLAGS += -T linker_script.x
 ifeq ($(CONFIG_LINKER_RELAX),y)
@@ -395,17 +411,17 @@ endif
 #AVRDUDE_PORT = lpt1    # programmer connected to serial device
 
 AVRDUDE_WRITE_FLASH = -U flash:w:$(OBJDIR)/$(TARGET).hex
-# AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(TARGET).eep
+#AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(OBJDIR)/$(TARGET).eep
 
 # Allow fuse overrides from the config file
 ifdef CONFIG_EFUSE
-  EFUSE := CONFIG_EFUSE
+	EFUSE := $(CONFIG_EFUSE)
 endif
 ifdef CONFIG_HFUSE
-  HFUSE := CONFIG_HFUSE
+	HFUSE := $(CONFIG_HFUSE)
 endif
 ifdef CONFIG_LFUSE
-  LFUSE := CONFIG_LFUSE
+	LFUSE := $(CONFIG_LFUSE)
 endif
 
 # Calculate command line arguments for fuses
@@ -480,6 +496,18 @@ DEBUG_HOST = localhost
 #============================================================================
 
 
+# Presume we're in a project directory so name the program like the current
+# directory. Set PROGRAM to override.
+ifeq ($(TARGET),)
+  TARGET := $(notdir $(CURDIR))
+endif
+ 
+# Presume the C and asm source files to be located in the subdirectory 'src'.
+# Set SRCDIR to override.
+ifeq ($(SRCDIR),)
+  SRCDIR := src
+endif
+ 
 # De-dupe the list of C source files
 CSRC := $(sort $(SRC))
 
@@ -506,7 +534,7 @@ ALL_ASFLAGS = -mmcu=$(MCU) -I$(SRCDIR) -x assembler-with-cpp $(ASFLAGS) $(CDEFS)
 # Default target.
 all: build
 
-build: elf bin hex
+build: elf hex bin eep lss 
 	$(E) "  SIZE   $(OBJDIR)/$(TARGET).elf"
 	$(Q)$(ELFSIZE)|grep -v debug
 
@@ -523,7 +551,7 @@ doxygen:
 	-rm -rf doxyinput
 	mkdir doxyinput
 	cp $(SRCDIR)/*.h $(SRCDIR)/*.c doxyinput
-	./src2doxy.pl doxyinput/*.h doxyinput/*.c
+	src2doxy.pl doxyinput/*.h doxyinput/*.c
 	doxygen doxygen.conf
 
 # Display size of file.
@@ -538,6 +566,9 @@ program: $(OBJDIR)/$(TARGET).hex $(OBJDIR)/$(TARGET).eep
 # Set fuses of the device
 fuses: $(CONFIG)
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FUSES)
+
+progall: $(OBJDIR)/$(TARGET).hex $(OBJDIR)/$(TARGET).eep $(CONFIG)
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH)  $(AVRDUDE_WRITE_EEPROM) $(AVRDUDE_WRITE_FUSES)
 
 # Generate avr-gdb config/init file which does the following:
 #     define the reset signal, load the target file, connect to target, and set
@@ -608,7 +639,6 @@ $(OBJDIR)/%.bin: $(OBJDIR)/%.elf
 	$(Q)$(OBJCOPY) -O binary -R .eeprom $< $@
 endif
 
-
 $(OBJDIR)/%.hex: $(OBJDIR)/%.elf
 	$(E) "  HEX    $@"
 	$(Q)$(OBJCOPY) -O $(FORMAT) -R .eeprom $< $@
@@ -658,12 +688,12 @@ $(OBJDIR)/%.o : $(SRCDIR)/%.S | $(OBJDIR) $(OBJDIR)/autoconf.h
 # Create preprocessed source for use in sending a bug report.
 $(OBJDIR)/%.i : $(SRCDIR)/%.c | $(OBJDIR) $(OBJDIR)/autoconf.h
 	$(E) "  CC     $<"
-	$(Q)$(CC) -E -mmcu=$(MCU) -I$(SRCDIR) $(CFLAGS) $< -o $@ 
+	$(Q)$(CC) -E -mmcu=$(MCU) -I$(SRCDIR) $(CFLAGS) $< -o $@
 
 # Create the output directory
 $(OBJDIR):
 	$(E) "  MKDIR  $(OBJDIR)"
-	$(Q)mkdir $(OBJDIR)
+	-$(Q)mkdir -p $(OBJDIR)
 
 # Target: clean project.
 clean: begin clean_list end
@@ -687,7 +717,7 @@ clean_list :
 	$(Q)$(REMOVE) .dep/*
 	$(Q)$(REMOVE) -rf codedoc
 	$(Q)$(REMOVE) -rf doxyinput
-	-$(Q)rmdir $(OBJDIR)
+	-$(Q)rmdir --ignore-fail-on-non-empty -p $(OBJDIR)
 
 # Include the dependency files.
 -include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)

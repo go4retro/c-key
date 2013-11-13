@@ -54,11 +54,8 @@ CONFIG_UART_BAUDRATE=115200
 CONFIG_UART_BUF_SHIFT=6
 
 # Select which hardware to compile for
-# Valid values:
-#   1 - v2 Board
-#   2 - v3 Board
-CONFIG_HARDWARE_VARIANT=2
-CONFIG_HARDWARE_NAME=C=Key-example
+CONFIG_HARDWARE_VARIANT=1
+CONFIG_HARDWARE_NAME=C=Key
 
 # Track the stack size
 # Warning: This option increases the code size a lot.

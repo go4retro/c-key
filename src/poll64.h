@@ -243,29 +243,6 @@
 #define POLL_C128_PKEY_CAPSENSE  0x10
 #define POLL_C64_PKEY_RESTORE    0x20
 
-#define XPT_PORT_DATA_OUT PORTB
-#define XPT_DDR_DATA DDRB
-#define XPT_PORT_STROBE_OUT PORTD
-#define XPT_DDR_STROBE DDRD
-
-#if defined __AVR_ATmega162__
-#define XPT_PIN_STROBE (1<<PIN6)
-
-#define SW_4080         PIN1
-#define SW_CAPSENSE     PIN0
-#define SW_RESTORE      PIN2
-#elif defined __AVR_ATmega16__
-#define XPT_PIN_STROBE (1<<PIN7)
-
-#define SW_4080         PIN4
-#define SW_CAPSENSE     PIN5
-#define SW_RESTORE      PIN6
-#else
-#  error Unknown CPU!
-#endif
-
-
-
 #define POLL_FLAG_LSHIFT 1
 #define POLL_FLAG_RSHIFT 2
 #define POLL_FLAG_SHIFT (POLL_FLAG_LSHIFT | POLL_FLAG_RSHIFT)

@@ -48,7 +48,7 @@
 
 #define SCAN_LAYOUT_SYMBOLIC_C64      0
 #define SCAN_LAYOUT_POSITIONAL_C64    1
-#define SCAN_LAYOUT_NUM           2
+#define SCAN_LAYOUT_NUM               2
 
 #define SCAN_C64_KEY_RSHIFT     0x33
 #define SCAN_C64_KEY_LSHIFT     0x0c
@@ -60,18 +60,5 @@
 #define SCAN_C64_KEY_RETURN     0x3e
 #define SCAN_C64_KEY_CTRL       0x05
 #define SCAN_C64_KEY_DEL        0x3f
-
-#if defined __AVR_ATmega162__
-#define SW_4080         PIN1
-#define SW_CAPSENSE     PIN0
-#define SW_RESTORE      PIN2
-#elif defined __AVR_ATmega16__
-#define SW_4080         PIN4
-#define SW_CAPSENSE     PIN5
-#define SW_RESTORE      PIN6
-#else
-#  error Unknown CPU!
-#endif
-
 
 #endif //_SCANNER64_H_

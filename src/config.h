@@ -46,28 +46,6 @@
 
 #if CONFIG_HARDWARE_VARIANT == 1
 
-/* MODE_DETECT must return non-zero when host mode is desired */
-#define MODE_DETECT       (PIND & (1 << PIN5))
-#define RESET_INIT()      do {} while(0)
-#define RESET_ON()        do {} while(0)
-#define RESET_OFF()       do {} while(0)
-
-#define KB_ROW_HI_OUT     PORTB
-#define KB_ROW_HI_IN      PINB
-#define KB_ROW_HI_DDR     DDRB
-#define KB_ROW_LO_OUT     PORTA
-#define KB_ROW_LO_IN      PINA
-#define KB_ROW_LO_DDR     DDRA
-#define KB_COL_OUT        PORTC
-#define KB_COL_IN         PINC
-#define KB_COL_DDR        DDRC
-
-#define PORT_SW_OUT      PORTD
-#define PORT_SW_IN       PIND
-#define PORT_SW_DDR      DDRD
-
-#elif CONFIG_HARDWARE_VARIANT == 2
-
 #define MODE_DETECT       (PIND & (1 << PIN4))
 #define RESET_INIT()      do {PORTD |= (1 << PIN5); } while(0)
 #define RESET_ON()        do {DDRD |= (1 << PIN5); PORTD &= (uint8_t)~(1 << PIN5); } while(0)
@@ -95,6 +73,17 @@
 #define PORT_SW_OUT       PORTE
 #define PORT_SW_IN        PINE
 #define PORT_SW_DDR       DDRE
+
+#define XPT_PORT_DATA_OUT   PORTB
+#define XPT_DDR_DATA        DDRB
+#define XPT_PORT_STROBE_OUT PORTD
+#define XPT_DDR_STROBE      DDRD
+
+#define XPT_PIN_STROBE (1<<PIN6)
+
+#define SW_4080         PIN1
+#define SW_CAPSENSE     PIN0
+#define SW_RESTORE      PIN2
 
 #endif
 

@@ -177,7 +177,7 @@
 #  define USARTA_UDRE_vect USART_UDRE_vect
 #  define USARTA_RXC_vect USART_RXC_vect
 
-#elif defined __AVR_ATmega165__ || defined __AVR_ATmega32__ || defined __AVR_ATmega16__ || defined __AVR_ATmega8__
+#elif defined __AVR_ATtiny2313__ || defined __AVR_ATtiny4313__ || defined __AVR_ATmega165__ || defined __AVR_ATmega165A__ || defined __AVR_ATmega165P__ || defined __AVR_ATmega165PA__ || defined __AVR_ATmega32__ || defined __AVR_ATmega16__ || defined __AVR_ATmega8__
 // only 1 uart
 #    define UDRA   UDR
 #    define RXCA   RXC
@@ -192,7 +192,7 @@
 #    define UDRIEA UDRIE
 #    define URSELA URSEL
 #    define U2XA   U2X
-#    if defined __AVR_ATmega165__
+#    if defined __AVR_ATmega165__ || defined __AVR_ATmega165A__ || defined __AVR_ATmega165P__ || defined __AVR_ATmega165PA__
 #      define USARTA_UDRE_vect USART0_UDRE_vect
 #      define USARTA_RXC_vect USART0_RXC_vect
 #    else
