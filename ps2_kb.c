@@ -24,7 +24,6 @@
 #include <avr/interrupt.h>
 #include "config.h"
 #include "ps2.h"
-#include "ps2_int.h"
 
 static uint8_t ps2_leds = 0;
 static uint8_t ps2_codeset = 2;
@@ -45,9 +44,7 @@ void ps2_handle_cmds(uint8_t data) {
         // we should disable sending output if we receive this command.
       case PS2_CMD_ENABLE:
         //clear out KB buffers
-        cli();
         ps2_clear_buffers();
-        sei();
         ps2_putc(PS2_CMD_ACK);
         break;
       default:

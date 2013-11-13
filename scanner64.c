@@ -151,7 +151,7 @@ static uint8_t led_state;
 void scan_init(void) {
   // init keyboard matrix scanning engine
   kb_init();
-  SW_init(SW_TYPE_INPUT,(1<<SW_RESTORE) | (1<<SW_CAPSENSE) | (1<<SW_4080));
+  sw_init((1<<SW_RESTORE) | (1<<SW_CAPSENSE) | (1<<SW_4080));
   LED_init(LED_PIN_7);
   
   // initially, load defaults from EEPROM
@@ -168,7 +168,7 @@ void scan_init(void) {
 
 void scan_irq(void) {
   kb_scan();
-  SW_scan();
+  sw_scan();
   led_divider++;
   if(led_divider==SCAN_LED_IRQ_DIVIDER) {
     led_divider=0;
@@ -442,10 +442,10 @@ void scan(void) {
         }
       }
     }
-    if(SW_data_available()) {
+    if(sw_data_available()) {
       
       // handle special switches.
-      data=SW_recv();
+      data=sw_getc();
       if(debug) {
         debug('s');
         uart_puthex(data);

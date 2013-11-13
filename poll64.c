@@ -261,10 +261,6 @@ static uint8_t led_state=0;
 static uint8_t led_counter=0;
 static uint8_t debug=0;
 
-
-
-static uint8_t state=POLL_ST_IDLE;
-
 void poll_irq(void) {
   led_counter++;
   if(led_counter==POLL_LED_IRQ_DIVIDER) {
@@ -292,13 +288,13 @@ void set_switch(uint8_t sw, uint8_t state) {
   }
   switch(sw) {
     case POLL_C64_PKEY_RESTORE:
-      SW_send(SW_RESTORE | (state?0:SW_UP));
+      sw_putc(SW_RESTORE | (state?0:SW_UP));
       break;
     case POLL_C128_PKEY_4080:
-      SW_send(SW_4080 | (state?0:SW_UP));
+      sw_putc(SW_4080 | (state?0:SW_UP));
       break;
     case POLL_C128_PKEY_CAPSENSE:
-      SW_send(SW_CAPSENSE | (state?0:SW_UP));
+      sw_putc(SW_CAPSENSE | (state?0:SW_UP));
       break;
     default:
       XPT_PORT_DATA_OUT=((state!=FALSE) | sw);
@@ -462,7 +458,7 @@ void poll_init(void) {
   XPT_PORT_STROBE_OUT&=(uint8_t)~XPT_PIN_STROBE;
   XPT_DDR_STROBE|=XPT_PIN_STROBE;
   XPT_DDR_DATA=0xff;
-  SW_init(SW_TYPE_OUTPUT,(1<<SW_RESTORE) | (1<<SW_CAPSENSE) | (1<<SW_4080));
+  sw_init((1<<SW_RESTORE) | (1<<SW_CAPSENSE) | (1<<SW_4080));
 
   // initially, load defaults from EEPROM
   while(!eeprom_is_ready());
@@ -716,9 +712,14 @@ static void map_symbolic_c128(uint8_t sh, uint8_t code, uint8_t state) {
 
 static void remap_personal(uint8_t map, uint8_t* shift, uint8_t* code) {
   // this is where we'd put the user's overrides...
+  (void)map;
+  (void)shift;
+  (void)code;
 }
 
 static void remap_keypad(uint8_t* sh,uint8_t* code) {
+  (void)sh;
+
   if(!(led_state & PS2_LED_NUM_LOCK)) {
     // mappings for cursor and paging keys.
     switch(*code) {
@@ -784,19 +785,19 @@ static void set_options(uint8_t code, uint8_t state) {
   if(state) {
     switch(code) {
       case PS2_KEY_1:
-        layout=0;
+        layout=POLL_LAYOUT_POSITIONAL_C64;
         LED_blink(LED_PIN_7,1,LED_FLAG_NONE);
         break;
       case PS2_KEY_2:
-        layout=1;
+        layout=POLL_LAYOUT_POSITIONAL_C128;
         LED_blink(LED_PIN_7,2,LED_FLAG_NONE);
         break;
       case PS2_KEY_3:
-        layout=2;
+        layout=POLL_LAYOUT_SYMBOLIC_C64;
         LED_blink(LED_PIN_7,3,LED_FLAG_NONE);
         break;
       case PS2_KEY_4:
-        layout=3;
+        layout=POLL_LAYOUT_SYMBOLIC_C128;
         LED_blink(LED_PIN_7,4,LED_FLAG_NONE);
         break;
       case PS2_KEY_EQUALS:
@@ -875,6 +876,7 @@ void poll_parse_key(uint8_t code, uint8_t state) {
 
 // This function, normalizes the PS2 keycodes in
 void poll(void) {
+  uint8_t state=POLL_ST_IDLE;
   uint8_t key;
   LED_blink(LED_PIN_7,layout+1,LED_FLAG_END_ON);
   

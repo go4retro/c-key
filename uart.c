@@ -126,7 +126,6 @@ void uart0_flush(void) {
 }
 void uart_flush(void) __attribute__ ((weak, alias("uart0_flush")));
 
-//void uart0_puts_P(prog_char *text) {
 void uart0_puts_P(const char *text) {
   uint8_t ch;
 
@@ -134,7 +133,7 @@ void uart0_puts_P(const char *text) {
     uart0_putc(ch);
   }
 }
-//void uart_puts_P(prog_char *text) __attribute__ ((weak, alias("uart0_puts_P")));
+
 void uart_puts_P(const char *text) __attribute__ ((weak, alias("uart0_puts_P")));
 
 void uart0_putcrlf(void) {
