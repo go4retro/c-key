@@ -62,6 +62,10 @@
 #define KB_COL_IN         PINC
 #define KB_COL_DDR        DDRC
 
+#define PORT_SW_OUT      PORTD
+#define PORT_SW_IN       PIND
+#define PORT_SW_DDR      DDRD
+
 #elif CONFIG_HARDWARE_VARIANT == 2
 
 #define MODE_DETECT       (PIND & (1 << PIN4))
@@ -79,15 +83,18 @@
 #define KB_COL_IN         PINA
 #define KB_COL_DDR        DDRA
 
-#define PS2_PORT_DDR_CLK    DDRD
-#define PS2_PORT_CLK_OUT    PORTD
-#define PS2_PORT_CLK_IN     PIND
-#define PS2_PIN_CLK         _BV(PD3)
-#define PS2_PORT_DDR_DATA   DDRD
-#define PS2_PORT_DATA_OUT   PORTD
-#define PS2_PORT_DATA_IN    PIND
-#define PS2_PIN_DATA        _BV(PD2)
+#define PS2_CLK_DDR       DDRD
+#define PS2_CLK_OUT       PORTD
+#define PS2_CLK_IN        PIND
+#define PS2_CLK_PIN       _BV(PD3)
+#define PS2_DATA_DDR      DDRD
+#define PS2_DATA_OUT      PORTD
+#define PS2_DATA_IN       PIND
+#define PS2_DATA_PIN      _BV(PD2)
 
+#define PORT_SW_OUT       PORTE
+#define PORT_SW_IN        PINE
+#define PORT_SW_DDR       DDRE
 
 #endif
 

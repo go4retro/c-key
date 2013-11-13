@@ -35,7 +35,7 @@ ISR(TIMER2_COMP_vect) {
   }
 }
 
-int main( void ) {
+void main( void ) {
   uart_init();
 
   poll_init();  // do it here to reset cross-point switch everytime.

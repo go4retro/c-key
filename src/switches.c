@@ -20,103 +20,101 @@
 
 */
 
+// TODO: if putc has depressed a IO pin, don't record it as a switch closure.
+
 #include <avr/io.h>
 #include <inttypes.h>
 #include "config.h"
 #include "switches.h"
 
-static unsigned char SW_RxBuf[SW_RX_BUFFER_SIZE];
-static volatile uint8_t SW_RxHead;
-static volatile uint8_t SW_RxTail;
+static unsigned char rx_buf[_BV( SW_RX_BUFFER_SHIFT)];
+static volatile uint8_t rx_head;
+static volatile uint8_t rx_tail;
 
-static uint8_t SW_cache;
-static uint8_t SW_mask;
+static uint8_t cache;
+static uint8_t in_mask;
 
-void SW_init(uint8_t type, uint8_t mask) {
-  // bring them HI-Z
-  PORT_SW_OUT|=mask;
-  // bring them to inputs;
-  PORT_SW_DDR&=(uint8_t)~mask;
-  SW_mask=mask;
-  SW_cache=(PORT_SW_IN & mask);
-}
-
-void SW_store(uint8_t data) {
-  uint8_t tmphead;
+static void sw_store(uint8_t data) {
   
-  tmphead = ( SW_RxHead + 1 ) & SW_RX_BUFFER_MASK;
-  SW_RxHead = tmphead;      /* Store new index */
+  rx_head = ( rx_head + 1 ) & (sizeof(rx_buf) - 1);  /* Calculate and store new index */
 
-  if ( tmphead == SW_RxTail ) {
+  if ( rx_head == rx_tail ) {
     /* ERROR! Receive buffer overflow */
   }
   
-  SW_RxBuf[tmphead] = data; /* Store received data in buffer */
+  rx_buf[rx_head] = data; /* Store received data in buffer */
 }
 
-uint8_t SW_data_available( void ) {
-  return ( SW_RxHead != SW_RxTail ); /* Return 0 (FALSE) if the receive buffer is empty */
+uint8_t sw_data_available( void ) {
+  return ( rx_head != rx_tail ); /* Return 0 (FALSE) if the receive buffer is empty */
 }
 
-void SW_send( uint8_t sw) {
-  // 0x80 indicates key up.
-  uint8_t state=(sw&0x80);
-  sw&=0x7f;
-  if(state) {
-    // bring to input and set HI-Z
-    PORT_SW_DDR&=(uint8_t)~(1<<sw);
-    PORT_SW_OUT|=(1<<sw);
-  } else {
-    PORT_SW_DDR|=(1<<sw);
-    PORT_SW_OUT&=(uint8_t)~(1<<sw);
+void sw_putc( uint8_t sw) {
+  // bit 7 indicates key up.
+  uint8_t state=(sw & SW_UP);
+  sw = _BV(sw); // turn into bit mask;
+  if(sw & in_mask) {
+    if(state) {
+      // bring to input and set HI-Z
+      PORT_SW_DDR &= (uint8_t)~sw;
+      PORT_SW_OUT |= sw;
+    } else {
+      PORT_SW_DDR |= sw;
+      PORT_SW_OUT &= (uint8_t)~sw;
+    }
   }
 }
 
-uint8_t SW_recv( void ) {
-  uint8_t tmptail;
+uint8_t sw_getc( void ) {
   
-  while ( SW_RxHead == SW_RxTail ) {
+  while ( rx_head == rx_tail ) {
     ;
   }
-  tmptail = ( SW_RxTail + 1 ) & SW_RX_BUFFER_MASK;/* Calculate buffer index */
+  rx_tail = ( rx_tail + 1 ) & (sizeof(rx_buf) - 1);  /* Calculate and store buffer index */
   
-  SW_RxTail = tmptail;                /* Store new index */
-  
-  return SW_RxBuf[tmptail];           /* Return data */
+  return rx_buf[rx_tail];           /* Return data */
 }
 
-void SW_scan(void) {
-  uint8_t mask,up,down,in;
+void sw_scan(void) {
+  uint8_t mask, up, down, in;
 
-  in=(PORT_SW_IN & SW_mask);
-  if(in != SW_cache) {
+  in=(PORT_SW_IN & in_mask);
+  if(in != cache) {
     // a key has changed.
-    mask = in ^ SW_cache;
-    down=SW_cache & mask;
-    up=in&mask;
+    mask = in ^ cache;
+    down=cache & mask;
+    up=in & mask;
     if(up) {
       // keys released.
-      if(up&1) {SW_store(0x80|0);}
-      if(up&2) {SW_store(0x80|1);}
-      if(up&4) {SW_store(0x80|2);}
-      if(up&8) {SW_store(0x80|3);}
-      if(up&16) {SW_store(0x80|4);}
-      if(up&32) {SW_store(0x80|5);}
-      if(up&64) {SW_store(0x80|6);}
-      if(up&128) {SW_store(0x80|7);}
+      if(up & 1)   {sw_store(SW_UP | 0);}
+      if(up & 2)   {sw_store(SW_UP | 1);}
+      if(up & 4)   {sw_store(SW_UP | 2);}
+      if(up & 8)   {sw_store(SW_UP | 3);}
+      if(up & 16)  {sw_store(SW_UP | 4);}
+      if(up & 32)  {sw_store(SW_UP | 5);}
+      if(up & 64)  {sw_store(SW_UP | 6);}
+      if(up & 128) {sw_store(SW_UP | 7);}
     }
     if(down) {
       // keys pressed.
-      if(down&1) {SW_store(0);}
-      if(down&2) {SW_store(1);}
-      if(down&4) {SW_store(2);}
-      if(down&8) {SW_store(3);}
-      if(down&16) {SW_store(4);}
-      if(down&32) {SW_store(5);}
-      if(down&64) {SW_store(6);}
-      if(down&128) {SW_store(7);}
+      if(down & 1)   {sw_store(0);}
+      if(down & 2)   {sw_store(1);}
+      if(down & 4)   {sw_store(2);}
+      if(down & 8)   {sw_store(3);}
+      if(down & 16)  {sw_store(4);}
+      if(down & 32)  {sw_store(5);}
+      if(down & 64)  {sw_store(6);}
+      if(down & 128) {sw_store(7);}
     }
-    SW_cache=in;
+    cache = in;
   }
 }
 
+void sw_init(uint8_t mask) {
+  // bring them HI-Z
+  PORT_SW_OUT |= mask;
+  // bring them to inputs;
+  PORT_SW_DDR &= (uint8_t)~mask;
+  in_mask = mask;
+  cache=(PORT_SW_IN & mask);
+}

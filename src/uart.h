@@ -46,7 +46,7 @@
 #define B460800	CALC_BPS(460800)
 #define B921600	CALC_BPS(921600)
 
-#if defined __AVR_ATmega162__ || defined __AVR_ATmega644__ || defined __AVR_ATmega644P__ || defined __AVR_ATmega1281__ || defined __AVR_ATmega2561__ || __AVR_ATmega128__
+#if defined __AVR_ATmega162__ || defined __AVR_ATmega644__ || defined __AVR_ATmega644P__ || defined __AVR_ATmega1281__ || defined __AVR_ATmega2561__ || defined __AVR_ATmega128__
 
 #  ifdef SWAP_UART
 #    define UDREA  UDRE1
@@ -177,7 +177,7 @@
 #  define USARTA_UDRE_vect USART_UDRE_vect
 #  define USARTA_RXC_vect USART_RXC_vect
 
-#elif defined __AVR_ATmega16__ || defined __AVR_ATmega8__
+#elif defined __AVR_ATmega165__ || defined __AVR_ATmega32__ || defined __AVR_ATmega16__ || defined __AVR_ATmega8__
 // only 1 uart
 #    define UDRA   UDR
 #    define RXCA   RXC
@@ -190,9 +190,20 @@
 #    define UCSRAB UCSRB
 #    define UCSRAC UCSRC
 #    define UDRIEA UDRIE
+#    define URSELA URSEL
 #    define U2XA   U2X
-#    define USARTA_UDRE_vect USART_UDRE_vect
-#    define USARTA_RXC_vect USART_RXC_vect
+#    if defined __AVR_ATmega165__
+#      define USARTA_UDRE_vect USART0_UDRE_vect
+#      define USARTA_RXC_vect USART0_RXC_vect
+#    else
+#      define USARTA_UDRE_vect USART_UDRE_vect
+#      define USARTA_RXC_vect USART_RXC_vect
+#    endif
+#    define USBSA  USBS
+#    define UCSZA0 UCSZ0
+#    define UCSZA1 UCSZ1
+#    define UPMA0  UPM0
+#    define UPMA1  UPM1
 
 #else
 #  error Unknown chip!
@@ -254,7 +265,6 @@ void uart_putcrlf(void);
 #define uart_flush()            do {} while(0)
 #define uart_puts_P(x)          do {} while(0)
 #define uart_putcrlf()          do {} while(0)
-#define uart_trace(a,b,c)       do {} while(0)
 
 #endif
 
@@ -278,7 +288,6 @@ void uart0_putcrlf(void);
 #  define uart0_puts_P(x)        do {} while(0)
 #  define uart0_data_available() do {} while(0)
 #  define uart0_putcrlf()        do {} while(0)
-#  define uart0_trace(a,b,c)     do {} while(0)
 #endif
 
 #ifdef ENABLE_UART1
