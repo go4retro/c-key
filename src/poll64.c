@@ -879,7 +879,7 @@ void poll(void) {
   uint8_t state=POLL_ST_IDLE;
   uint8_t key;
   LED_blink(LED_PIN_7,layout+1,LED_FLAG_END_ON);
-  
+
   for(;;) {
     if(ps2_data_available() != 0) {
       // kb sent data...
