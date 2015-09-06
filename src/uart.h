@@ -151,6 +151,7 @@
 #  endif
 
 #elif defined __AVR_ATmega28__ || defined __AVR_ATmega48__ || defined __AVR_ATmega88__ || defined __AVR_ATmega168__
+#  define UDREA  UDRE0
 #  define UCSZA0 UCSZ00
 #  define UCSZA1 UCSZ01
 #  define UPMA0  UPM00
@@ -179,31 +180,32 @@
 
 #elif defined __AVR_ATtiny2313__ || defined __AVR_ATtiny4313__ || defined __AVR_ATmega165__ || defined __AVR_ATmega165A__ || defined __AVR_ATmega165P__ || defined __AVR_ATmega165PA__ || defined __AVR_ATmega32__ || defined __AVR_ATmega16__ || defined __AVR_ATmega8__
 // only 1 uart
-#    define UDRA   UDR
-#    define RXCA   RXC
-#    define RXENA  RXEN
-#    define TXCA   TXC
-#    define TXENA  TXEN
-#    define UBRRAH UBRRH
-#    define UBRRAL UBRRL
-#    define UCSRAA UCSRA
-#    define UCSRAB UCSRB
-#    define UCSRAC UCSRC
-#    define UDRIEA UDRIE
-#    define URSELA URSEL
-#    define U2XA   U2X
-#    if defined __AVR_ATmega165__ || defined __AVR_ATmega165A__ || defined __AVR_ATmega165P__ || defined __AVR_ATmega165PA__
-#      define USARTA_UDRE_vect USART0_UDRE_vect
-#      define USARTA_RXC_vect USART0_RXC_vect
-#    else
-#      define USARTA_UDRE_vect USART_UDRE_vect
-#      define USARTA_RXC_vect USART_RXC_vect
-#    endif
-#    define USBSA  USBS
-#    define UCSZA0 UCSZ0
-#    define UCSZA1 UCSZ1
-#    define UPMA0  UPM0
-#    define UPMA1  UPM1
+#  define UDREA  UDRE
+#  define UDRA   UDR
+#  define RXCA   RXC
+#  define RXENA  RXEN
+#  define TXCA   TXC
+#  define TXENA  TXEN
+#  define UBRRAH UBRRH
+#  define UBRRAL UBRRL
+#  define UCSRAA UCSRA
+#  define UCSRAB UCSRB
+#  define UCSRAC UCSRC
+#  define UDRIEA UDRIE
+#  define URSELA URSEL
+#  define U2XA   U2X
+#  if defined __AVR_ATmega165__
+#    define USARTA_UDRE_vect USART0_UDRE_vect
+#    define USARTA_RXC_vect USART0_RXC_vect
+#  else
+#    define USARTA_UDRE_vect USART_UDRE_vect
+#    define USARTA_RXC_vect USART_RXC_vect
+#  endif
+#  define USBSA  USBS
+#  define UCSZA0 UCSZ0
+#  define UCSZA1 UCSZ1
+#  define UPMA0  UPM0
+#  define UPMA1  UPM1
 
 #else
 #  error Unknown chip!
@@ -218,7 +220,11 @@
                                  UCSRAC = __tmp | _BV(URSELA) | (l & UART_LENGTH_MASK) | (p & UART_PARITY_MASK) | (s & UART_STOP_MASK); \
                                  } \
                                 } while(0)
-#  define UART0_MODE_SETUP()  do { UCSRAC = _BV(URSELA) | _BV(UCSZA1) | _BV(UCSZA0); } while(0)
+#  if defined __AVR_ATmega16__ || defined __AVR_ATmega32__
+#    define UART0_MODE_SETUP()  do { UCSRAC = _BV(URSELA) | _BV(UCSZA1) | _BV(UCSZA0); } while(0)
+#  else
+#    define UART0_MODE_SETUP()  do { UCSRAC = _BV(UCSZA1) | _BV(UCSZA0); } while(0)
+#  endif
 #  if defined __AVR_ATmega162__
 #    define UART1_CONFIG(l,p,s) do{\
                                    uint8_t __tmp; \
