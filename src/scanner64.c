@@ -236,6 +236,8 @@ void send_key_code(uint8_t sh,uint8_t key,uint8_t state) {
       switch(state) {
         case FALSE:
           ps2_putc(PS2_KEY_UP);
+          ps2_putc(key);
+          break;
         case TRUE:
           ps2_putc(key);
           break;
