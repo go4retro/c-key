@@ -387,10 +387,13 @@ void reset_matrix(void) {
   // turn off all LEDs but NumLock
   led_state&=(PS2_LED_NUM_LOCK);
 
-  // turn off all but 4080 
-  sw_state&=(1<<SW_4080);
+  // turn off all but 4080
+  //sw_state&=(1<<SW_4080);
+  // turn off all
+  sw_state = 0;
+
   // now, set 4080
-  set_switch(POLL_C128_PKEY_4080,sw_state&(1<<SW_4080));
+  //set_switch(POLL_C128_PKEY_4080,sw_state&(1<<SW_4080));
 }
 
 static void set_LED(uint8_t led) {

@@ -165,6 +165,21 @@ pip-log.txt
 #SVN
 .svn
 
-#Project Stuff
+#Xilinx ISE WebPack
+*.xmsgs
+*.tim
+*.tspec
+_xmsgs
+/hdl/*.err
+/hdl/iseconfig
+/hdl/_pace.ucf
+
+#EAGLE CAD
+/pcb/*.lck
+
+#GCC
 .dep
 obj-*
+
+#Project Stuff
+archive
