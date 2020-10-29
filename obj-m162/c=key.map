@@ -1,0 +1,973 @@
+Archive member included to satisfy reference by file (symbol)
+
+c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+                              c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o (exit)
+c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libc.a(iob.o)
+                              obj-m162/src/uart.o (symbol from plugin) (__iob)
+c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libatmega162.a(eerd_byte.o)
+                              obj-m162/src/eeprom.o (symbol from plugin) (eeprom_read_byte)
+c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libatmega162.a(eewr_byte.o)
+                              obj-m162/src/eeprom.o (symbol from plugin) (eeprom_write_byte)
+c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+                              c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libc.a(iob.o) (__do_clear_bss)
+c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+                              C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o (__tablejump2__)
+c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+                              C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o (__do_copy_data)
+c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+                              C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o (__prologue_saves__)
+c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+                              C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o (__epilogue_restores__)
+
+Allocating common symbols
+Common symbol       size              file
+
+__iob               0x6               c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libc.a(iob.o)
+
+Discarded input sections
+
+ .data          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+ .bss           0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+ .text          0x00000000        0x0 obj-m162/src/eeprom.o (symbol from plugin)
+ .text          0x00000000        0x0 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .data          0x00000000        0x0 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss           0x00000000        0x0 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .avr.prop      0x00000000       0x67 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text          0x00000000        0x0 obj-m162/src/kb.o (symbol from plugin)
+ .text          0x00000000        0x0 obj-m162/src/led.o (symbol from plugin)
+ .text          0x00000000        0x0 obj-m162/src/main.o (symbol from plugin)
+ .text          0x00000000        0x0 obj-m162/src/poll64.o (symbol from plugin)
+ .text          0x00000000        0x0 obj-m162/src/ps2.o (symbol from plugin)
+ .text          0x00000000        0x0 obj-m162/src/ps2_kb.o (symbol from plugin)
+ .text          0x00000000        0x0 obj-m162/src/scanner64.o (symbol from plugin)
+ .text          0x00000000        0x0 obj-m162/src/switches.o (symbol from plugin)
+ .text          0x00000000        0x0 obj-m162/src/uart.o (symbol from plugin)
+ .text          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+ .data          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+ .bss           0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+ .text.libgcc.mul
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+ .text.libgcc.div
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+ .text          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libc.a(iob.o)
+ .data          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libc.a(iob.o)
+ .bss           0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libc.a(iob.o)
+ .text          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libatmega162.a(eerd_byte.o)
+ .data          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libatmega162.a(eerd_byte.o)
+ .bss           0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libatmega162.a(eerd_byte.o)
+ .text          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libatmega162.a(eewr_byte.o)
+ .data          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libatmega162.a(eewr_byte.o)
+ .bss           0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libatmega162.a(eewr_byte.o)
+ .text          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+ .data          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+ .bss           0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc.mul
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc.div
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+ .text          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+ .data          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+ .bss           0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+ .text.libgcc.mul
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+ .text.libgcc.div
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+ .text          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+ .data          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+ .bss           0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc.mul
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc.div
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc   0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+ .text          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+ .data          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+ .bss           0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+ .text.libgcc.mul
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+ .text.libgcc.div
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+ .text.libgcc   0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+ .text          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+ .data          0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+ .bss           0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+ .text.libgcc.mul
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+ .text.libgcc.div
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+ .text.libgcc   0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x00000000         0x00020000         xr
+data             0x00800060         0x0000ffa0         rw !x
+eeprom           0x00810000         0x00010000         rw !x
+fuse             0x00820000         0x00000003         rw !x
+lock             0x00830000         0x00000400         rw !x
+signature        0x00840000         0x00000400         rw !x
+user_signatures  0x00850000         0x00000400         rw !x
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+Address of section .data set to 0x800100
+LOAD c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+LOAD obj-m162/src/eeprom.o
+LOAD C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+LOAD obj-m162/src/kb.o
+LOAD obj-m162/src/led.o
+LOAD obj-m162/src/main.o
+LOAD obj-m162/src/poll64.o
+LOAD obj-m162/src/ps2.o
+LOAD obj-m162/src/ps2_kb.o
+LOAD obj-m162/src/scanner64.o
+LOAD obj-m162/src/switches.o
+LOAD obj-m162/src/uart.o
+LOAD c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libm.a
+START GROUP
+LOAD c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a
+LOAD c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libm.a
+LOAD c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libc.a
+LOAD c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libatmega162.a
+END GROUP
+                0x00020000                __TEXT_REGION_LENGTH__ = DEFINED (__TEXT_REGION_LENGTH__)?__TEXT_REGION_LENGTH__:0x20000
+                0x0000ffa0                __DATA_REGION_LENGTH__ = DEFINED (__DATA_REGION_LENGTH__)?__DATA_REGION_LENGTH__:0xffa0
+                0x00010000                __EEPROM_REGION_LENGTH__ = DEFINED (__EEPROM_REGION_LENGTH__)?__EEPROM_REGION_LENGTH__:0x10000
+                [0x00000003]                __FUSE_REGION_LENGTH__ = DEFINED (__FUSE_REGION_LENGTH__)?__FUSE_REGION_LENGTH__:0x400
+                0x00000400                __LOCK_REGION_LENGTH__ = DEFINED (__LOCK_REGION_LENGTH__)?__LOCK_REGION_LENGTH__:0x400
+                0x00000400                __SIGNATURE_REGION_LENGTH__ = DEFINED (__SIGNATURE_REGION_LENGTH__)?__SIGNATURE_REGION_LENGTH__:0x400
+                0x00000400                __USER_SIGNATURE_REGION_LENGTH__ = DEFINED (__USER_SIGNATURE_REGION_LENGTH__)?__USER_SIGNATURE_REGION_LENGTH__:0x400
+                0x00800060                __DATA_REGION_ORIGIN__ = DEFINED (__DATA_REGION_ORIGIN__)?__DATA_REGION_ORIGIN__:0x800060
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x00000000     0x1d66
+ *(.vectors)
+ .vectors       0x00000000       0x70 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+                0x00000000                __vector_default
+                0x00000000                __vectors
+ *(.vectors)
+ *(.progmem.gcc*)
+                0x00000070                . = ALIGN (0x2)
+                0x00000070                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x00000070        0x0 linker stubs
+ *(.trampolines*)
+                0x00000070                __trampolines_end = .
+ *libprintf_flt.a:*(.progmem.data)
+ *libc.a:*(.progmem.data)
+ *(.progmem*)
+ .progmem.data.layouts.lto_priv.15
+                0x00000070      0x168 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .progmem.data.normal.lto_priv.11
+                0x000001d8       0x84 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .progmem.data.joy_mapping
+                0x0000025c       0x24 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .progmem.data.joy_table
+                0x00000280       0x10 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .progmem.data.layouts.lto_priv.16
+                0x00000290       0xc8 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .progmem.data.normal.lto_priv.12
+                0x00000358       0x58 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                0x000003b0                . = ALIGN (0x2)
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x000003b0                __ctors_start = .
+ *(.ctors)
+                0x000003b0                __ctors_end = .
+                0x000003b0                __dtors_start = .
+ *(.dtors)
+                0x000003b0                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x000003b0        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+                0x000003b0                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x000003b0        0xc c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x000003bc       0x10 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+                0x000003bc                __do_clear_bss
+ .init4         0x000003cc       0x16 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+                0x000003cc                __do_copy_data
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x000003e2        0x8 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+ *(.init9)
+ *(.text)
+ .text          0x000003ea        0x4 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+                0x000003ea                __vector_22
+                0x000003ea                __vector_1
+                0x000003ea                __vector_24
+                0x000003ea                __vector_12
+                0x000003ea                __bad_interrupt
+                0x000003ea                __vector_6
+                0x000003ea                __vector_3
+                0x000003ea                __vector_23
+                0x000003ea                __vector_25
+                0x000003ea                __vector_11
+                0x000003ea                __vector_13
+                0x000003ea                __vector_17
+                0x000003ea                __vector_19
+                0x000003ea                __vector_7
+                0x000003ea                __vector_27
+                0x000003ea                __vector_5
+                0x000003ea                __vector_4
+                0x000003ea                __vector_9
+                0x000003ea                __vector_15
+                0x000003ea                __vector_8
+                0x000003ea                __vector_26
+                0x000003ea                __vector_14
+                0x000003ea                __vector_18
+                0x000003ea                __vector_20
+                0x000003ee                . = ALIGN (0x2)
+ *(.text.*)
+ .text.LED_init.constprop.1
+                0x000003ee       0x16 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.sw_init.constprop.0
+                0x00000404       0x1c C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.uart0_putc
+                0x00000420       0x24 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ioputc   0x00000444       0x1c C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.uart0_puthex
+                0x00000460       0x2c C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.sw_putc  0x0000048c       0x3a C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.sw_store
+                0x000004c6       0x22 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.get_joy_direction
+                0x000004e8       0x4e C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_getc
+                0x00000536       0x22 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_clear_buffers
+                0x00000558       0x18 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_write_parity
+                0x00000570       0x14 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_read_bit
+                0x00000584       0x2e C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_write_bit
+                0x000005b2       0x38 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_read_byte
+                0x000005ea       0x20 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_write_byte
+                0x0000060a       0x1e C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_disable_timer
+                0x00000628        0x8 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_enable_timer
+                0x00000630       0x14 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_trigger_send
+                0x00000644       0x32 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_putc
+                0x00000676       0x36 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.check_override
+                0x000006ac       0x54 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.send_key_code
+                0x00000700       0xc4 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_enable_clk_fall
+                0x000007c4       0x1c C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_init
+                0x000007e0       0x26 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_check_for_data
+                0x00000806       0x20 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_enable_clk_rise
+                0x00000826       0x1a C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.ps2_device_host_inhibit
+                0x00000840       0x14 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.set_LED  0x00000854       0x1c C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.toggle_num_lock
+                0x00000870       0x28 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.set_switch
+                0x00000898       0x58 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.reset_matrix
+                0x000008f0       0x28 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.set_matrix
+                0x00000918      0x12c C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.map_positional_c128
+                0x00000a44      0x118 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.LED_irq  0x00000b5c       0xb4 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.kb_set_repeat_code
+                0x00000c10       0x1e C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.do_joy   0x00000c2e       0xa0 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.parse_key
+                0x00000cce       0xd6 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.kb_store
+                0x00000da4       0x16 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.kb_decode
+                0x00000dba       0x5a C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.update_eeprom
+                0x00000e14       0x2c C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.poll_parse_key
+                0x00000e40      0x302 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .text.__vector_21
+                0x00001142       0x4e C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                0x00001142                __vector_21
+ .text.__vector_2
+                0x00001190      0x14a C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                0x00001190                __vector_2
+ .text.__vector_16
+                0x000012da      0x21c C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                0x000012da                __vector_16
+ .text.startup.main
+                0x000014f6      0x574 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                0x000014f6                main
+ .text.__vector_10
+                0x00001a6a      0x254 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                0x00001a6a                __vector_10
+ .text.avr-libc
+                0x00001cbe       0x10 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libatmega162.a(eerd_byte.o)
+                0x00001cbe                eeprom_read_byte
+ .text.avr-libc
+                0x00001cce       0x1a c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libatmega162.a(eewr_byte.o)
+                0x00001cce                eeprom_write_byte
+                0x00001cd0                eeprom_write_r18
+ .text.libgcc   0x00001ce8        0xc c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+                0x00001ce8                __tablejump2__
+ .text.libgcc.prologue
+                0x00001cf4       0x38 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+                0x00001cf4                __prologue_saves__
+ .text.libgcc.prologue
+                0x00001d2c       0x36 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+                0x00001d2c                __epilogue_restores__
+                0x00001d62                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x00001d62        0x0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+                0x00001d62                _exit
+                0x00001d62                exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x00001d62        0x4 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+ *(.fini0)
+                0x00001d66                _etext = .
+
+.data           0x00800100       0x10 load address 0x00001d66
+                0x00800100                PROVIDE (__data_start, .)
+ *(.data)
+ *(.data*)
+ .data.mystdout
+                0x00800100        0xe C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .data.ps2_codeset
+                0x0080010e        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ *(.gnu.linkonce.d*)
+ *(.rodata)
+ *(.rodata*)
+ *(.gnu.linkonce.r*)
+                0x00800110                . = ALIGN (0x2)
+ *fill*         0x0080010f        0x1 
+                0x00800110                _edata = .
+                0x00800110                PROVIDE (__data_end, .)
+
+.bss            0x00800110       0x85
+                0x00800110                PROVIDE (__bss_start, .)
+ *(.bss)
+ *(.bss*)
+ .bss.led_status
+                0x00800110        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.led_counter
+                0x00800111        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.kb_port_save
+                0x00800112        0x2 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.kb_save   0x00800114       0x10 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.kb_scan_idx
+                0x00800124        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.kb_curr_value
+                0x00800125        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.led_divider
+                0x00800126        0x2 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.kb_state  0x00800128        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.kb_repeat_count
+                0x00800129        0x2 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.kb_repeat_delay
+                0x0080012b        0x2 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.kb_repeat_period
+                0x0080012d        0x2 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.kb_rxbuf  0x0080012f       0x10 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.kb_rxtail
+                0x0080013f        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.kb_rxhead
+                0x00800140        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.kb_repeat_code
+                0x00800141        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.led_state.lto_priv.24
+                0x00800142        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.shift_override_key.lto_priv.19
+                0x00800143        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.shift_override.lto_priv.17
+                0x00800144        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.debug     0x00800145        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.sw_state  0x00800146        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.led_state.lto_priv.23
+                0x00800147        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.layout.lto_priv.13
+                0x00800148        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.config    0x00800149        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.meta.lto_priv.9
+                0x0080014a        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.ps2_holdoff_count
+                0x0080014b        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.ps2_parity
+                0x0080014c        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.ps2_byte  0x0080014d        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.ps2_bit_count
+                0x0080014e        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.rxbuf     0x0080014f        0x8 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.rx_tail.lto_priv.7
+                0x00800157        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.rx_head.lto_priv.5
+                0x00800158        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.txbuf     0x00800159        0x8 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.tx_tail   0x00800161        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.tx_head   0x00800162        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.ps2_state
+                0x00800163        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.ps2_mode  0x00800164        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.shift_override_state.lto_priv.22
+                0x00800165        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.shift_override_key.lto_priv.20
+                0x00800166        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.shift_override.lto_priv.18
+                0x00800167        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.joy1      0x00800168        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.joy0      0x00800169        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.layout.lto_priv.14
+                0x0080016a        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.meta.lto_priv.10
+                0x0080016b        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.rx_buf    0x0080016c        0x4 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.rx_tail.lto_priv.8
+                0x00800170        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.rx_head.lto_priv.6
+                0x00800171        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.tx0_buf   0x00800172        0x8 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.tx0_tail  0x0080017a        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.tx0_head  0x0080017b        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.cache     0x0080017c        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.in_mask   0x0080017d        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.led_count
+                0x0080017e        0x8 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.led_program
+                0x00800186        0x8 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .bss.led_mask  0x0080018e        0x1 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ *(COMMON)
+ COMMON         0x0080018f        0x6 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libc.a(iob.o)
+                0x0080018f                __iob
+                0x00800195                PROVIDE (__bss_end, .)
+                0x00001d66                __data_load_start = LOADADDR (.data)
+                0x00001d76                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x00800195        0x0
+                [!provide]                PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                [!provide]                PROVIDE (__noinit_end, .)
+                0x00800195                _end = .
+                [!provide]                PROVIDE (__heap_start, .)
+
+.eeprom         0x00810000        0x0
+ *(.eeprom*)
+                0x00810000                __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.user_signatures
+ *(.user_signatures*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x00000000       0x11
+ *(.comment)
+ .comment       0x00000000       0x12 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .comment       0x00000000       0x11 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libc.a(iob.o)
+                                 0x12 (size before relaxing)
+
+.note.gnu.avr.deviceinfo
+                0x00000000       0x3c
+ .note.gnu.avr.deviceinfo
+                0x00000000       0x3c c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+
+.note.gnu.build-id
+ *(.note.gnu.build-id)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000      0x240
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000      0x180 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .debug_aranges
+                0x00000180       0x20 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+ .debug_aranges
+                0x000001a0       0x20 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+ .debug_aranges
+                0x000001c0       0x20 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+ .debug_aranges
+                0x000001e0       0x20 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+ .debug_aranges
+                0x00000200       0x20 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+ .debug_aranges
+                0x00000220       0x20 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x00000000     0x3627
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x00000000      0x5d0 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+ .debug_info    0x000005d0     0x2bf5 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .debug_info    0x000031c5       0xbb c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+ .debug_info    0x00003280       0xbb c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+ .debug_info    0x0000333b       0xbb c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+ .debug_info    0x000033f6       0xbb c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+ .debug_info    0x000034b1       0xbb c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+ .debug_info    0x0000356c       0xbb c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+
+.debug_abbrev   0x00000000      0xb39
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000      0x580 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+ .debug_abbrev  0x00000580      0x541 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .debug_abbrev  0x00000ac1       0x14 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+ .debug_abbrev  0x00000ad5       0x14 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+ .debug_abbrev  0x00000ae9       0x14 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+ .debug_abbrev  0x00000afd       0x14 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+ .debug_abbrev  0x00000b11       0x14 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+ .debug_abbrev  0x00000b25       0x14 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+
+.debug_line     0x00000000     0x1f4c
+ *(.debug_line .debug_line.* .debug_line_end)
+ .debug_line    0x00000000       0x1a c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+ .debug_line    0x0000001a     0x1b42 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+ .debug_line    0x00001b5c       0x62 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+ .debug_line    0x00001bbe       0x86 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+ .debug_line    0x00001c44       0x7a c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+ .debug_line    0x00001cbe       0x98 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+ .debug_line    0x00001d56       0xfe c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+ .debug_line    0x00001e54       0xf8 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+
+.debug_frame    0x00000000      0x4b4
+ *(.debug_frame)
+ .debug_frame   0x00000000      0x4b4 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+
+.debug_str      0x00000000      0xdaa
+ *(.debug_str)
+ .debug_str     0x00000000      0x1f6 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+ .debug_str     0x000001f6      0xbb4 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                                0xc1c (size before relaxing)
+
+.debug_loc      0x00000000     0x269b
+ *(.debug_loc)
+ .debug_loc     0x00000000     0x269b C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.debug_pubtypes
+ *(.debug_pubtypes)
+
+.debug_ranges   0x00000000      0x3a0
+ *(.debug_ranges)
+ .debug_ranges  0x00000000      0x3a0 C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+
+.debug_macro
+ *(.debug_macro)
+OUTPUT(obj-m162/c=key.elf elf32-avr)
+LOAD linker stubs
+
+Cross Reference Table
+
+Symbol                                            File
+LED_blink                                         obj-m162/src/led.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+                                                  obj-m162/src/poll64.o (symbol from plugin)
+LED_init                                          obj-m162/src/led.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+                                                  obj-m162/src/poll64.o (symbol from plugin)
+LED_irq                                           obj-m162/src/led.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+                                                  obj-m162/src/poll64.o (symbol from plugin)
+LED_off                                           obj-m162/src/led.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+LED_on                                            obj-m162/src/led.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+__FUSE_REGION_LENGTH__                            c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__bad_interrupt                                   c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__bss_end                                         c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+__bss_start                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+__data_end                                        c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+__data_load_start                                 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+__data_start                                      c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+__do_clear_bss                                    c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_clear_bss.o)
+                                                  C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                                                  c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libc.a(iob.o)
+__do_copy_data                                    c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_copy_data.o)
+                                                  C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+__epilogue_restores__                             c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_epilogue.o)
+                                                  C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+__heap_end                                        c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__init                                            c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__iob                                             c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libc.a(iob.o)
+                                                  C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                                                  obj-m162/src/uart.o (symbol from plugin)
+__prologue_saves__                                c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_prologue.o)
+                                                  C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+__stack                                           c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__tablejump2__                                    c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_tablejump2.o)
+                                                  C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+__vector_1                                        c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_10                                       C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                                                  obj-m162/src/main.o (symbol from plugin)
+                                                  c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_11                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_12                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_13                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_14                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_15                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_16                                       C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                                                  obj-m162/src/ps2.o (symbol from plugin)
+                                                  c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_17                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_18                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_19                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_2                                        C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                                                  obj-m162/src/ps2.o (symbol from plugin)
+                                                  c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_20                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_21                                       C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                                                  obj-m162/src/uart.o (symbol from plugin)
+                                                  c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_22                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_23                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_24                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_25                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_26                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_27                                       c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_3                                        c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_4                                        c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_5                                        c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_6                                        c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_7                                        c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_8                                        c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_9                                        c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vector_default                                  c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+__vectors                                         c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+_exit                                             c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+check_override                                    obj-m162/src/scanner64.o (symbol from plugin)
+do_joy                                            obj-m162/src/scanner64.o (symbol from plugin)
+eeprom_read_byte                                  c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libatmega162.a(eerd_byte.o)
+                                                  C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+                                                  obj-m162/src/poll64.o (symbol from plugin)
+                                                  obj-m162/src/eeprom.o (symbol from plugin)
+eeprom_write_byte                                 c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libatmega162.a(eewr_byte.o)
+                                                  C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                                                  obj-m162/src/eeprom.o (symbol from plugin)
+eeprom_write_r18                                  c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5\libatmega162.a(eewr_byte.o)
+exit                                              c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/avr5\libgcc.a(_exit.o)
+                                                  c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+get_joy_direction                                 obj-m162/src/scanner64.o (symbol from plugin)
+kb_data_available                                 obj-m162/src/kb.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+kb_get_repeat_code                                obj-m162/src/kb.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+kb_init                                           obj-m162/src/kb.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+kb_recv                                           obj-m162/src/kb.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+kb_scan                                           obj-m162/src/kb.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+kb_set_repeat_code                                obj-m162/src/kb.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+kb_set_repeat_delay                               obj-m162/src/kb.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+kb_set_repeat_period                              obj-m162/src/kb.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+main                                              C:\Users\brain\AppData\Local\Temp\ccLvhzXc.ltrans0.ltrans.o
+                                                  obj-m162/src/main.o (symbol from plugin)
+                                                  c:/tools/avr-gcc_7.3.0/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr5/crtatmega162.o
+parse_key                                         obj-m162/src/scanner64.o (symbol from plugin)
+poll                                              obj-m162/src/poll64.o (symbol from plugin)
+                                                  obj-m162/src/main.o (symbol from plugin)
+poll_init                                         obj-m162/src/poll64.o (symbol from plugin)
+                                                  obj-m162/src/main.o (symbol from plugin)
+poll_irq                                          obj-m162/src/poll64.o (symbol from plugin)
+                                                  obj-m162/src/main.o (symbol from plugin)
+poll_parse_key                                    obj-m162/src/poll64.o (symbol from plugin)
+ps2_clear_buffers                                 obj-m162/src/ps2.o (symbol from plugin)
+                                                  obj-m162/src/ps2_kb.o (symbol from plugin)
+ps2_data_available                                obj-m162/src/ps2.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+                                                  obj-m162/src/poll64.o (symbol from plugin)
+ps2_get_typematic_delay                           obj-m162/src/ps2_kb.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+ps2_get_typematic_period                          obj-m162/src/ps2_kb.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+ps2_getc                                          obj-m162/src/ps2.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+                                                  obj-m162/src/ps2_kb.o (symbol from plugin)
+                                                  obj-m162/src/poll64.o (symbol from plugin)
+ps2_handle_cmds                                   obj-m162/src/ps2_kb.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+ps2_init                                          obj-m162/src/ps2.o (symbol from plugin)
+                                                  obj-m162/src/main.o (symbol from plugin)
+ps2_putc                                          obj-m162/src/ps2.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+                                                  obj-m162/src/ps2_kb.o (symbol from plugin)
+                                                  obj-m162/src/poll64.o (symbol from plugin)
+reset_matrix                                      obj-m162/src/poll64.o (symbol from plugin)
+scan                                              obj-m162/src/scanner64.o (symbol from plugin)
+                                                  obj-m162/src/main.o (symbol from plugin)
+scan_init                                         obj-m162/src/scanner64.o (symbol from plugin)
+                                                  obj-m162/src/main.o (symbol from plugin)
+scan_irq                                          obj-m162/src/scanner64.o (symbol from plugin)
+                                                  obj-m162/src/main.o (symbol from plugin)
+send_key_code                                     obj-m162/src/scanner64.o (symbol from plugin)
+set_matrix                                        obj-m162/src/poll64.o (symbol from plugin)
+set_switch                                        obj-m162/src/poll64.o (symbol from plugin)
+sw_data_available                                 obj-m162/src/switches.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+sw_getc                                           obj-m162/src/switches.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+sw_init                                           obj-m162/src/switches.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+                                                  obj-m162/src/poll64.o (symbol from plugin)
+sw_putc                                           obj-m162/src/switches.o (symbol from plugin)
+                                                  obj-m162/src/poll64.o (symbol from plugin)
+sw_scan                                           obj-m162/src/switches.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+toggle_4080_key                                   obj-m162/src/poll64.o (symbol from plugin)
+toggle_caps_lock_key                              obj-m162/src/poll64.o (symbol from plugin)
+uart0_data_available                              obj-m162/src/uart.o (symbol from plugin)
+uart0_flush                                       obj-m162/src/uart.o (symbol from plugin)
+uart0_getc                                        obj-m162/src/uart.o (symbol from plugin)
+uart0_putc                                        obj-m162/src/uart.o (symbol from plugin)
+uart0_putcrlf                                     obj-m162/src/uart.o (symbol from plugin)
+uart0_puthex                                      obj-m162/src/uart.o (symbol from plugin)
+uart0_puts_P                                      obj-m162/src/uart.o (symbol from plugin)
+uart0_trace                                       obj-m162/src/uart.o (symbol from plugin)
+uart_data_available                               obj-m162/src/uart.o (symbol from plugin)
+uart_flush                                        obj-m162/src/uart.o (symbol from plugin)
+uart_getc                                         obj-m162/src/uart.o (symbol from plugin)
+uart_init                                         obj-m162/src/uart.o (symbol from plugin)
+                                                  obj-m162/src/main.o (symbol from plugin)
+uart_putc                                         obj-m162/src/uart.o (symbol from plugin)
+                                                  obj-m162/src/main.o (symbol from plugin)
+uart_putcrlf                                      obj-m162/src/uart.o (symbol from plugin)
+uart_puthex                                       obj-m162/src/uart.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+                                                  obj-m162/src/poll64.o (symbol from plugin)
+uart_puts_P                                       obj-m162/src/uart.o (symbol from plugin)
+uart_trace                                        obj-m162/src/uart.o (symbol from plugin)
+update_eeprom                                     obj-m162/src/eeprom.o (symbol from plugin)
+                                                  obj-m162/src/scanner64.o (symbol from plugin)
+                                                  obj-m162/src/poll64.o (symbol from plugin)

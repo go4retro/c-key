@@ -179,7 +179,8 @@ _xmsgs
 
 #GCC
 .dep
-obj-*
+obj-*/src*
+obj-*/*.h
 
 #Project Stuff
 archive

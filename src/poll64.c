@@ -168,9 +168,9 @@ static  const PROGMEM uint8_t layouts[4][45][2] = {
                                           {POLL_MAP_NONE | POLL_C64_KEY_8, POLL_MAP_SHIFT | POLL_C64_KEY_8},                  // 14 8 ->  8/Sh+8
                                           {POLL_MAP_NONE | POLL_C64_KEY_0,POLL_MAP_SHIFT | POLL_C64_KEY_0},                   // 15 0 ->  0/Sh+0
                                           {POLL_MAP_NONE | POLL_C64_KEY_9,POLL_MAP_SHIFT | POLL_C64_KEY_9},                   // 16 9 ->  9/Sh+9
-                                          {POLL_MAP_NONE | POLL_C64_KEY_SEMICOLON,POLL_MAP_SHIFT | POLL_C64_KEY_SEMICOLON},   // 17 ; ->  ;/Sh+;
+                                          {POLL_MAP_NONE | POLL_C64_KEY_COLON,POLL_MAP_SHIFT | POLL_C64_KEY_COLON},           // 17 ; ->  :/[
                                           {POLL_MAP_NONE | POLL_C64_KEY_PLUS,POLL_MAP_SHIFT | POLL_C64_KEY_PLUS},             // 18 - ->  +/Sh++
-                                          {POLL_MAP_NONE | POLL_C64_KEY_SEMICOLON,POLL_MAP_SHIFT | POLL_C64_KEY_SEMICOLON},   // 19 ' ->  ;/Sh+;
+                                          {POLL_MAP_NONE | POLL_C64_KEY_SEMICOLON,POLL_MAP_SHIFT | POLL_C64_KEY_SEMICOLON},   // 19 ' ->  ;/]
                                           {POLL_MAP_NONE | POLL_C64_KEY_AT,POLL_MAP_SHIFT | POLL_C64_KEY_AT},                 // 20 [ ->  @/Sh+@
                                           {POLL_MAP_NONE | POLL_C64_KEY_MINUS,POLL_MAP_SHIFT | POLL_C64_KEY_MINUS},           // 21 = ->  -/Sh+-
                                           {POLL_MAP_NONE | POLL_C64_KEY_ASTERIX,POLL_MAP_SHIFT | POLL_C64_KEY_ASTERIX},       // 22 ] ->  */Sh+*
@@ -216,9 +216,9 @@ static  const PROGMEM uint8_t layouts[4][45][2] = {
                                           {POLL_MAP_NONE | POLL_C64_KEY_8, POLL_MAP_SHIFT | POLL_C64_KEY_8},                  // 14 8 ->  8/Sh+8
                                           {POLL_MAP_NONE | POLL_C64_KEY_0,POLL_MAP_SHIFT | POLL_C64_KEY_0},                   // 15 0 ->  0/Sh+0
                                           {POLL_MAP_NONE | POLL_C64_KEY_9,POLL_MAP_SHIFT | POLL_C64_KEY_9},                   // 16 9 ->  9/Sh+9
-                                          {POLL_MAP_NONE | POLL_C64_KEY_SEMICOLON,POLL_MAP_SHIFT | POLL_C64_KEY_SEMICOLON},   // 17 ; ->  ;/Sh+;
+                                          {POLL_MAP_NONE | POLL_C64_KEY_COLON,POLL_MAP_SHIFT | POLL_C64_KEY_COLON},           // 17 ; ->  :/[;
                                           {POLL_MAP_NONE | POLL_C64_KEY_PLUS,POLL_MAP_SHIFT | POLL_C64_KEY_PLUS},             // 18 - ->  +/Sh++
-                                          {POLL_MAP_NONE | POLL_C64_KEY_SEMICOLON,POLL_MAP_SHIFT | POLL_C64_KEY_SEMICOLON},   // 19 ' ->  ;/Sh+;
+                                          {POLL_MAP_NONE | POLL_C64_KEY_SEMICOLON,POLL_MAP_SHIFT | POLL_C64_KEY_SEMICOLON},   // 19 ' ->  ;/];
                                           {POLL_MAP_NONE | POLL_C64_KEY_AT,POLL_MAP_SHIFT | POLL_C64_KEY_AT},                 // 20 [ ->  @/Sh+@
                                           {POLL_MAP_NONE | POLL_C64_KEY_MINUS,POLL_MAP_SHIFT | POLL_C64_KEY_MINUS},           // 21 = ->  -/Sh+-
                                           {POLL_MAP_NONE | POLL_C64_KEY_ASTERIX,POLL_MAP_SHIFT | POLL_C64_KEY_ASTERIX},       // 22 ] ->  */Sh+*

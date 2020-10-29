@@ -4,7 +4,7 @@
 MAJOR = 0
 MINOR = 7
 PATCHLEVEL = 2
-FIX = 1
+FIX = 2
 
 # Forces bootloader version to 0, comment out or leave empty for release
 #PRERELEASE =
@@ -49,7 +49,7 @@ FIX = 1
 # make filename.i = Create a preprocessed source file for use in submitting
 #                   bug reports to the GCC project.
 #
-# To rebuild project do "make clean" then "make all".
+# To rebuild project do "make clean all".
 #----------------------------------------------------------------------------
 
 # Read configuration file
@@ -158,7 +158,16 @@ FORMAT = ihex
 TARGET = c=key
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = switches.c uart.c kb.c main.c ps2.c eeprom.c scanner64.c led.c ps2_kb.c poll64.c
+SRC  = switches.c 
+SRC += uart.c
+SRC += kb.c
+SRC += main.c
+SRC += ps2.c
+SRC += eeprom.c
+SRC += scanner64.c
+SRC += led.c
+SRC += ps2_kb.c
+SRC += poll64.c
 
 # Sample mechanism to add files to SRC line
 #ifeq ($(CONFIG_VARIABLE),4)
@@ -190,13 +199,11 @@ OPT = s
 #     AVR [Extended] COFF format requires stabs, plus an avr-objcopy run.
 DEBUG = dwarf-2
 
-
 # List any extra directories to look for include files here.
 #     Each directory must be seperated by a space.
 #     Use forward slashes for directory separators.
 #     For a directory that has spaces, enclose it in quotes.
 EXTRAINCDIRS =
-
 
 # Compiler flag to set the C Standard level.
 #     c89   = "ANSI" C
@@ -204,7 +211,6 @@ EXTRAINCDIRS =
 #     c99   = ISO C99 standard (not yet fully implemented)
 #     gnu99 = c99 plus GCC extensions
 CSTANDARD = -std=gnu99
-
 
 # Place -D or -U options here
 CDEFS = -DF_CPU=$(CONFIG_MCU_FREQ)UL
@@ -253,6 +259,9 @@ AVRDUDE = avrdude
 REMOVE = rm -f
 COPY = cp
 WINSHELL = cmd
+CRCGEN := scripts/crcgen-avr.pl
+AWK = gawk
+#CRCGEN = crcgen-new
 
 
 #---------------- Compiler Options ----------------
@@ -282,12 +291,26 @@ CFLAGS += -Wunreachable-code
 CFLAGS += -Wshadow
 #CFLAGS += -Winline
 CFLAGS += -Wsign-compare
-CFLAGS += -Wa,-adhlns=$(OBJDIR)/$(*F).lst
-CFLAGS += -I$(OBJDIR)
+CFLAGS += -Wstrict-prototypes 
+# Add this if you want all warnings output as errors.
+#CFLAGS += -Werror
+#CFLAGS += -Wa,-adhlns=$(OBJDIR)/$(<:.c=.lst)
+CFLAGS += -I$(OBJDIR) -Isrc
 CFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
 CFLAGS += $(CSTANDARD)
 CFLAGS += -ffunction-sections
 CFLAGS += -fdata-sections
+# CFLAGS += -funsigned-char
+# CFLAGS += -funsigned-bitfields
+# CFLAGS += -fpack-struct
+# CFLAGS += -fshort-enums
+#CFLAGS += -fno-unit-at-a-time
+# CFLAGS += -Wundef
+# CFLAGS += -Wextra
+# CFLAGS += -Wunreachable-code
+# CFLAGS += -Wshadow
+#CFLAGS += -Winline
+# CFLAGS += -Wsign-compare
 #CFLAGS += -mtiny-stack
 #CFLAGS += -mno-interrupts
 CFLAGS += -mcall-prologues
@@ -509,14 +532,19 @@ ifeq ($(SRCDIR),)
 endif
  
 # De-dupe the list of C source files
-CSRC := $(sort $(SRC))
+CSRC := $(patsubst %,$(SRCDIR)/%,$(sort $(SRC)))
+
+# Add subdir to assembler source files
+ASMSRC_DIR := $(patsubst %,$(SRCDIR)/%,$(ASMSRC))
 
 # Define all object files.
-OBJ := $(patsubst %,$(OBJDIR)/%,$(CSRC:.c=.o) $(ASRC:.S=.o))
+OBJ := $(patsubst %,$(OBJDIR)/%,$(CSRC:.c=.o) $(ASMSRC_DIR:.S=.o) $(CSRC_DIR:.cpp=.o))
 
 # Define all listing files.
-LST := $(patsubst %,$(OBJDIR)/%,$(CSRC:.c=.lst) $(ASRC:.S=.lst))
+LST := $(patsubst %,$(OBJDIR)/%,$(CSRC:.c=.lst) $(ASMSRC_DIR:.S=.lst))
 
+# Define the object directories
+OBJDIRS := $(sort $(dir $(OBJ)))
 
 # Compiler flags to generate dependency files.
 GENDEPFLAGS = -MMD -MP -MF .dep/$(@F).d
@@ -524,12 +552,8 @@ GENDEPFLAGS = -MMD -MP -MF .dep/$(@F).d
 
 # Combine all necessary flags and optional flags.
 # Add target processor to flags.
-ALL_CFLAGS = -mmcu=$(MCU) -I$(SRCDIR) $(CFLAGS) $(GENDEPFLAGS)
+ALL_CFLAGS  = -mmcu=$(MCU) -I$(SRCDIR) $(CFLAGS) $(GENDEPFLAGS)
 ALL_ASFLAGS = -mmcu=$(MCU) -I$(SRCDIR) -x assembler-with-cpp $(ASFLAGS) $(CDEFS)
-
-
-
-
 
 # Default target.
 all: build
@@ -551,8 +575,8 @@ doxygen:
 	-rm -rf doxyinput
 	mkdir doxyinput
 	cp $(SRCDIR)/*.h $(SRCDIR)/*.c doxyinput
-	src2doxy.pl doxyinput/*.h doxyinput/*.c
-	doxygen doxygen.conf
+	srcipts/src2doxy.pl doxyinput/*.h doxyinput/*.c
+	doxygen scripts/doxygen.conf
 
 # Display size of file.
 HEXSIZE = $(SIZE) --mcu=$(MCU) --target=$(FORMAT) $(OBJDIR)/$(TARGET).hex
@@ -619,10 +643,19 @@ extcoff: $(TARGET).elf
 
 
 # Generate autoconf.h from config
-.PRECIOUS : $(OBJDIR)/autoconf.h
+.PRECIOUS : $(OBJDIR) $(OBJDIR)/autoconf.h
 $(OBJDIR)/autoconf.h: $(CONFIG) | $(OBJDIR)
 	$(E) "  CONF2H $(CONFIG)"
-	$(Q)gawk -f conf2h.awk $(CONFIG) > $(OBJDIR)/autoconf.h
+	$(Q)$(AWK) -f scripts/conf2h.awk $(CONFIG) > $(OBJDIR)/autoconf.h
+$(OBJDIR):
+	$(E) "  MKDIR  $(OBJDIR)"
+	-$(Q)mkdir $(OBJDIR)
+
+# Generate macro-only asmconfig.h from autoconf.h
+.PRECIOUS: $(OBJDIR)/asmconfig.h
+$(OBJDIR)/asmconfig.h: $(CONFFILES) src/config.h | $(OBJDIR)
+	$(E) "  CPP    config.h"
+	$(Q)$(CC) -E -dM $(ALL_ASFLAGS) src/config.h | grep -v "^#define __" > $@
 
 # Create final output files (.hex, .eep) from ELF output file.
 ifeq ($(CONFIG_BOOTLOADER),y)
@@ -630,7 +663,7 @@ $(OBJDIR)/%.bin: $(OBJDIR)/%.elf
 	$(E) "  BIN    $@"
 	$(Q)$(OBJCOPY) -O binary -R .eeprom $< $@
 	$(E) "  CRCGEN $@"
-	-$(Q)crcgen-new $@ $(BINARY_LENGTH) $(CONFIG_BOOT_DEVID) $(BOOT_VERSION)
+	-$(Q)$(CRCGEN) $@ $(BINARY_LENGTH) $(CONFIG_BOOT_DEVID) $(BOOT_VERSION)
 	$(E) "  COPY   $(CONFIG_HARDWARE_NAME)-firmware-$(PROGRAMVERSION).bin"
 	$(Q)$(COPY) $@ $(OBJDIR)/$(CONFIG_HARDWARE_NAME)-firmware-$(PROGRAMVERSION).bin
 else
@@ -669,31 +702,31 @@ $(OBJDIR)/%.elf: $(OBJ) | $(OBJDIR)
 
 
 # Compile: create object files from C source files.
-$(OBJDIR)/%.o : $(SRCDIR)/%.c | $(OBJDIR) $(OBJDIR)/autoconf.h
+$(OBJDIR)/%.o : %.c $(CONFFILES) | $(OBJDIR)/$(SRCDIR) $(OBJDIR)/autoconf.h
 	$(E) "  CC     $<"
 	$(Q)$(CC) -c $(ALL_CFLAGS) $< -o $@
 
 
 # Compile: create assembler files from C source files.
-$(OBJDIR)/%.s : $(SRCDIR)/%.c | $(OBJDIR) $(OBJDIR)/autoconf.h
+$(OBJDIR)/%.s : $(SRCDIR)/%.c $(CONFFILES) | $(OBJDIR)/$(SRCDIR) $(OBJDIR)/autoconf.h
 	$(E) "  CC     $<"
 	$(Q)$(CC) -S $(ALL_CFLAGS) $< -o $@
 
 
 # Assemble: create object files from assembler source files.
-$(OBJDIR)/%.o : $(SRCDIR)/%.S | $(OBJDIR) $(OBJDIR)/autoconf.h
+$(OBJDIR)/%.o : $(SRCDIR)/%.S $(OBJDIR)/asmconfig.h $(CONFFILES) | $(OBJDIR) $(OBJDIR)/autoconf.h
 	$(E) "  AS     $<"
 	$(Q)$(CC) -c $(ALL_ASFLAGS) $< -o $@
 
 # Create preprocessed source for use in sending a bug report.
-$(OBJDIR)/%.i : $(SRCDIR)/%.c | $(OBJDIR) $(OBJDIR)/autoconf.h
+$(OBJDIR)/%.i : $(SRCDIR)/%.c | $(OBJDIR)/$(SRCDIR) $(OBJDIR)/autoconf.h
 	$(E) "  CC     $<"
 	$(Q)$(CC) -E -mmcu=$(MCU) -I$(SRCDIR) $(CFLAGS) $< -o $@
 
-# Create the output directory
-$(OBJDIR):
-	$(E) "  MKDIR  $(OBJDIR)"
-	-$(Q)mkdir -p $(OBJDIR)
+# Create the output directories
+$(OBJDIR)/$(SRCDIR):
+	$(E) "  MKDIR  $(OBJDIRS)"
+	-$(Q)mkdir -p $(OBJDIRS)
 
 # Target: clean project.
 clean: begin clean_list end
