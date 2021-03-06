@@ -98,7 +98,7 @@ else ifeq ($(MCU),atmega162)
   BINARY_LENGTH = 0x3c00
   EFUSE = 0xff
   HFUSE = 0xd2
-  LFUSE = 0xfc
+  LFUSE = 0xfe
 else ifeq ($(MCU),atmega32)
   BINARY_LENGTH = 0x7800
   EFUSE = 0xff
