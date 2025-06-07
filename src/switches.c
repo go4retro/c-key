@@ -51,7 +51,8 @@ uint8_t sw_data_available( void ) {
 
 void sw_putc( uint8_t sw) {
   // bit 7 indicates key up.
-  uint8_t state=(sw & SW_UP);
+  uint8_t state = (sw & SW_UP);
+  sw = sw & 0x7F; // tuti: cut of the state bit 7!
   sw = _BV(sw); // turn into bit mask;
   if(sw & in_mask) {
     if(state) {
